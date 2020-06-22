@@ -11,12 +11,14 @@
 	<modules>
 		<module>blue-core</module>
 		<module>blue-monitor</module>
+		<module>blue-validation</module>
 	</modules>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jdk.version>11</jdk.version>
 
+		<!-- core -->
 		<blue.version>3.0.0</blue.version>
 		<slf4j.version>1.7.30</slf4j.version>
 		<log4j2.version>2.13.0</log4j2.version>
@@ -26,8 +28,16 @@
 		<aspectjweaver.version>1.9.5</aspectjweaver.version>
 		<caffeine.version>2.8.1</caffeine.version>
 		<snappy.version>1.1.7.3</snappy.version>
-		<prometheus.version>0.8.1</prometheus.version>
 		<javax.annotation.version>1.3.2</javax.annotation.version>
+		
+		<!-- monitor -->
+		<prometheus.version>0.8.1</prometheus.version>
+		
+		<!-- validation -->
+		<validator.version>6.1.2.Final</validator.version>
+		<jboss.logging.version>3.4.1.Final</jboss.logging.version>
+		<classmate.version>1.5.1</classmate.version>
+		<tomcat.el.version>9.0.31</tomcat.el.version>
 
 		<!-- test -->
 		<junit.platform.version>1.6.0</junit.platform.version>
