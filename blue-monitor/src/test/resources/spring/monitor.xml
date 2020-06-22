@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:monitor="http://blue.com/schema/monitor"
+       xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://blue.com/schema/monitor  http://blue.com/schema/monitor.xsd">
+	
+	<monitor:prometheus-registry id="registry" job-name="test" />
+	
+	<monitor:histogram-metrics id="testHistogram" name="histogram" help="histogram" labels="label" ref-registry="registry" />
+	<monitor:counter-metrics id="testCounter" name="counter" help="counter" labels="label" ref-registry="registry" />
+
+</beans>

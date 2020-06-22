@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<xsd:schema xmlns="http://blue.com/schema/monitor"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="http://blue.com/schema/monitor"
+            elementFormDefault="qualified" attributeFormDefault="unqualified">
+	
+	<xsd:import namespace="http://www.springframework.org/schema/beans" />
+	
+	<xsd:element name="prometheus-registry">
+		<xsd:complexType>
+			<xsd:attribute name="id" type="xsd:ID" use="required" />
+			<xsd:attribute name="job-name" type="xsd:string" use="required" />
+			<xsd:attribute name="push-gateway" type="xsd:string" use="optional" />
+			<xsd:attribute name="period" type="xsd:string" default="500" />
+			<xsd:attribute name="ref-task-scheduler" type="xsd:string" use="optional" />
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="histogram-metrics">
+		<xsd:complexType>
+			<xsd:attribute name="id" type="xsd:ID" use="required" />
+			<xsd:attribute name="name" type="xsd:string" use="required" />
+			<xsd:attribute name="labels" type="xsd:string" use="required" />
+			<xsd:attribute name="help" type="xsd:string" use="required" />
+			<xsd:attribute name="buckets" type="xsd:string" use="optional" />
+			<xsd:attribute name="ref-registry" type="xsd:string" use="optional" />
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="counter-metrics">
+		<xsd:complexType>
+			<xsd:attribute name="id" type="xsd:ID" use="required" />
+			<xsd:attribute name="name" type="xsd:string" use="required" />
+			<xsd:attribute name="labels" type="xsd:string" use="required" />
+			<xsd:attribute name="help" type="xsd:string" use="required" />
+			<xsd:attribute name="ref-registry" type="xsd:string" use="optional" />
+		</xsd:complexType>
+	</xsd:element>
+	
+</xsd:schema>
