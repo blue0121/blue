@@ -1,7 +1,7 @@
 package blue.core.id;
 
+import blue.core.common.CoreConst;
 import blue.core.util.NetworkUtil;
-import blue.core.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -108,7 +108,7 @@ public class MachineIdProvider
 	{
 		try (InputStream iis = is)
 		{
-			Scanner scanner = new Scanner(iis, StringUtil.UTF8);
+			Scanner scanner = new Scanner(iis, CoreConst.UTF_8);
 			while (scanner.hasNextLine())
 			{
 				String line = scanner.nextLine().trim();

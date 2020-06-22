@@ -144,8 +144,12 @@
 				<configuration>
 					<argLine>
 						--illegal-access=warn
-						--add-exports blue.core4j/blue.test.core4j.util=spring.core,spring.beans
-						--add-opens java.base/java.util=ALL-UNNAMED
+						--add-exports blue.core/test.core.dict=spring.beans
+						--add-exports blue.core/test.core.http=spring.beans
+						--add-exports blue.core/test.core.security=spring.beans
+						--add-exports blue.core/test.core.model=spring.beans
+						--add-exports blue.core/test.core.util=spring.beans
+						--add-opens blue.core/test.core.model=fastjson,ALL-UNNAMED
 					</argLine>
 				</configuration>
 			</plugin>

@@ -1,5 +1,6 @@
 module blue.monitor
 {
+	requires java.xml;
 	requires blue.core;
 	requires simpleclient;
 	requires simpleclient.pushgateway;

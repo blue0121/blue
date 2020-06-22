@@ -17,7 +17,6 @@ import java.util.Map;
  */
 public class StringUtil
 {
-	public static final String UTF8 = "UTF-8";
 	public static final String SPLIT = "[\\s,;\\|]";
 
 	private StringUtil()
