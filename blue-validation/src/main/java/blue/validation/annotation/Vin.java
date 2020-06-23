@@ -1,7 +1,7 @@
 package blue.validation.annotation;
 
 
-import blue.internal.validation.VinValidator;
+import blue.internal.validation.validator.VinValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

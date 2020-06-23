@@ -1,7 +1,7 @@
-package blue.internal.validation;
+package blue.internal.validation.validator;
 
 
-import blue.validation.annotation.FieldNotBlank;
+import blue.validation.annotation.FieldNotEqual;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -9,20 +9,19 @@ import javax.validation.ValidationException;
 import java.lang.reflect.Method;
 import java.util.Map;
 
-public class FieldNotBlankValidator extends FieldValidator implements ConstraintValidator<FieldNotBlank, Object>
+public class FieldNotEqualValidator extends FieldValidator implements ConstraintValidator<FieldNotEqual, Object>
 {
-	
-	public FieldNotBlankValidator()
+	public FieldNotEqualValidator()
 	{
 	}
 
 	@Override
-	public void initialize(FieldNotBlank anno)
+	public void initialize(FieldNotEqual anno)
 	{
 		this.fields = anno.fields();
 
-		if (fields == null || fields.length == 0)
-			throw new IllegalArgumentException("@FieldNotBlank 字段不能少于1个");
+		if (fields == null || fields.length < 2)
+			throw new IllegalArgumentException("@FieldNotEqual 验证字段不能少于2个");
 	}
 
 	@Override
@@ -30,16 +29,17 @@ public class FieldNotBlankValidator extends FieldValidator implements Constraint
 	{
 		if (obj == null)
 			return true;
-		
+
 		Map<String, Method> methodMap = this.init(obj.getClass());
-		
+
+		Object value = null;
 		for (int i = 0; i < fields.length; i++)
 		{
 			String field = fields[i];
 			Method method = methodMap.get(field);
 			if (method == null)
 				throw new ValidationException(field + " 字段不存在");
-			
+
 			Object current = null;
 			try
 			{
@@ -49,13 +49,19 @@ public class FieldNotBlankValidator extends FieldValidator implements Constraint
 			{
 				e.printStackTrace();
 			}
-			
-			if (current != null && !current.equals(""))
-				return true;
+
+			if (i > 0)
+			{
+				if (value == null || value == null)
+					continue;
+				
+				if (value != null && value.equals(current))
+					return false;
+				
+			}
+			value = current;
 		}
-		
-		return false;
+
+		return true;
 	}
-	
-	
 }

@@ -1,7 +1,7 @@
 package blue.validation.annotation;
 
 
-import blue.internal.validation.ZipValidator;
+import blue.internal.validation.validator.ZipValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

@@ -1,7 +1,7 @@
 package blue.validation.annotation;
 
 
-import blue.internal.validation.PhoneValidator;
+import blue.internal.validation.validator.PhoneValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

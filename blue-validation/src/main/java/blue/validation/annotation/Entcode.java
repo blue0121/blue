@@ -1,6 +1,6 @@
 package blue.validation.annotation;
 
-import blue.internal.validation.EntcodeValidator;
+import blue.internal.validation.validator.EntcodeValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

@@ -1,7 +1,7 @@
 package blue.validation.annotation;
 
 
-import blue.internal.validation.PassportValidator;
+import blue.internal.validation.validator.PassportValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

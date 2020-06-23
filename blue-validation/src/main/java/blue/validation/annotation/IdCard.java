@@ -1,6 +1,6 @@
 package blue.validation.annotation;
 
-import blue.internal.validation.IdCardValidator;
+import blue.internal.validation.validator.IdCardValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

@@ -1,6 +1,6 @@
 package blue.validation.annotation;
 
-import blue.internal.validation.FieldEqualValidator;
+import blue.internal.validation.validator.FieldEqualValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

@@ -1,6 +1,7 @@
-package blue.internal.validation;
+package blue.internal.validation.validator;
 
-import blue.validation.annotation.FieldEqual;
+
+import blue.validation.annotation.FieldNotBlank;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -8,19 +9,20 @@ import javax.validation.ValidationException;
 import java.lang.reflect.Method;
 import java.util.Map;
 
-public class FieldEqualValidator extends FieldValidator implements ConstraintValidator<FieldEqual, Object>
+public class FieldNotBlankValidator extends FieldValidator implements ConstraintValidator<FieldNotBlank, Object>
 {
-	public FieldEqualValidator()
+	
+	public FieldNotBlankValidator()
 	{
 	}
 
 	@Override
-	public void initialize(FieldEqual anno)
+	public void initialize(FieldNotBlank anno)
 	{
 		this.fields = anno.fields();
 
-		if (fields == null || fields.length < 2)
-			throw new IllegalArgumentException("@FieldEqual 验证字段不能少于2个");
+		if (fields == null || fields.length == 0)
+			throw new IllegalArgumentException("@FieldNotBlank 字段不能少于1个");
 	}
 
 	@Override
@@ -28,17 +30,16 @@ public class FieldEqualValidator extends FieldValidator implements ConstraintVal
 	{
 		if (obj == null)
 			return true;
-
+		
 		Map<String, Method> methodMap = this.init(obj.getClass());
-
-		Object value = null;
+		
 		for (int i = 0; i < fields.length; i++)
 		{
 			String field = fields[i];
 			Method method = methodMap.get(field);
 			if (method == null)
 				throw new ValidationException(field + " 字段不存在");
-
+			
 			Object current = null;
 			try
 			{
@@ -48,23 +49,13 @@ public class FieldEqualValidator extends FieldValidator implements ConstraintVal
 			{
 				e.printStackTrace();
 			}
-
-			if (i > 0)
-			{
-				if (value == null)
-				{
-					if (current != null)
-						return false;
-				}
-				else
-				{
-					if (!value.equals(current))
-						return false;
-				}
-			}
-			value = current;
+			
+			if (current != null && !current.equals(""))
+				return true;
 		}
-
-		return true;
+		
+		return false;
 	}
+	
+	
 }

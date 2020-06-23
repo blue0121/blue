@@ -1,7 +1,7 @@
 package blue.validation.annotation;
 
 
-import blue.internal.validation.QQValidator;
+import blue.internal.validation.validator.QQValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

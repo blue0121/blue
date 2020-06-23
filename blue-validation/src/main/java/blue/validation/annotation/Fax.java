@@ -1,6 +1,6 @@
 package blue.validation.annotation;
 
-import blue.internal.validation.FaxValidator;
+import blue.internal.validation.validator.FaxValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

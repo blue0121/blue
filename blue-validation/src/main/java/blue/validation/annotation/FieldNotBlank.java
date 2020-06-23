@@ -1,6 +1,6 @@
 package blue.validation.annotation;
 
-import blue.internal.validation.FieldNotBlankValidator;
+import blue.internal.validation.validator.FieldNotBlankValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

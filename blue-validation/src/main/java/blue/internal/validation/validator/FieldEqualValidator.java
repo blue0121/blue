@@ -1,7 +1,6 @@
-package blue.internal.validation;
+package blue.internal.validation.validator;
 
-
-import blue.validation.annotation.FieldNotEqual;
+import blue.validation.annotation.FieldEqual;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -9,19 +8,19 @@ import javax.validation.ValidationException;
 import java.lang.reflect.Method;
 import java.util.Map;
 
-public class FieldNotEqualValidator extends FieldValidator implements ConstraintValidator<FieldNotEqual, Object>
+public class FieldEqualValidator extends FieldValidator implements ConstraintValidator<FieldEqual, Object>
 {
-	public FieldNotEqualValidator()
+	public FieldEqualValidator()
 	{
 	}
 
 	@Override
-	public void initialize(FieldNotEqual anno)
+	public void initialize(FieldEqual anno)
 	{
 		this.fields = anno.fields();
 
 		if (fields == null || fields.length < 2)
-			throw new IllegalArgumentException("@FieldNotEqual 验证字段不能少于2个");
+			throw new IllegalArgumentException("@FieldEqual 验证字段不能少于2个");
 	}
 
 	@Override
@@ -52,12 +51,16 @@ public class FieldNotEqualValidator extends FieldValidator implements Constraint
 
 			if (i > 0)
 			{
-				if (value == null || value == null)
-					continue;
-				
-				if (value != null && value.equals(current))
-					return false;
-				
+				if (value == null)
+				{
+					if (current != null)
+						return false;
+				}
+				else
+				{
+					if (!value.equals(current))
+						return false;
+				}
 			}
 			value = current;
 		}

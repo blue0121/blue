@@ -1,6 +1,6 @@
 package blue.validation.annotation;
 
-import blue.internal.validation.LicencePlateValidator;
+import blue.internal.validation.validator.LicencePlateValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

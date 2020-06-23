@@ -1,6 +1,6 @@
 package blue.validation.annotation;
 
-import blue.internal.validation.IdListValidator;
+import blue.internal.validation.validator.IdListValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

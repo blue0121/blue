@@ -75,6 +75,7 @@
 				<configuration>
 					<argLine>
 						--illegal-access=warn
+						--add-opens blue.validation/test.validation.model=ALL-UNNAMED
 					</argLine>
 				</configuration>
 			</plugin>

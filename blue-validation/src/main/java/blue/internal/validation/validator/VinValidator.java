@@ -1,4 +1,4 @@
-package blue.internal.validation;
+package blue.internal.validation.validator;
 
 
 import blue.validation.annotation.Vin;

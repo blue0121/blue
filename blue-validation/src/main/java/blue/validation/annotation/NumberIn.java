@@ -1,7 +1,7 @@
 package blue.validation.annotation;
 
 
-import blue.internal.validation.NumberInValidator;
+import blue.internal.validation.validator.NumberInValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

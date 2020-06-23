@@ -1,6 +1,6 @@
 package blue.validation.annotation;
 
-import blue.internal.validation.MobileValidator;
+import blue.internal.validation.validator.MobileValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
