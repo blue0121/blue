@@ -3,8 +3,6 @@ package blue.validation;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import org.springframework.util.Assert;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -108,31 +106,6 @@ public class ValidationUtil
 			
 			validator = Validation.buildDefaultValidatorFactory().getValidator();
 		}
-	}
-	
-	/**
-	 * SpringMVC 验证结果
-	 * 
-	 * @param result
-	 */
-	public static void valid(BindingResult result) throws ValidationException
-	{
-		if (result == null)
-			return;
-		
-		if (!result.hasErrors())
-			return;
-		
-		List<FieldError> errorList = result.getFieldErrors();
-		StringBuilder sb = new StringBuilder();
-		for (FieldError error : errorList)
-		{
-			sb.append(error.getDefaultMessage()).append(",");
-		}
-		if (sb.length() > 1)
-			sb.delete(sb.length() - 1, sb.length());
-		
-		throw new ValidationException(sb.toString());
 	}
 	
 }
