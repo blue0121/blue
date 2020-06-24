@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<xsd:schema xmlns="http://blue.com/schema/jdbc"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:beans="http://www.springframework.org/schema/beans"
+            targetNamespace="http://blue.com/schema/jdbc"
+            elementFormDefault="qualified" attributeFormDefault="unqualified">
+	
+	<xsd:import namespace="http://www.springframework.org/schema/beans" />
+	
+	<xsd:element name="route-data-source">
+		<xsd:complexType>
+			<xsd:all>
+				<xsd:element name="target-data-sources">
+					<xsd:complexType>
+						<xsd:all>
+							<xsd:element ref="beans:map" />
+						</xsd:all>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:all>
+			<xsd:attribute name="id" type="xsd:ID" use="required" />
+			<xsd:attribute name="default-data-source" type="xsd:string" use="required" />
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="data-source">
+		<xsd:complexType>
+			<xsd:attribute name="id" type="xsd:ID" use="required" />
+			<xsd:attribute name="driver-class-name" type="xsd:string" use="required" />
+			<xsd:attribute name="url" type="xsd:string" use="required" />
+			<xsd:attribute name="username" type="xsd:string" use="required" />
+			<xsd:attribute name="password" type="xsd:string" use="required" />
+			<xsd:attribute name="validation-query" type="xsd:string" default="select 1" />
+			<xsd:attribute name="initial-size" type="xsd:positiveInteger" default="5" />
+			<xsd:attribute name="max-total" type="xsd:positiveInteger" default="100" />
+			<xsd:attribute name="max-idle" type="xsd:positiveInteger" default="10" />
+			<xsd:attribute name="min-idle" type="xsd:positiveInteger" default="5" />
+			<xsd:attribute name="max-wait-millis" type="xsd:positiveInteger" default="60000" />
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="data-source-aspect">
+		<xsd:complexType>
+			<xsd:attribute name="id" type="xsd:ID" use="required" />
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="transaction-manager">
+		<xsd:complexType>
+			<xsd:attribute name="id" type="xsd:ID" use="required" />
+			<xsd:attribute name="ref-data-source" type="xsd:string" use="required" />
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="template">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="scan-packages" minOccurs="0" maxOccurs="1">
+					<xsd:complexType>
+						<xsd:all>
+							<xsd:element ref="beans:list" />
+						</xsd:all>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+			<xsd:attribute name="id" type="xsd:ID" use="required" />
+			<xsd:attribute name="ref-data-source" type="xsd:string" use="required" />
+			<xsd:attribute name="debug" type="xsd:boolean" default="false" />
+			<xsd:attribute name="escape" type="xsd:boolean" default="true" />
+			<xsd:attribute name="scan-packages" type="xsd:string" use="optional" />
+			<xsd:attribute name="machine-id-properties" type="xsd:string" use="optional" />
+		</xsd:complexType>
+	</xsd:element>
+	
+</xsd:schema>
