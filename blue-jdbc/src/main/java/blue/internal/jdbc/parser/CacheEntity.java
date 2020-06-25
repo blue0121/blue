@@ -1,7 +1,7 @@
 package blue.internal.jdbc.parser;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * 缓存持久对象
@@ -17,9 +17,9 @@ public class CacheEntity
 
 	private CacheVersion version; // 版本
 	private CacheId id; // 单个主键
-	private Map<String, CacheId> idMap = new HashMap<>(); // 主键
-	private Map<String, CacheColumn> columnMap = new HashMap<>(); // 字段
-	private Map<String, CacheColumn> extraMap = new HashMap<>(); // 额外字段
+	private Map<String, CacheId> idMap = new TreeMap<>(); // 主键
+	private Map<String, CacheColumn> columnMap = new TreeMap<>(); // 字段
+	private Map<String, CacheColumn> extraMap = new TreeMap<>(); // 额外字段
 
 	private String insertSQL; // 默认插入语句
 	private String updateSQL; // 默认更新语句

@@ -1,7 +1,7 @@
 package blue.internal.jdbc.config;
 
 import blue.core.common.SimpleBeanDefinitionParser;
-import blue.jdbc.core.JdbcObjectTemplate;
+import blue.internal.jdbc.core.JdbcObjectTemplate;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.w3c.dom.Element;

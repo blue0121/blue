@@ -83,6 +83,12 @@
 				<configuration>
 					<argLine>
 						--illegal-access=warn
+						--add-exports blue.jdbc/test.jdbc.model=ALL-UNNAMED
+						--add-exports blue.jdbc/test.jdbc.model2=ALL-UNNAMED
+						--add-exports blue.jdbc/blue.internal.jdbc.core=ALL-UNNAMED
+						--add-opens blue.jdbc/blue.internal.jdbc.core=ALL-UNNAMED
+						--add-opens blue.jdbc/blue.internal.jdbc.sql=ALL-UNNAMED
+						--add-opens blue.jdbc/test.jdbc.template=ALL-UNNAMED
 					</argLine>
 				</configuration>
 			</plugin>

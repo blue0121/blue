@@ -11,4 +11,7 @@ module blue.jdbc
 	exports blue.jdbc.exception;
 
 	exports blue.internal.jdbc.config to spring.beans;
+	exports blue.internal.jdbc.core to spring.beans;
+
+	opens blue.internal.jdbc.datasource to spring.beans;
 }

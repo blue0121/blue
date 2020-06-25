@@ -1,6 +1,8 @@
 package blue.jdbc.core;
 
 import blue.core.util.BeanUtil;
+import blue.internal.jdbc.core.DefaultPage;
+import blue.internal.jdbc.core.JdbcObjectTemplate;
 import blue.internal.jdbc.parser.CacheEntity;
 import blue.internal.jdbc.parser.CacheId;
 import blue.internal.jdbc.parser.ParserCache;
@@ -24,7 +26,7 @@ public abstract class QueryDao<T, R> implements InitializingBean
 	public static final String COUNT_TPL = "select count(*) from %s a";
 	public static final String SELECT_TPL = "select a.* from %s a";
 
-	protected JdbcObjectTemplate jdbcObjectTemplate;
+	protected JdbcOperation jdbcOperation;
 
 	protected JdbcTemplate jdbcTemplate;
 	protected NamedParameterJdbcTemplate nJdbcTemplate;
@@ -65,7 +67,7 @@ public abstract class QueryDao<T, R> implements InitializingBean
 		StringBuilder sql = this.select();
 		T change = this.where(sql, param);
 		this.orderBy(sql, param);
-		List<R> list = jdbcObjectTemplate.list(targetClazz, sql.toString(), change);
+		List<R> list = jdbcOperation.list(targetClazz, sql.toString(), change);
 		return list;
 	}
 
@@ -82,7 +84,7 @@ public abstract class QueryDao<T, R> implements InitializingBean
 		StringBuilder sql = this.select();
 		T change = this.where(sql, param);
 		this.orderBy(sql, param);
-		List<R> list = jdbcObjectTemplate.list(targetClazz, sql.toString(), change, start, size);
+		List<R> list = jdbcOperation.list(targetClazz, sql.toString(), change, start, size);
 		return list;
 	}
 
@@ -96,13 +98,13 @@ public abstract class QueryDao<T, R> implements InitializingBean
 	public Page listPage(T param, Page page)
 	{
 		if (page == null)
-			page = new Page();
+			page = new DefaultPage();
 
-		int rows = this.getRows(param);
-		page.setRows(rows);
+		int rows = this.getTotalResult(param);
+		page.setTotalResult(rows);
 
-		List<R> list = this.listPage(param, page.getStartRowNo(), page.getSize());
-		page.setObjectList(list);
+		List<R> list = this.listPage(param, page.getRowIndex(), page.getItemsPerPage());
+		page.setResults(list);
 
 		return page;
 	}
@@ -113,11 +115,11 @@ public abstract class QueryDao<T, R> implements InitializingBean
 	 * @param param 查询参数
 	 * @return 记录数
 	 */
-	public int getRows(T param)
+	public int getTotalResult(T param)
 	{
 		StringBuilder sql = this.selectCount();
 		T change = this.where(sql, param);
-		return jdbcObjectTemplate.queryForInt(sql.toString(), change);
+		return jdbcOperation.queryForInt(sql.toString(), change);
 	}
 
 	private T where(StringBuilder sql, T param)
@@ -196,17 +198,17 @@ public abstract class QueryDao<T, R> implements InitializingBean
 	@Override
 	public void afterPropertiesSet() throws Exception
 	{
-		this.jdbcTemplate = jdbcObjectTemplate.getJdbcTemplate();
-		this.nJdbcTemplate = jdbcObjectTemplate.getnJdbcTemplate();
+		this.jdbcTemplate = jdbcOperation.getJdbcTemplate();
+		this.nJdbcTemplate = jdbcOperation.getNamedParameterJdbcTemplate();
 	}
 
 	@Autowired
-	public void setJdbcObjectTemplate(JdbcObjectTemplate jdbcObjectTemplate)
+	public void setJdbcOperation(JdbcObjectTemplate jdbcOperation)
 	{
-		if (this.jdbcObjectTemplate != null)
+		if (this.jdbcOperation != null)
 		{
 			return;
 		}
-		this.jdbcObjectTemplate = jdbcObjectTemplate;
+		this.jdbcOperation = jdbcOperation;
 	}
 }

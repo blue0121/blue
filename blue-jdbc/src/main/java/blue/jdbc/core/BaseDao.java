@@ -29,7 +29,7 @@ public abstract class BaseDao<T> extends QueryDao<T, T>
 	 */
 	public int save(T object)
 	{
-		return jdbcObjectTemplate.save(object);
+		return jdbcOperation.save(object);
 	}
 
 	/**
@@ -41,7 +41,7 @@ public abstract class BaseDao<T> extends QueryDao<T, T>
 	 */
 	public int save(T object, boolean dynamic)
 	{
-		return jdbcObjectTemplate.save(object, dynamic);
+		return jdbcOperation.save(object, dynamic);
 	}
 
 	/**
@@ -52,7 +52,7 @@ public abstract class BaseDao<T> extends QueryDao<T, T>
 	 */
 	public int saveObject(Object...params)
 	{
-		return jdbcObjectTemplate.saveObject(targetClazz, params);
+		return jdbcOperation.saveObject(targetClazz, params);
 	}
 
 	/**
@@ -63,7 +63,7 @@ public abstract class BaseDao<T> extends QueryDao<T, T>
 	 */
 	public int saveObject(Map<String, Object> param)
 	{
-		return jdbcObjectTemplate.saveObject(targetClazz, param);
+		return jdbcOperation.saveObject(targetClazz, param);
 	}
 
 	/**
@@ -74,7 +74,7 @@ public abstract class BaseDao<T> extends QueryDao<T, T>
 	 */
 	public int[] saveList(List<T> objectList)
 	{
-		return jdbcObjectTemplate.saveList(objectList);
+		return jdbcOperation.saveList(objectList);
 	}
 
 	/**
@@ -85,7 +85,7 @@ public abstract class BaseDao<T> extends QueryDao<T, T>
 	 */
 	public int delete(T object)
 	{
-		return jdbcObjectTemplate.delete(object);
+		return jdbcOperation.delete(object);
 	}
 
 	/**
@@ -96,7 +96,7 @@ public abstract class BaseDao<T> extends QueryDao<T, T>
 	 */
 	public int deleteId(Object id)
 	{
-		return jdbcObjectTemplate.deleteId(targetClazz, id);
+		return jdbcOperation.deleteId(targetClazz, id);
 	}
 
 	/**
@@ -107,7 +107,7 @@ public abstract class BaseDao<T> extends QueryDao<T, T>
 	 */
 	public <K> int delete(List<K> idList)
 	{
-		return jdbcObjectTemplate.delete(targetClazz, idList);
+		return jdbcOperation.delete(targetClazz, idList);
 	}
 
 	/**
@@ -118,7 +118,7 @@ public abstract class BaseDao<T> extends QueryDao<T, T>
 	 */
 	public int deleteBy(Object...params)
 	{
-		return jdbcObjectTemplate.deleteBy(targetClazz, params);
+		return jdbcOperation.deleteBy(targetClazz, params);
 	}
 
 	/**
@@ -129,7 +129,7 @@ public abstract class BaseDao<T> extends QueryDao<T, T>
 	 */
 	public int update(T object)
 	{
-		return jdbcObjectTemplate.update(object);
+		return jdbcOperation.update(object);
 	}
 
 	/**
@@ -141,7 +141,7 @@ public abstract class BaseDao<T> extends QueryDao<T, T>
 	 */
 	public int update(T object, boolean dynamic)
 	{
-		return jdbcObjectTemplate.update(object, dynamic);
+		return jdbcOperation.update(object, dynamic);
 	}
 
 	/**
@@ -153,7 +153,7 @@ public abstract class BaseDao<T> extends QueryDao<T, T>
 	 */
 	public int updateObject(Object id, Object...params)
 	{
-		return jdbcObjectTemplate.updateObject(targetClazz, id, params);
+		return jdbcOperation.updateObject(targetClazz, id, params);
 	}
 
 	/**
@@ -165,7 +165,7 @@ public abstract class BaseDao<T> extends QueryDao<T, T>
 	 */
 	public int updateObject(Object id, Map<String, Object> param)
 	{
-		return jdbcObjectTemplate.updateObject(targetClazz, id, param);
+		return jdbcOperation.updateObject(targetClazz, id, param);
 	}
 
 	/**
@@ -176,7 +176,7 @@ public abstract class BaseDao<T> extends QueryDao<T, T>
 	 */
 	public int[] updateList(List<T> objectList)
 	{
-		return jdbcObjectTemplate.updateList(objectList);
+		return jdbcOperation.updateList(objectList);
 	}
 
 	/**
@@ -188,7 +188,7 @@ public abstract class BaseDao<T> extends QueryDao<T, T>
 	 */
 	public int inc(Object id, Object...params)
 	{
-		return jdbcObjectTemplate.inc(targetClazz, id, params);
+		return jdbcOperation.inc(targetClazz, id, params);
 	}
 
 	/**
@@ -200,7 +200,7 @@ public abstract class BaseDao<T> extends QueryDao<T, T>
 	 */
 	public int inc(Object id, Map<String, Object> param)
 	{
-		return jdbcObjectTemplate.inc(targetClazz, id, param);
+		return jdbcOperation.inc(targetClazz, id, param);
 	}
 
 	/**
@@ -211,7 +211,7 @@ public abstract class BaseDao<T> extends QueryDao<T, T>
 	 */
 	public T get(Object id)
 	{
-		return jdbcObjectTemplate.get(targetClazz, id);
+		return jdbcOperation.get(targetClazz, id);
 	}
 
 	/**
@@ -223,7 +223,7 @@ public abstract class BaseDao<T> extends QueryDao<T, T>
 	 */
 	public T get(Object id, LockModeType type)
 	{
-		return jdbcObjectTemplate.get(targetClazz, id, type);
+		return jdbcOperation.get(targetClazz, id, type);
 	}
 
 	/**
@@ -241,7 +241,7 @@ public abstract class BaseDao<T> extends QueryDao<T, T>
 		param.put(cacheId.getName(), id);
 		StringBuilder sql = this.select();
 		sql.append(" where a.").append(cacheId.getEscapeColumn()).append("=:").append(cacheId.getName());
-		return jdbcObjectTemplate.get(targetClazz, sql.toString(), param);
+		return jdbcOperation.get(targetClazz, sql.toString(), param);
 	}
 
 	/**
@@ -254,7 +254,7 @@ public abstract class BaseDao<T> extends QueryDao<T, T>
 	 */
 	public <K> K getField(Class<K> target, String field, Object...params)
 	{
-		return jdbcObjectTemplate.getField(targetClazz, target, field, params);
+		return jdbcOperation.getField(targetClazz, target, field, params);
 	}
 
 	/**
@@ -267,7 +267,7 @@ public abstract class BaseDao<T> extends QueryDao<T, T>
 	 */
 	public <K> K getField(Class<K> target, String field, Map<String, Object> param)
 	{
-		return jdbcObjectTemplate.getField(targetClazz, target, field, param);
+		return jdbcOperation.getField(targetClazz, target, field, param);
 	}
 
 	/**
@@ -278,7 +278,7 @@ public abstract class BaseDao<T> extends QueryDao<T, T>
 	 */
 	public T getObject(Object...params)
 	{
-		return jdbcObjectTemplate.getObject(targetClazz, params);
+		return jdbcOperation.getObject(targetClazz, params);
 	}
 
 	/**
@@ -289,7 +289,7 @@ public abstract class BaseDao<T> extends QueryDao<T, T>
 	 */
 	public <K> Map<K, T> getList(Collection<K> idList)
 	{
-		return jdbcObjectTemplate.get(targetClazz, idList);
+		return jdbcOperation.get(targetClazz, idList);
 	}
 
 	/**
@@ -301,7 +301,7 @@ public abstract class BaseDao<T> extends QueryDao<T, T>
 	 */
 	public boolean exist(T object, String...names)
 	{
-		return jdbcObjectTemplate.exist(object, names);
+		return jdbcOperation.exist(object, names);
 	}
 
 	/**
@@ -314,7 +314,7 @@ public abstract class BaseDao<T> extends QueryDao<T, T>
 	 */
 	public <K> List<K> listField(Class<K> target, String field, Object...params)
 	{
-		return jdbcObjectTemplate.listField(targetClazz, target, field, params);
+		return jdbcOperation.listField(targetClazz, target, field, params);
 	}
 
 	/**
@@ -327,7 +327,7 @@ public abstract class BaseDao<T> extends QueryDao<T, T>
 	 */
 	public <K> List<K> listField(Class<K> target, String field, Map<String, Object> param)
 	{
-		return jdbcObjectTemplate.listField(targetClazz, target, field, param);
+		return jdbcOperation.listField(targetClazz, target, field, param);
 	}
 
 	/**
@@ -338,7 +338,7 @@ public abstract class BaseDao<T> extends QueryDao<T, T>
 	 */
 	public List<T> listObject(Object...params)
 	{
-		return jdbcObjectTemplate.listObject(targetClazz, params);
+		return jdbcOperation.listObject(targetClazz, params);
 	}
 
 
@@ -350,7 +350,7 @@ public abstract class BaseDao<T> extends QueryDao<T, T>
 	 */
 	public List<T> listObject(Map<String, Object> param)
 	{
-		return jdbcObjectTemplate.listObject(targetClazz, param);
+		return jdbcOperation.listObject(targetClazz, param);
 	}
 
 	/**
@@ -361,7 +361,7 @@ public abstract class BaseDao<T> extends QueryDao<T, T>
 	 */
 	public int count(Object...params)
 	{
-		return jdbcObjectTemplate.count(targetClazz, params);
+		return jdbcOperation.count(targetClazz, params);
 	}
 
 	/**
@@ -372,12 +372,7 @@ public abstract class BaseDao<T> extends QueryDao<T, T>
 	 */
 	public int count(Map<String, Object> param)
 	{
-		return jdbcObjectTemplate.count(targetClazz, param);
+		return jdbcOperation.count(targetClazz, param);
 	}
 
-	@Override
-	public void afterPropertiesSet() throws Exception
-	{
-		this.jdbcTemplate = jdbcObjectTemplate.getJdbcTemplate();
-	}
 }

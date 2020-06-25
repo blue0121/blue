@@ -1,4 +1,4 @@
-package blue.jdbc.core;
+package blue.internal.jdbc.core;
 
 import blue.core.file.ClassScanner;
 import blue.core.id.MachineIdProvider;
@@ -19,6 +19,8 @@ import blue.internal.jdbc.util.IdUtil;
 import blue.internal.jdbc.util.ObjectRowMapper;
 import blue.internal.jdbc.util.ObjectUtil;
 import blue.jdbc.annotation.LockModeType;
+import blue.jdbc.core.Dialect;
+import blue.jdbc.core.JdbcOperation;
 import blue.jdbc.exception.JdbcException;
 import blue.jdbc.exception.VersionException;
 import org.slf4j.Logger;
@@ -44,7 +46,7 @@ import java.util.Map;
  * @author Jin Zheng
  * @since 2019-11-30
  */
-public class JdbcObjectTemplate implements InitializingBean
+public class JdbcObjectTemplate implements JdbcOperation, InitializingBean
 {
 	private static Logger logger = LoggerFactory.getLogger(JdbcObjectTemplate.class);
 
@@ -65,24 +67,7 @@ public class JdbcObjectTemplate implements InitializingBean
 		this.parserCache = ParserCache.getInstance();
 	}
 
-	/**
-	 * 保存对象
-	 *
-	 * @param object 对象
-	 * @return 影响记录数
-	 */
-	public int save(Object object)
-	{
-		return this.save(object, true);
-	}
-
-	/**
-	 * 保存对象
-	 *
-	 * @param object 对象
-	 * @param dynamic 空字段是否也写进SQL语句中
-	 * @return 影响记录数
-	 */
+	@Override
 	public int save(Object object, boolean dynamic)
 	{
 		AssertUtil.notNull(object, "Object");
@@ -108,26 +93,7 @@ public class JdbcObjectTemplate implements InitializingBean
 		return n;
 	}
 
-	/**
-	 * 保存对象
-	 *
-	 * @param clazz 对象类型
-	 * @param params [字段名0, 字段值0, 字段名1, 字段值1...]
-	 * @return 影响记录数
-	 */
-	public int saveObject(Class<?> clazz, Object...params)
-	{
-		Map<String, Object> map = ObjectUtil.toParamMap(params);
-		return this.saveObject(clazz, map);
-	}
-
-	/**
-	 * 保存对象
-	 *
-	 * @param clazz 对象类型
-	 * @param param <字段名, 字段值>
-	 * @return 影响记录数
-	 */
+	@Override
 	public int saveObject(Class<?> clazz, Map<String, Object> param)
 	{
 		AssertUtil.notNull(clazz, "Class");
@@ -136,13 +102,8 @@ public class JdbcObjectTemplate implements InitializingBean
 		return nJdbcTemplate.update(sql, param);
 	}
 
-	/**
-	 * 保存对象列表，默认不产生主键
-	 *
-	 * @param objectList 对象列表
-	 * @return 影响记录数
-	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public int[] saveList(List<?> objectList)
 	{
 		if (objectList == null || objectList.size() == 0)
@@ -165,24 +126,7 @@ public class JdbcObjectTemplate implements InitializingBean
 		return nJdbcTemplate.batchUpdate(sql, mapList.toArray(new Map[0]));
 	}
 
-	/**
-	 * 更新对象
-	 *
-	 * @param object
-	 * @return 影响记录数
-	 */
-	public int update(Object object)
-	{
-		return this.update(object, true);
-	}
-
-	/**
-	 * 更新对象
-	 *
-	 * @param object
-	 * @param dynamic 空字段是否也写进SQL语句中
-	 * @return 影响记录数
-	 */
+	@Override
 	public int update(Object object, boolean dynamic)
 	{
 		AssertUtil.notNull(object, "Object");
@@ -215,28 +159,7 @@ public class JdbcObjectTemplate implements InitializingBean
 		return n;
 	}
 
-	/**
-	 * 更新对象
-	 *
-	 * @param clazz 对象类型
-	 * @param id 对象主键值
-	 * @param params [字段名0, 字段值0, 字段名1, 字段值1...]
-	 * @return 影响记录数
-	 */
-	public int updateObject(Class<?> clazz, Object id, Object...params)
-	{
-		Map<String, Object> map = ObjectUtil.toParamMap(params);
-		return this.updateObject(clazz, id, map);
-	}
-
-	/**
-	 * 更新对象
-	 *
-	 * @param clazz 对象类型
-	 * @param id 对象主键值
-	 * @param param <字段名, 字段值>
-	 * @return 影响记录数
-	 */
+	@Override
 	public int updateObject(Class<?> clazz, Object id, Map<String, Object> param)
 	{
 		AssertUtil.notNull(clazz, "Class");
@@ -250,13 +173,8 @@ public class JdbcObjectTemplate implements InitializingBean
 		return nJdbcTemplate.update(sql, param);
 	}
 
-	/**
-	 * 更新对象列表
-	 *
-	 * @param objectList 对象列表
-	 * @return 影响记录数
-	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public int[] updateList(List<?> objectList)
 	{
 		if (objectList == null || objectList.size() == 0)
@@ -289,28 +207,7 @@ public class JdbcObjectTemplate implements InitializingBean
 		return ns;
 	}
 
-	/**
-	 * 对象自增长
-	 *
-	 * @param clazz 对象类型
-	 * @param id 对象主键
-	 * @param params [字段名0, 增长值0, 字段名1, 增长值1...]
-	 * @return 影响记录数
-	 */
-	public int inc(Class<?> clazz, Object id, Object...params)
-	{
-		Map<String, Object> map = ObjectUtil.toParamMap(params);
-		return this.inc(clazz, id, map);
-	}
-
-	/**
-	 * 对象自增长
-	 *
-	 * @param clazz 对象类型
-	 * @param id 对象主键
-	 * @param param <字段名, 增长值>
-	 * @return 影响记录数
-	 */
+	@Override
 	public int inc(Class<?> clazz, Object id, Map<String, Object> param)
 	{
 		AssertUtil.notNull(clazz, "Class");
@@ -325,12 +222,7 @@ public class JdbcObjectTemplate implements InitializingBean
 		return nJdbcTemplate.update(sql, param);
 	}
 
-	/**
-	 * 删除对象
-	 *
-	 * @param object 对象
-	 * @return 影响数据库记录数
-	 */
+	@Override
 	public int delete(Object object)
 	{
 		AssertUtil.notNull(object, "Object");
@@ -342,12 +234,7 @@ public class JdbcObjectTemplate implements InitializingBean
 		return nJdbcTemplate.update(sql, source);
 	}
 
-	/**
-	 * 根据主键删除对象
-	 *
-	 * @param id 主键
-	 * @return 影响数据库记录数
-	 */
+	@Override
 	public int deleteId(Class<?> clazz, Object id)
 	{
 		AssertUtil.notNull(clazz, "Class");
@@ -363,12 +250,7 @@ public class JdbcObjectTemplate implements InitializingBean
 		return nJdbcTemplate.update(sql, param);
 	}
 
-	/**
-	 * 根据主键列表删除对象
-	 *
-	 * @param clazz 对象类型
-	 * @param idList 主键列表
-	 */
+	@Override
 	public <K, T> int delete(Class<T> clazz, List<K> idList)
 	{
 		if (idList == null || idList.isEmpty())
@@ -383,26 +265,7 @@ public class JdbcObjectTemplate implements InitializingBean
 		return jdbcTemplate.update(sql);
 	}
 
-	/**
-	 * 根据字段值删除
-	 *
-	 * @param clazz 对象类型
-	 * @param params [字段名0, 字段值0, 字段名1, 字段值1...]
-	 * @return 影响记录数
-	 */
-	public <T> int deleteBy(Class<T> clazz, Object...params)
-	{
-		Map<String, Object> map = ObjectUtil.toParamMap(params);
-		return this.deleteBy(clazz, map);
-	}
-
-	/**
-	 * 根据字段值删除
-	 *
-	 * @param clazz 对象类型
-	 * @param param <字段名, 字段值>
-	 * @return 影响记录数
-	 */
+	@Override
 	public <T> int deleteBy(Class<T> clazz, Map<String, Object> param)
 	{
 		AssertUtil.notNull(clazz, "Class");
@@ -411,26 +274,7 @@ public class JdbcObjectTemplate implements InitializingBean
 		return nJdbcTemplate.update(sql, param);
 	}
 
-	/**
-	 * 根据主键取得一个对象
-	 *
-	 * @param id 单主键
-	 * @param clazz 对象类型
-	 * @return 对象，不存在返回 null
-	 */
-	public <T> T get(Class<T> clazz, Object id)
-	{
-		return this.get(clazz, id, LockModeType.NONE);
-	}
-
-	/**
-	 * 根据主键取得一个对象
-	 *
-	 * @param id 单主键
-	 * @param clazz 对象类型
-	 * @param type 锁类型
-	 * @return 对象，不存在返回 null
-	 */
+	@Override
 	public <T> T get(Class<T> clazz, Object id, LockModeType type)
 	{
 		AssertUtil.notNull(clazz, "Class");
@@ -458,14 +302,8 @@ public class JdbcObjectTemplate implements InitializingBean
 		return list.get(0);
 	}
 
-	/**
-	 * 根据主键取得对象Map
-	 *
-	 * @param clazz 对象类型
-	 * @param idList 主键列表
-	 * @return 对象Map
-	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public <K, T> Map<K, T> get(Class<T> clazz, Collection<K> idList)
 	{
 		AssertUtil.notNull(clazz, "Class");
@@ -500,28 +338,7 @@ public class JdbcObjectTemplate implements InitializingBean
 		return map;
 	}
 
-	/**
-	 * 根据SQL查询一个对象
-	 *
-	 * @param clazz 类型
-	 * @param sql SQL语句
-	 * @param param 查询参数
-	 * @return 单个对象，不存在返回 null
-	 */
-	public <T> T get(Class<T> clazz, String sql, Map<String, Object> param)
-	{
-		return this.get(clazz, sql, param, LockModeType.NONE);
-	}
-
-	/**
-	 * 根据SQL查询一个对象
-	 *
-	 * @param clazz 类型
-	 * @param sql SQL语句
-	 * @param param 查询参数
-	 * @param type 锁类型
-	 * @return 单个对象，不存在返回 null
-	 */
+	@Override
 	public <T> T get(Class<T> clazz, String sql, Map<String, Object> param, LockModeType type)
 	{
 		AssertUtil.notNull(clazz, "Class");
@@ -542,58 +359,7 @@ public class JdbcObjectTemplate implements InitializingBean
 		return list.get(0);
 	}
 
-	/**
-	 * 根据SQL查询一个对象
-	 *
-	 * @param sql SQL语句
-	 * @param param 查询参数
-	 * @return 单个对象，不存在返回 null
-	 */
-	public <T> T get(String sql, T param)
-	{
-		return this.get(sql, param, LockModeType.NONE);
-	}
-
-	/**
-	 * 根据SQL查询一个对象
-	 *
-	 * @param sql SQL语句
-	 * @param param 查询参数
-	 * @param type 锁类型
-	 * @return 单个对象，不存在返回 null
-	 */
-	@SuppressWarnings("unchecked")
-	public <T> T get(String sql, T param, LockModeType type)
-	{
-		AssertUtil.notNull(param, "Param");
-		Map<String, Object> map = ObjectUtil.toMap(param);
-		return this.get((Class<T>)param.getClass(), sql, map, type);
-	}
-
-	/**
-	 * 查询一个字段
-	 *
-	 * @param clazz 对象类型
-	 * @param target 字段类型
-	 * @param field 字段名称
-	 * @param params [字段名0, 字段值0, 字段名1, 字段值1...]
-	 * @return 字段值
-	 */
-	public <T> T getField(Class<?> clazz, Class<T> target, String field, Object...params)
-	{
-		Map<String, Object> map = ObjectUtil.toParamMap(params);
-		return this.getField(clazz, target, field, map);
-	}
-
-	/**
-	 * 查询一个字段
-	 *
-	 * @param clazz 对象类型
-	 * @param target 字段类型
-	 * @param field 字段名称
-	 * @param param <字段名, 字段值>
-	 * @return 字段值
-	 */
+	@Override
 	public <T> T getField(Class<?> clazz, Class<T> target, String field, Map<String, Object> param)
 	{
 		AssertUtil.notNull(clazz, "Class");
@@ -610,26 +376,7 @@ public class JdbcObjectTemplate implements InitializingBean
 		return list.get(0);
 	}
 
-	/**
-	 * 查询一个对象
-	 *
-	 * @param clazz 对象类型
-	 * @param params [字段名0, 字段值0, 字段名1, 字段值1...]
-	 * @return 对象
-	 */
-	public <T> T getObject(Class<T> clazz, Object...params)
-	{
-		Map<String, Object> map = ObjectUtil.toParamMap(params);
-		return this.getObject(clazz, map);
-	}
-
-	/**
-	 * 查询一个对象
-	 *
-	 * @param clazz 对象类型
-	 * @param param <字段名, 字段值>
-	 * @return 对象
-	 */
+	@Override
 	public <T> T getObject(Class<T> clazz, Map<String, Object> param)
 	{
 		AssertUtil.notNull(clazz, "Class");
@@ -645,14 +392,8 @@ public class JdbcObjectTemplate implements InitializingBean
 		return list.get(0);
 	}
 
-	/**
-	 * 判断对象某些字段是否存在
-	 *
-	 * @param object 对象
-	 * @param names 字段列表
-	 * @return true表示存在，false表示不存在
-	 */
 	@SuppressWarnings("varargs")
+	@Override
 	public boolean exist(Object object, String...names)
 	{
 		AssertUtil.notNull(object, "Object");
@@ -664,26 +405,7 @@ public class JdbcObjectTemplate implements InitializingBean
 		return n > 0;
 	}
 
-	/**
-	 * 查询记录数
-	 *
-	 * @param clazz 类型
-	 * @param params [字段名0, 字段值0, 字段名1, 字段值1...]
-	 * @return 记录数
-	 */
-	public int count(Class<?> clazz, Object...params)
-	{
-		Map<String, Object> map = ObjectUtil.toParamMap(params);
-		return this.count(clazz, map);
-	}
-
-	/**
-	 * 查询记录数
-	 *
-	 * @param clazz 类型
-	 * @param param <字段名, 字段值>
-	 * @return 记录数
-	 */
+	@Override
 	public int count(Class<?> clazz, Map<String, Object> param)
 	{
 		AssertUtil.notNull(clazz, "Class");
@@ -692,29 +414,7 @@ public class JdbcObjectTemplate implements InitializingBean
 		return nJdbcTemplate.queryForObject(sql, param, Integer.class);
 	}
 
-	/**
-	 * 根据SQL查询一个整数
-	 *
-	 * @param <T> 类型参数
-	 * @param sql SQL语句
-	 * @param param 查询参数
-	 * @return 整数
-	 */
-	public <T> int queryForInt(String sql, T param)
-	{
-		AssertUtil.notEmpty(sql, "SQL");
-		Map<String, Object> map = ObjectUtil.toMap(param);
-
-		return this.queryForInt(sql, map);
-	}
-
-	/**
-	 * 根据SQL查询一个整数
-	 *
-	 * @param sql SQL语句
-	 * @param param 查询参数
-	 * @return 整数
-	 */
+	@Override
 	public int queryForInt(String sql, Map<String, Object> param)
 	{
 		AssertUtil.notEmpty(sql, "SQL");
@@ -724,42 +424,7 @@ public class JdbcObjectTemplate implements InitializingBean
 		return n == null ? 0 : n.intValue();
 	}
 
-	/**
-	 * 根据SQL语句查询列表，以对象列表返回
-	 *
-	 * @param clazz 对象类型
-	 * @param sql SQL语句
-	 * @return 对象列表
-	 */
-	public <T> List<T> list(Class<T> clazz, String sql)
-	{
-		return this.list(clazz, sql, new HashMap<>());
-	}
-
-	/**
-	 * 根据SQL语句查询列表，以对象列表返回
-	 *
-	 * @param clazz 对象类型
-	 * @param sql SQL语句
-	 * @param param 查询参数
-	 * @return 对象列表
-	 */
-	public <T, P> List<T> list(Class<T> clazz, String sql, P param)
-	{
-		AssertUtil.notNull(clazz, "Class");
-		AssertUtil.notEmpty(sql, "SQL");
-		Map<String, Object> map = ObjectUtil.toMap(param);
-		return this.list(clazz, sql, map);
-	}
-
-	/**
-	 * 根据SQL语句查询列表，以对象列表返回
-	 *
-	 * @param clazz 对象类型
-	 * @param sql SQL语句
-	 * @param param 查询参数
-	 * @return 对象列表
-	 */
+	@Override
 	public <T> List<T> list(Class<T> clazz, String sql, Map<String, Object> param)
 	{
 		AssertUtil.notNull(clazz, "Class");
@@ -770,77 +435,7 @@ public class JdbcObjectTemplate implements InitializingBean
 		return list;
 	}
 
-	/**
-	 * 根据SQL语句查询列表，以对象列表返回
-	 *
-	 * @param clazz 对象类型
-	 * @param sql SQL语句
-	 * @param start 起始行号
-	 * @param size 最大记录数
-	 * @return 对象列表
-	 */
-	public <T> List<T> list(Class<T> clazz, String sql, int start, int size)
-	{
-		sql = dialect.page(sql, start, size);
-		return this.list(clazz, sql, new HashMap<>());
-	}
-
-	/**
-	 * 根据SQL语句查询列表，以对象列表返回
-	 *
-	 * @param clazz 对象类型
-	 * @param sql SQL语句
-	 * @param param 查询参数
-	 * @param start 起始行号
-	 * @param size 最大记录数
-	 * @return 对象列表
-	 */
-	public <T, P> List<T> list(Class<T> clazz, String sql, P param, int start, int size)
-	{
-		sql = dialect.page(sql, start, size);
-		return this.list(clazz, sql, param);
-	}
-
-	/**
-	 * 根据SQL语句查询列表，以对象列表返回
-	 *
-	 * @param clazz 对象类型
-	 * @param sql SQL语句
-	 * @param param 查询参数
-	 * @param start 起始行号
-	 * @param size 最大记录数
-	 * @return 对象列表
-	 */
-	public <T> List<T> list(Class<T> clazz, String sql, Map<String, Object> param, int start, int size)
-	{
-		sql = dialect.page(sql, start, size);
-		return this.list(clazz, sql, param);
-	}
-
-	/**
-	 * 查询字段列表
-	 *
-	 * @param clazz 对象类型
-	 * @param target 字段类型
-	 * @param field 字段名称
-	 * @param params [字段名0, 字段值0, 字段名1, 字段值1...]
-	 * @return 字段列表
-	 */
-	public <T> List<T> listField(Class<?> clazz, Class<T> target, String field, Object...params)
-	{
-		Map<String, Object> map = ObjectUtil.toParamMap(params);
-		return this.listField(clazz, target, field, map);
-	}
-
-	/**
-	 * 查询字段列表
-	 *
-	 * @param clazz 对象类型
-	 * @param target 字段类型
-	 * @param field 字段名称
-	 * @param param <字段名, 字段值>
-	 * @return 字段列表
-	 */
+	@Override
 	public <T> List<T> listField(Class<?> clazz, Class<T> target, String field, Map<String, Object> param)
 	{
 		AssertUtil.notNull(clazz, "Class");
@@ -853,26 +448,7 @@ public class JdbcObjectTemplate implements InitializingBean
 		return list;
 	}
 
-	/**
-	 * 查询对象列表
-	 *
-	 * @param clazz 对象类型
-	 * @param params [字段名0, 字段值0, 字段名1, 字段值1...]
-	 * @return 对象列表
-	 */
-	public <T> List<T> listObject(Class<T> clazz, Object...params)
-	{
-		Map<String, Object> map = ObjectUtil.toParamMap(params);
-		return this.listObject(clazz, map);
-	}
-
-	/**
-	 * 查询对象列表
-	 *
-	 * @param clazz 对象类型
-	 * @param param <字段名, 字段值>
-	 * @return 对象列表
-	 */
+	@Override
 	public <T> List<T> listObject(Class<T> clazz, Map<String, Object> param)
 	{
 		AssertUtil.notNull(clazz, "Class");
@@ -903,12 +479,7 @@ public class JdbcObjectTemplate implements InitializingBean
 		}
 	}
 
-	/**
-	 * 根据类名查找表名
-	 *
-	 * @param clazz
-	 * @return
-	 */
+	@Override
 	public String getTable(Class<?> clazz)
 	{
 		CacheEntity cacheEntity = parserCache.get(clazz);
@@ -938,26 +509,31 @@ public class JdbcObjectTemplate implements InitializingBean
 		this.nJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
 	}
 
+	@Override
 	public JdbcTemplate getJdbcTemplate()
 	{
 		return jdbcTemplate;
 	}
 
-	public NamedParameterJdbcTemplate getnJdbcTemplate()
+	@Override
+	public NamedParameterJdbcTemplate getNamedParameterJdbcTemplate()
 	{
 		return nJdbcTemplate;
 	}
 
+	@Override
 	public Dialect getDialect()
 	{
 		return dialect;
 	}
 
+	@Override
 	public boolean isDebug()
 	{
 		return debug;
 	}
 
+	@Override
 	public boolean isEscape()
 	{
 		return escape;
