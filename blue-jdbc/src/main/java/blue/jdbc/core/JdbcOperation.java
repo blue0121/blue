@@ -509,10 +509,11 @@ public interface JdbcOperation
 	/**
 	 * 根据类名查找表名
 	 *
-	 * @param clazz
+	 * @param clazz 类型
+	 * @param escape 是否转义
 	 * @return
 	 */
-	String getTable(Class<?> clazz);
+	String getTable(Class<?> clazz, boolean escape);
 
 	/**
 	 * 获取JdbcTemplate

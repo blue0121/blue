@@ -480,10 +480,10 @@ public class JdbcObjectTemplate implements JdbcOperation, InitializingBean
 	}
 
 	@Override
-	public String getTable(Class<?> clazz)
+	public String getTable(Class<?> clazz, boolean escape)
 	{
 		CacheEntity cacheEntity = parserCache.get(clazz);
-		return cacheEntity.getTable();
+		return escape ? cacheEntity.getEscapeTable() : cacheEntity.getTable();
 	}
 
 	@Override

@@ -10,9 +10,10 @@
 	<version>3.0.0</version>
 	<modules>
 		<module>blue-core</module>
-		<module>blue-monitor</module>
-		<module>blue-validation</module>
 		<module>blue-jdbc</module>
+		<module>blue-monitor</module>
+		<module>blue-test</module>
+		<module>blue-validation</module>
 	</modules>
 
 	<properties>
@@ -45,6 +46,8 @@
 		<tomcat.el.version>9.0.31</tomcat.el.version>
 
 		<!-- test -->
+		<hsqldb.version>2.5.0</hsqldb.version>
+		<h2.version>1.4.200</h2.version>
 		<junit.platform.version>1.6.0</junit.platform.version>
 		<junit.jupiter.version>5.6.0</junit.jupiter.version>
 		<mockito.version>3.2.4</mockito.version>
