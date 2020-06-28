@@ -1,6 +1,7 @@
 package test.core.id;
 
-import blue.core.id.SingleSnowflakeId;
+import blue.core.id.SnowflakeId;
+import blue.core.id.SnowflakeIdFactory;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -18,7 +19,7 @@ public class SingleSnowflakeIdMain
 
 	public static void main(String[] args)
 	{
-        SingleSnowflakeId snowflakeId = SingleSnowflakeId.getInstance();
+        SnowflakeId snowflakeId = SnowflakeIdFactory.getSingleSnowflakeId();
 		//System.out.println(snowflakeId.nextId());
 		long maxCount = 1000000;
 		Set<Long> set = new HashSet<>();

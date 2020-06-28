@@ -1,8 +1,8 @@
 package test.core.id;
 
-import blue.core.id.SingleSnowflakeId;
+import blue.core.id.Metadata;
 import blue.core.id.SnowflakeId;
-import blue.core.id.SnowflakeIdMetadata;
+import blue.core.id.SnowflakeIdFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,7 +30,7 @@ public class SnowflakeIdTest
 	@BeforeEach
 	public void setUp()
 	{
-		snowflakeId = SingleSnowflakeId.getInstance();
+		snowflakeId = SnowflakeIdFactory.getSingleSnowflakeId();
 	}
 
 	@Test
@@ -46,14 +46,14 @@ public class SnowflakeIdTest
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		LocalDateTime now = LocalDateTime.now();
 		long id = snowflakeId.nextId();
-		SnowflakeIdMetadata metadata = snowflakeId.getMetadata(id);
+		Metadata metadata = snowflakeId.getMetadata(id);
 		System.out.println(metadata.getMachineId());
 		System.out.println(metadata.getSequence());
-		System.out.println(metadata.getTime());
+		System.out.println(metadata.getDateTime());
 		System.out.println(now);
 		Assertions.assertEquals(0, metadata.getMachineId());
 		Assertions.assertEquals(0, metadata.getSequence());
-		Assertions.assertEquals(now.format(formatter), metadata.getTime().format(formatter));
+		Assertions.assertEquals(now.format(formatter), metadata.getDateTime().format(formatter));
 	}
 
 	private void print(LocalDate date)

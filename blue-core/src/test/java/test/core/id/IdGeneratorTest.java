@@ -1,7 +1,8 @@
 package test.core.id;
 
 import blue.core.id.IdGenerator;
-import blue.core.id.SingleSnowflakeId;
+import blue.core.id.SnowflakeId;
+import blue.core.id.SnowflakeIdFactory;
 import org.junit.jupiter.api.Test;
 
 public class IdGeneratorTest
@@ -30,14 +31,15 @@ public class IdGeneratorTest
 		System.out.println(uuid + " | " + uuid.length());
 		uuid = IdGenerator.uuid12bit();
 		System.out.println(uuid + " | " + uuid.length());
-		
-		long id = SingleSnowflakeId.getInstance().nextId();
+
+		SnowflakeId snowflakeId = SnowflakeIdFactory.getSingleSnowflakeId();
+		long id = snowflakeId.nextId();
 		System.out.println(id);
-		id = SingleSnowflakeId.getInstance().nextId();
+		id = snowflakeId.nextId();
 		System.out.println(id);
-		id = SingleSnowflakeId.getInstance().nextId();
+		id = snowflakeId.nextId();
 		System.out.println(id);
-		id = SingleSnowflakeId.getInstance().nextId();
+		id = snowflakeId.nextId();
 		System.out.println(id);
 	}
 

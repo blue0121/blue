@@ -3,6 +3,7 @@ package blue.internal.jdbc.core;
 import blue.core.file.ClassScanner;
 import blue.core.id.MachineIdProvider;
 import blue.core.id.SnowflakeId;
+import blue.core.id.SnowflakeIdFactory;
 import blue.core.util.AssertUtil;
 import blue.core.util.JsonUtil;
 import blue.core.util.StringUtil;
@@ -564,7 +565,7 @@ public class JdbcObjectTemplate implements JdbcOperation, InitializingBean
 		MachineIdProvider provider = new MachineIdProvider(classpath);
 		Integer id = provider.getMachineId();
 		logger.info("当前机器ID：{}", id);
-		this.snowflakeId = new SnowflakeId(id);
+		this.snowflakeId = SnowflakeIdFactory.newSnowflakeId(id);
 	}
 
 }

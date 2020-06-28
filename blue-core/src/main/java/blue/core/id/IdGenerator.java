@@ -27,7 +27,7 @@ public class IdGenerator
 	 */
 	public static String uuid12bit()
 	{
-		return Long.toHexString(SingleSnowflakeId.getInstance().nextId());
+		return Long.toHexString(SnowflakeIdFactory.getSingleSnowflakeId().nextId());
 	}
 	
 	/**
@@ -35,7 +35,7 @@ public class IdGenerator
 	 */
 	public static long id()
 	{
-		return SingleSnowflakeId.getInstance().nextId();
+		return SnowflakeIdFactory.getSingleSnowflakeId().nextId();
 	}
 	
 }
