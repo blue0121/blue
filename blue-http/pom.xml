@@ -79,6 +79,8 @@
 				<configuration>
 					<argLine>
 						--illegal-access=warn
+						--add-exports blue.http/test.http.controller=spring.beans
+						--add-exports blue.http/blue.internal.http.message=ALL-UNNAMED
 					</argLine>
 				</configuration>
 			</plugin>

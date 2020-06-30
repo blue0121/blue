@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<xsd:schema xmlns="http://blue.com/schema/http"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:beans="http://www.springframework.org/schema/beans"
+            targetNamespace="http://blue.com/schema/http"
+            elementFormDefault="qualified" attributeFormDefault="unqualified">
+	
+	<xsd:import namespace="http://www.springframework.org/schema/beans" />
+	
+	<xsd:element name="http-config">
+		<xsd:complexType>
+			<xsd:all>
+				<xsd:element name="path-map">
+					<xsd:complexType>
+						<xsd:all>
+							<xsd:element ref="beans:map" />
+						</xsd:all>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="filter-configs">
+					<xsd:complexType>
+						<xsd:choice minOccurs="1" maxOccurs="unbounded">
+							<xsd:element ref="filter-config" />
+						</xsd:choice>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:all>
+			<xsd:attribute name="id" type="xsd:ID" use="required" />
+			<xsd:attribute name="path" type="xsd:string" default="/api" />
+			<xsd:attribute name="ftl-root" type="xsd:string" default="/ftl/" />
+			<xsd:attribute name="max-upload-size" type="xsd:integer" default="1048576" />
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="filter-config">
+		<xsd:complexType>
+			<xsd:attribute name="ref" type="xsd:string" use="required" />
+			<xsd:attribute name="filters" type="xsd:string" use="required" />
+			<xsd:attribute name="excludes" type="xsd:string" use="optional" />
+			<xsd:attribute name="order" type="xsd:positiveInteger" default="10" />
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="controller-post-processor">
+		<xsd:complexType>
+			<xsd:attribute name="id" type="xsd:ID" use="required" />
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="web-socket-config">
+		<xsd:complexType>
+			<xsd:all>
+				<xsd:element name="filter-configs">
+					<xsd:complexType>
+						<xsd:choice minOccurs="1" maxOccurs="unbounded">
+							<xsd:element ref="filter-config" />
+						</xsd:choice>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:all>
+			<xsd:attribute name="id" type="xsd:ID" use="required" />
+			<xsd:attribute name="root" type="xsd:string" default="/ws" />
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="ssl-config">
+		<xsd:complexType>
+			<xsd:attribute name="id" type="xsd:ID" use="required" />
+			<xsd:attribute name="enable" type="xsd:boolean" default="true" />
+			<xsd:attribute name="jks-path" type="xsd:string" />
+			<xsd:attribute name="password" type="xsd:string" />
+			<xsd:attribute name="alias" type="xsd:string" />
+		</xsd:complexType>
+	</xsd:element>
+	
+	
+	<xsd:element name="http-server">
+		<xsd:complexType>
+			<xsd:attribute name="id" type="xsd:ID" />
+			<xsd:attribute name="port" type="xsd:positiveInteger" default="8080" />
+			<xsd:attribute name="io-thread" type="xsd:positiveInteger" use="optional" />
+			<xsd:attribute name="ref-task-executor" type="xsd:string" default="taskExecutor" />
+			<xsd:attribute name="ref-http-config" type="xsd:string" use="optional" />
+			<xsd:attribute name="ref-ssl-config" type="xsd:string" use="optional" />
+			<xsd:attribute name="ref-web-socket-config" type="xsd:string" use="optional" />
+		</xsd:complexType>
+	</xsd:element>
+	
+</xsd:schema>

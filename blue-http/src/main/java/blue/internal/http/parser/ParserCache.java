@@ -1,9 +1,9 @@
 package blue.internal.http.parser;
 
 import blue.http.annotation.HttpMethod;
-import blue.http.config.FilterConfig;
 import blue.http.filter.Filter;
 import blue.http.filter.FilterType;
+import blue.internal.http.config.FilterConfig;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
 

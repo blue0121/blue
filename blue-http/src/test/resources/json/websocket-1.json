@@ -1,0 +1,15 @@
+{
+  "header": {
+	"messageId": 1,
+	"token": "111",
+	"timestamp": 1,
+	"url": "/hello",
+	"version": 0,
+	"type": 1
+  },
+  "body": {
+	"code": 0,
+	"message": null,
+	"data": "blue"
+  }
+}

@@ -30,7 +30,7 @@ public class WebSocketMessage
 	}
 
 	public static WebSocketMessage toResponse(WebSocketMessage request, Object result,
-	                                                                 ErrorCode errorCode, Object...args)
+	                                          ErrorCode errorCode, Object...args)
 	{
 		WebSocketMessage response = WebSocketMessage.toResponse(request);
 		WebSocketBody body = response.getBody();
