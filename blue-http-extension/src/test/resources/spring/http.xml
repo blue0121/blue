@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:core="http://blue.com/schema/core"
+	xmlns:http="http://blue.com/schema/http"
+    xmlns:http-extension="http://blue.com/schema/http-extension"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://blue.com/schema/core http://blue.com/schema/core.xsd
+		http://blue.com/schema/http http://blue.com/schema/http.xsd
+		http://blue.com/schema/http-extension http://blue.com/schema/http-extension.xsd">
+		
+	<!-- 扫描包 -->
+	<context:component-scan base-package="test.http.extension.controller" />
+	<http-extension:monitor-controller id="monitorController" />
+
+	<http:controller-post-processor id="controllerPostProcessor" />
+	<core:task-executor id="taskExecutor" core-pool-size="200" max-pool-size="5000" queue-capacity="0" />
+	
+	<http:http-config id="httpConfig" path="/api" ftl-root="/html/" max-upload-size="1048576">
+		<http:path-map>
+			<map>
+				<entry key="/static_api" value="cp:/static" />
+				<entry key="/html" value="cp:/html" />
+				<entry key="/upload" value="/opt/web/web/upload" />
+			</map>
+		</http:path-map>
+		<http:filter-configs>
+			<http:filter-config ref="sessionCookieFilter" filters="/**" order="1" />
+			<http:filter-config ref="settingFilter" filters="/**" order="2" />
+			<http:filter-config ref="uploadFilter" filters="/**" order="3" />
+			<http:filter-config ref="monitorFilter" filters="/**" excludes="/management/**" order="5" />
+		</http:filter-configs>
+	</http:http-config>
+	
+	<http:session-cookie-http-filter id="sessionCookieFilter" session-key="session" />
+	<http:setting-http-filter id="settingFilter">
+		<http:param-map>
+			<map>
+				<entry key="path" value="/api" />
+			</map>
+		</http:param-map>
+	</http:setting-http-filter>
+	<http:upload-http-filter id="uploadFilter" />
+	<http-extension:monitor-http-filter id="monitorFilter" />
+
+	<http:web-socket-config id="webSocketConfig" root="/ws">
+		<http:filter-configs>
+			<http:filter-config ref="tokenWebSocketFilter" filters="/**" order="1"/>
+		</http:filter-configs>
+	</http:web-socket-config>
+
+	<http:token-web-socket-filter id="tokenWebSocketFilter" />
+	
+	<http:http-server id="httpServer" port="8080" ref-task-executor="taskExecutor"
+	                    ref-http-config="httpConfig" ref-web-socket-config="webSocketConfig" />
+	
+</beans>
