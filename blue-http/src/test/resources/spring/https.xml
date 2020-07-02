@@ -33,17 +33,15 @@
 		</http:filter-configs>
 	</http:http-config>
 	
-	<bean id="sessionCookieFilter" class="blue.internal.http.filter.SessionCookieFilter">
-		<property name="sessionKey" value="session" />
-	</bean>
-	<bean id="settingFilter" class="blue.internal.http.filter.SettingFilter">
-		<property name="param">
+	<http:session-cookie-http-filter id="sessionCookieFilter" session-key="session" />
+	<http:setting-http-filter id="settingFilter">
+		<http:param-map>
 			<map>
 				<entry key="path" value="/api" />
 			</map>
-		</property>
-	</bean>
-	<bean id="uploadFilter" class="blue.internal.http.filter.UploadFilter" />
+		</http:param-map>
+	</http:setting-http-filter>
+	<http:upload-http-filter id="uploadFilter" />
 	
 	<http:ssl-config id="sslConfig" enable="true" />
 
@@ -52,8 +50,8 @@
 			<http:filter-config ref="tokenWebSocketFilter" filters="/**" order="1"/>
 		</http:filter-configs>
 	</http:web-socket-config>
-
-	<bean id="tokenWebSocketFilter" class="blue.internal.http.filter.TokenWebSocketFilter" />
+	
+	<http:token-web-socket-filter id="tokenWebSocketFilter" />
 	
 	<http:http-server id="httpServer" port="8080" ref-task-executor="taskExecutor" ref-http-config="httpConfig"
 	                    ref-ssl-config="sslConfig" ref-web-socket-config="webSocketConfig"/>

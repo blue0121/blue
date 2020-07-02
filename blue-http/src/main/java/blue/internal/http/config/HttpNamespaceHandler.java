@@ -21,9 +21,13 @@ public class HttpNamespaceHandler extends NamespaceHandlerSupport
 	{
 		this.registerBeanDefinitionParser("controller-post-processor", new HttpPostProcessorParser());
 		this.registerBeanDefinitionParser("http-config", new HttpConfigParser());
+		this.registerBeanDefinitionParser("upload-http-filter", new UploadFilterParser());
+		this.registerBeanDefinitionParser("session-cookie-http-filter", new SessionCookieFilterParser());
+		this.registerBeanDefinitionParser("setting-http-filter", new SettingFilterParser());
 		this.registerBeanDefinitionParser("http-server", new HttpServerParser());
 		this.registerBeanDefinitionParser("ssl-config", new SslConfigParser());
 		this.registerBeanDefinitionParser("web-socket-config", new WebSocketConfigParser());
+		this.registerBeanDefinitionParser("token-web-socket-filter", new TokenWebSocketFilterParser());
 	}
 
 }

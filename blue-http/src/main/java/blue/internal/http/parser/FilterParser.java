@@ -8,8 +8,6 @@ public class FilterParser
 {
 	private static volatile FilterParser instance;
 
-	private ParserCache parserCache = ParserCache.getInstance();
-
 	private FilterParser()
 	{
 	}

@@ -86,4 +86,38 @@
 		</xsd:complexType>
 	</xsd:element>
 	
+	<xsd:element name="upload-http-filter">
+		<xsd:complexType>
+			<xsd:attribute name="id" type="xsd:ID" use="required" />
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="session-cookie-http-filter">
+		<xsd:complexType>
+			<xsd:attribute name="id" type="xsd:ID" use="required" />
+			<xsd:attribute name="session-key" type="xsd:string" />
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="setting-http-filter">
+		<xsd:complexType>
+			<xsd:all>
+				<xsd:element name="param-map">
+					<xsd:complexType>
+						<xsd:all>
+							<xsd:element ref="beans:map" />
+						</xsd:all>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:all>
+			<xsd:attribute name="id" type="xsd:ID" use="required" />
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="token-web-socket-filter">
+		<xsd:complexType>
+			<xsd:attribute name="id" type="xsd:ID" use="required" />
+		</xsd:complexType>
+	</xsd:element>
+	
 </xsd:schema>

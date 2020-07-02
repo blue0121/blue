@@ -42,6 +42,9 @@ public class HttpConfig implements InitializingBean
 			for (FilterConfig config : filterConfigList)
 			{
 				parserCache.addFilterConfig(config);
+				logger.info("{} Filter name: {}, order: {}, include: {}, exclude: {}",
+						config.getObject().getFilterType(), config.getClazz().getSimpleName(),
+						config.getOrder(), config.getFilterList(), config.getExcludeList());
 			}
 		}
 
