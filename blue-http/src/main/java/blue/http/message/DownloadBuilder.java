@@ -1,9 +1,9 @@
-package blue.internal.http.message;
+package blue.http.message;
 
 import blue.core.id.IdGenerator;
 import blue.core.util.UrlUtil;
 import blue.http.exception.HttpServerException;
-import blue.http.message.Download;
+import blue.internal.http.message.DefaultDownload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
@@ -30,7 +30,7 @@ public class DownloadBuilder
 	private boolean download = false;
 	private boolean handled = false;
 
-	public DownloadBuilder()
+	DownloadBuilder()
 	{
 	}
 

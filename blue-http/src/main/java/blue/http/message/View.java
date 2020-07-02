@@ -1,7 +1,5 @@
 package blue.http.message;
 
-import blue.internal.http.message.ViewBuilder;
-
 import java.util.Map;
 
 /**

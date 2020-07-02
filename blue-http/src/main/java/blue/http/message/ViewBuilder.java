@@ -1,6 +1,6 @@
-package blue.internal.http.message;
+package blue.http.message;
 
-import blue.http.message.View;
+import blue.internal.http.message.DefaultView;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +17,7 @@ public class ViewBuilder
 	private String view;
 	private Map<String, Object> model;
 
-	public ViewBuilder()
+	ViewBuilder()
 	{
 		this.model = new HashMap<>();
 	}

@@ -1,7 +1,5 @@
 package blue.http.message;
 
-import blue.internal.http.message.DownloadBuilder;
-
 import java.io.File;
 
 /**
