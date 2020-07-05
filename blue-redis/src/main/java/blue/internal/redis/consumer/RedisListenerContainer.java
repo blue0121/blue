@@ -22,7 +22,7 @@ public class RedisListenerContainer extends AbstractListenerContainer
 	{
 		for (ConsumerListenerConfig config : configList)
 		{
-			MessageListenerImpl listener = new MessageListenerImpl(config);
+			RedissonMessageListener listener = new RedissonMessageListener(config);
 			redisson.getTopic(config.getTopic()).addListener(config.getClazz(), listener);
 		}
 	}

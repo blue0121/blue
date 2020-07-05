@@ -10,12 +10,12 @@ import org.slf4j.LoggerFactory;
  * @author Jin Zheng
  * @since 2019-04-06
  */
-public class MessageListenerImpl<T> implements MessageListener<T>
+public class RedissonMessageListener<T> implements MessageListener<T>
 {
-	private static Logger logger = LoggerFactory.getLogger(MessageListenerImpl.class);
+	private static Logger logger = LoggerFactory.getLogger(RedissonMessageListener.class);
 	private final ConsumerListenerConfig config;
 
-	public MessageListenerImpl(ConsumerListenerConfig config)
+	public RedissonMessageListener(ConsumerListenerConfig config)
 	{
 		this.config = config;
 	}
