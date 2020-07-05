@@ -17,6 +17,7 @@
 		<module>blue-test</module>
 		<module>blue-validation</module>
 		<module>blue-redis</module>
+		<module>blue-mqtt</module>
 	</modules>
 
 	<properties>
