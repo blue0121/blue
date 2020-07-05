@@ -18,10 +18,12 @@ module blue.core
 	exports blue.core.file;
 	exports blue.core.http;
 	exports blue.core.id;
+	exports blue.core.message;
 	exports blue.core.security;
 	exports blue.core.tree;
 	exports blue.core.util;
 
 	exports blue.internal.core.config to spring.beans;
 	exports blue.internal.core.dict to spring.beans;
+	exports blue.internal.core.message to blue.redis;
 }

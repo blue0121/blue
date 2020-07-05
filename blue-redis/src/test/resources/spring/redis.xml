@@ -1,0 +1,40 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:core="http://blue.com/schema/core"
+       xmlns:redis="http://blue.com/schema/redis"
+       xmlns:redisson="http://redisson.org/schema/redisson"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://blue.com/schema/core http://blue.com/schema/core.xsd
+       http://blue.com/schema/redis http://blue.com/schema/redis.xsd
+	   http://redisson.org/schema/redisson http://redisson.org/schema/redisson/redisson.xsd">
+	
+	<core:task-executor id="taskExecutor" core-pool-size="10" max-pool-size="1000" queue-capacity="10000" keep-alive-seconds="60" />
+	<core:task-scheduler id="taskScheduler" pool-size="10" />
+	
+	<redis:fastjson-codec id="fastjsonCodec" />
+	
+	<redisson:client id="redisson" codec-ref="fastjsonCodec">
+		<redisson:single-server address="redis://127.0.0.1:6379" password="1111"
+		                        connection-pool-size="100"/>
+	</redisson:client>
+	
+	<redis:producer id="redisProducer" ref-redisson="redisson" ref-producer-listener="producerListener" />
+	
+	<redis:listener-container id="mqttListenerContainer" ref-redisson="redisson" ref-task-executor="taskExecutor">
+		<redis:listener topic="test" ref-listener="redisListener" />
+	</redis:listener-container>
+	
+	<bean id="producerListener" class="test.redis.listener.DefaultProducerListener" />
+	<bean id="redisListener" class="test.redis.listener.DefaultListener" />
+	
+	<redis:date-sequence id="orderSeq" ref-redisson="redisson" key="order_seq" length="14" prefix="OD" />
+	<redis:reset-sequence id="resetSeq" ref-task-scheduler="taskScheduler" cron="0/30 * * ? * *">
+		<redis:ref-sequences>
+			<list>
+				<ref bean="orderSeq" />
+			</list>
+		</redis:ref-sequences>
+	</redis:reset-sequence>
+
+</beans>

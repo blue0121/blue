@@ -16,6 +16,7 @@
 		<module>blue-monitor</module>
 		<module>blue-test</module>
 		<module>blue-validation</module>
+		<module>blue-redis</module>
 	</modules>
 
 	<properties>
@@ -50,6 +51,19 @@
 		<jboss.logging.version>3.4.1.Final</jboss.logging.version>
 		<classmate.version>1.5.1</classmate.version>
 		<tomcat.el.version>9.0.31</tomcat.el.version>
+
+		<!-- redis -->
+		<redisson.version>3.12.1</redisson.version>
+
+		<!-- mqtt -->
+		<fusesource.version>1.16</fusesource.version>
+
+		<!-- jms -->
+		<jms.version>2.0.1</jms.version>
+		<qpid.version>6.3.4</qpid.version>
+
+		<!-- kafka -->
+		<kafka.version>2.5.0</kafka.version>
 
 		<!-- test -->
 		<hsqldb.version>2.5.0</hsqldb.version>
