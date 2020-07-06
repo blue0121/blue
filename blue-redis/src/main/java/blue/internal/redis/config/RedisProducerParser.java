@@ -12,9 +12,9 @@ import org.w3c.dom.Element;
  * @author Jin Zheng
  * @since 1.0 2019-04-10
  */
-public class RedissProducerParser extends SimpleBeanDefinitionParser
+public class RedisProducerParser extends SimpleBeanDefinitionParser
 {
-	public RedissProducerParser()
+	public RedisProducerParser()
 	{
 		this.clazz = DefaultRedisProducer.class;
 	}

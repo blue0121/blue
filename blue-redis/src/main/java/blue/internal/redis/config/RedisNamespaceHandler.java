@@ -18,7 +18,7 @@ public class RedisNamespaceHandler extends NamespaceHandlerSupport
 	public void init()
 	{
 		this.registerBeanDefinitionParser("fastjson-codec", new FastjsonCodecParser());
-		this.registerBeanDefinitionParser("producer", new RedissProducerParser());
+		this.registerBeanDefinitionParser("producer", new RedisProducerParser());
 		this.registerBeanDefinitionParser("listener-container", new RedisListenerContrainerParser());
 		this.registerBeanDefinitionParser("lock-service", new DefaultLockServiceParser());
 		this.registerBeanDefinitionParser("atomic-sequence", new AtomicSequenceParser());

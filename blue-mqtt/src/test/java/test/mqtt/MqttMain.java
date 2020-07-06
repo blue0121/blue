@@ -10,11 +10,11 @@ import test.mqtt.model.User;
  * @author Jin Zheng
  * @since 1.0 2019-07-29
  */
-public class ListenerMain
+public class MqttMain
 {
 	private static String[] SPRING = {"spring/mqtt.xml"};
 
-	public ListenerMain()
+	public MqttMain()
 	{
 	}
 
