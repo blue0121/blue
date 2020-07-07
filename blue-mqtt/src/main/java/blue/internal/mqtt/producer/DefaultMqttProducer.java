@@ -3,6 +3,7 @@ package blue.internal.mqtt.producer;
 import blue.core.message.ProducerListener;
 import blue.core.util.AssertUtil;
 import blue.core.util.WaitUtil;
+import blue.internal.core.message.LoggerProducerListener;
 import blue.mqtt.exception.MqttException;
 import blue.mqtt.model.MqttQos;
 import blue.mqtt.model.MqttTopic;
@@ -12,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.LongAdder;
@@ -45,8 +45,7 @@ public class DefaultMqttProducer implements MqttProducer, InitializingBean
 		CountDownLatch latch = new CountDownLatch(messageList.size());
 		for (Object message : messageList)
 		{
-			this.getBatchMqttClient().publish(topic, message,
-					Arrays.asList(new MqttProducerListener(latch, topic, message, this.listener)));
+			this.getBatchMqttClient().publish(topic, message, new MqttProducerListener(latch, topic, message, this.listener));
 		}
 		WaitUtil.await(latch);
 	}
@@ -57,25 +56,14 @@ public class DefaultMqttProducer implements MqttProducer, InitializingBean
 		AssertUtil.notNull(topic, "Topic");
 		AssertUtil.notEmpty(messageList, "Message list");
 		this.setMqttTopic(topic);
-		List<ProducerListener<MqttTopic, Object>> listenerList = this.getProducerListener(listener);
+		if (listener == null)
+		{
+			listener = this.listener;
+		}
 		for (Object message : messageList)
 		{
-			this.getBatchMqttClient().publish(topic, message, listenerList);
+			this.getBatchMqttClient().publish(topic, message, listener);
 		}
-	}
-
-	private List<ProducerListener<MqttTopic, Object>> getProducerListener(ProducerListener<MqttTopic, Object> listener)
-	{
-		List<ProducerListener<MqttTopic, Object>> listenerList = new ArrayList<>();
-		if (this.listener != null)
-		{
-			listenerList.add(this.listener);
-		}
-		if (listener != null)
-		{
-			listenerList.add(listener);
-		}
-		return listenerList;
 	}
 
 	@Override
@@ -103,6 +91,12 @@ public class DefaultMqttProducer implements MqttProducer, InitializingBean
 			{
 				this.initBatchMqttClient(i);
 			}
+		}
+
+		if (this.listener == null)
+		{
+			this.listener = new LoggerProducerListener<>();
+			logger.info("Default ProducerListener is empty, use LoggerProducerListener");
 		}
 	}
 

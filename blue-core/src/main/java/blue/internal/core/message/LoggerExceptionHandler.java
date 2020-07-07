@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
  * @author Jin Zheng
  * @since 2019-06-29
  */
-public class LoggerExceptionHandler<V> implements ExceptionHandler<Topic, V>
+public class LoggerExceptionHandler<T extends Topic, V> implements ExceptionHandler<T, V>
 {
 	private static Logger logger = LoggerFactory.getLogger(LoggerExceptionHandler.class);
 
@@ -19,10 +19,10 @@ public class LoggerExceptionHandler<V> implements ExceptionHandler<Topic, V>
 	}
 
 	@Override
-	public void onError(Topic topic, V message, Exception e)
+	public void onError(T topic, V message, Exception e)
 	{
 		String json = message instanceof CharSequence ? message.toString() : JsonUtil.output(message);
-		logger.error("Error, topic: {}, value: {}", topic, json);
+		logger.error("Error, {}, value: {}", topic, json);
 		logger.error("Error: ", e);
 	}
 

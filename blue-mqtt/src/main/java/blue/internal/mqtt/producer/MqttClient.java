@@ -80,7 +80,7 @@ public class MqttClient implements InitializingBean, DisposableBean
 		WaitUtil.await(latch);
 	}
 
-	public void publish(MqttTopic topic, Object message, List<ProducerListener<MqttTopic, Object>> listenerList)
+	public void publish(MqttTopic topic, Object message, ProducerListener<MqttTopic, Object> listener)
 	{
 		byte[] payload = message instanceof ByteValue ? ((ByteValue)message).getBytes() : JsonUtil.toBytes(message);
 		connection.getDispatchQueue().execute(() ->
@@ -90,24 +90,18 @@ public class MqttClient implements InitializingBean, DisposableBean
 				@Override
 				public void onSuccess(Void value)
 				{
-					if (listenerList != null && !listenerList.isEmpty())
+					if (listener != null)
 					{
-						for (ProducerListener<MqttTopic, Object> l : listenerList)
-						{
-							l.onSuccess(topic, message);
-						}
+						listener.onSuccess(topic, message);
 					}
 				}
 
 				@Override
 				public void onFailure(Throwable cause)
 				{
-					if (listenerList != null && !listenerList.isEmpty())
+					if (listener != null)
 					{
-						for (ProducerListener<MqttTopic, Object> l : listenerList)
-						{
-							l.onFailure(topic, message, cause);
-						}
+						listener.onFailure(topic, message, cause);
 					}
 				}
 			});

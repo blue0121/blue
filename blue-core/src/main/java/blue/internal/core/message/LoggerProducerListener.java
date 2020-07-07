@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
  * @author Jin Zheng
  * @since 2020-02-10
  */
-public class LoggerProducerListener<V> implements ProducerListener<Topic, V>
+public class LoggerProducerListener<T extends Topic, V> implements ProducerListener<T, V>
 {
 	private static Logger logger = LoggerFactory.getLogger(LoggerProducerListener.class);
 
@@ -19,17 +19,17 @@ public class LoggerProducerListener<V> implements ProducerListener<Topic, V>
 	}
 
 	@Override
-	public void onSuccess(Topic topic, V message)
+	public void onSuccess(T topic, V message)
 	{
 		String json = message instanceof CharSequence ? message.toString() : JsonUtil.output(message);
-		logger.error("Success, topic: {}, value: {}", topic, json);
+		logger.info("Success, {}, value: {}", topic, json);
 	}
 
 	@Override
-	public void onFailure(Topic topic, V message, Throwable cause)
+	public void onFailure(T topic, V message, Throwable cause)
 	{
 		String json = message instanceof CharSequence ? message.toString() : JsonUtil.output(message);
-		logger.error("Error, topic: {}, value: {}", topic, json);
+		logger.error("Error, {}, value: {}", topic, json);
 		logger.error("Error: ", cause);
 	}
 }

@@ -19,6 +19,7 @@
 		<module>blue-redis</module>
 		<module>blue-mqtt</module>
 		<module>blue-jms</module>
+		<module>blue-kafka</module>
 	</modules>
 
 	<properties>
