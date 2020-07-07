@@ -15,8 +15,7 @@
 	<redis:fastjson-codec id="fastjsonCodec" />
 	
 	<redisson:client id="redisson" codec-ref="fastjsonCodec">
-		<redisson:single-server address="redis://127.0.0.1:6379" password="1111"
-		                        connection-pool-size="100"/>
+		<redisson:single-server address="redis://127.0.0.1:6379" connection-pool-size="100"/>
 	</redisson:client>
 	
 	<redis:producer id="redisProducer" ref-redisson="redisson" ref-producer-listener="producerListener" />

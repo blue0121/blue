@@ -10,7 +10,7 @@
 		<xsd:complexType>
 			<xsd:attribute name="id" type="xsd:ID" use="required" />
 			<xsd:attribute name="ref-config" type="xsd:string" use="required" />
-			<xsd:attribute name="ref-default-listener" type="xsd:string" use="optional" />
+			<xsd:attribute name="ref-producer-listener" type="xsd:string" use="optional" />
 		</xsd:complexType>
 	</xsd:element>
 

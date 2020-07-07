@@ -87,4 +87,14 @@ public class KafkaListenerContainer extends AbstractListenerContainer
             logger.info("OffsetManager is null，default: MemoryOffsetManager");
         }
     }
+
+    public void setConfig(Properties config)
+    {
+        this.config = config;
+    }
+
+    public void setOffsetManager(OffsetManager offsetManager)
+    {
+        this.offsetManager = offsetManager;
+    }
 }

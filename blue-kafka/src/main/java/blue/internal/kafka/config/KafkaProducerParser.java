@@ -22,7 +22,7 @@ public class KafkaProducerParser extends SimpleBeanDefinitionParser
 	@Override
 	protected void doParseInternal(Element element, ParserContext parserContext, BeanDefinitionBuilder builder)
 	{
-		this.parseRef(element, builder, "defaultListener", "ref-default-listener");
+		this.parseRef(element, builder, "producerListener", "ref-producer-listener");
 		this.parseRef(element, builder, "config", "ref-config");
 	}
 }

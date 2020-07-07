@@ -30,7 +30,7 @@
 	<bean id="producerListener" class="test.kafka.listener.DefaultProducerListener" />
 	<bean id="kafkaListener" class="test.kafka.listener.DefaultKafkaListener" />
 	
-	<kafka:producer id="kafkaProducer" ref-config="kafkaProducerConfig" ref-default-listener="producerListener" />
+	<kafka:producer id="kafkaProducer" ref-config="kafkaProducerConfig" />
 	
 	<kafka:memory-offset-manager id="kafkaOffsetManager" />
 	
