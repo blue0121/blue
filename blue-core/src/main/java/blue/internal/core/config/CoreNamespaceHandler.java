@@ -24,6 +24,6 @@ public class CoreNamespaceHandler extends NamespaceHandlerSupport
 		this.registerBeanDefinitionParser("task-scheduler", new TaskSchedulerParser());
 		this.registerBeanDefinitionParser("encryption-placeholder", new EncryptionPlaceholderParser());
 		this.registerBeanDefinitionParser("spring-bean", new SpringBeanParser());
-		this.registerBeanDefinitionParser("http-util", new HttpUtilParser());
+		this.registerBeanDefinitionParser("http-invoker", new HttpInvokerParser());
 	}
 }

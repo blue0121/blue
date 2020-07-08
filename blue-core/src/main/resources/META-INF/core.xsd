@@ -62,7 +62,7 @@
 		</xsd:complexType>
 	</xsd:element>
 
-	<xsd:element name="http-util">
+	<xsd:element name="http-invoker">
 		<xsd:complexType>
 			<xsd:all minOccurs="0">
 				<xsd:element name="default-headers">

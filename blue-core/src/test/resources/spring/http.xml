@@ -8,13 +8,13 @@
 	
 	<core:task-executor id="taskExecutor" />
 	
-	<core:http-util id="httpUtil" base-url="http://localhost:10000" timeout="10000"
+	<core:http-invoker id="httpInvoker" base-url="http://localhost:10000" timeout="10000"
 	                ref-task-executor="taskExecutor">
 		<core:default-headers>
 			<map>
 				<entry key="Content-Type" value="application/json" />
 			</map>
 		</core:default-headers>
-	</core:http-util>
+	</core:http-invoker>
 
 </beans>

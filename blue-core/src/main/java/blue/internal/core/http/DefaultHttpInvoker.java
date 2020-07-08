@@ -1,7 +1,8 @@
-package blue.core.http;
+package blue.internal.core.http;
 
-import blue.core.dict.HttpMethod;
-import blue.internal.core.http.MultiPartBodyPublisher;
+import blue.core.http.HttpInvoker;
+import blue.core.http.PathResponse;
+import blue.core.http.StringResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -23,11 +24,11 @@ import java.util.concurrent.CompletableFuture;
 
 /**
  * @author Jin Zheng
- * @since 2020-04-24
+ * @date 2020-07-08
  */
-public class HttpUtil implements InitializingBean
+public class DefaultHttpInvoker implements HttpInvoker, InitializingBean
 {
-	private static Logger logger = LoggerFactory.getLogger(HttpUtil.class);
+	private static Logger logger = LoggerFactory.getLogger(DefaultHttpInvoker.class);
 
 	private String baseUrl;
 	private int timeout;
@@ -37,33 +38,20 @@ public class HttpUtil implements InitializingBean
 
 	private HttpClient httpClient;
 
-	public HttpUtil()
+	public DefaultHttpInvoker()
 	{
 	}
 
-	public HttpResponse<String> requestSync(String uri)
-	{
-		return this.requestSync(uri, HttpMethod.GET, null, null);
-	}
-
-	public HttpResponse<String> requestSync(String uri, HttpMethod method)
-	{
-		return this.requestSync(uri, method, null, null);
-	}
-
-	public HttpResponse<String> requestSync(String uri, HttpMethod method, String body)
-	{
-		return this.requestSync(uri, method, body, null);
-	}
-
-	public HttpResponse<String> requestSync(String uri, HttpMethod method, String body, Map<String, String> header)
+	@Override
+	public StringResponse requestSync(String uri, String method, String body, Map<String, String> header)
 	{
 		HttpRequest.BodyPublisher publisher = this.publisher(body);
 		HttpRequest.Builder builder = this.builder(uri, method, header, publisher);
 
 		try
 		{
-			return httpClient.send(builder.build(), HttpResponse.BodyHandlers.ofString());
+			HttpResponse<String> response = httpClient.send(builder.build(), HttpResponse.BodyHandlers.ofString());
+			return new DefaultStringResponse(response);
 		}
 		catch (Exception e)
 		{
@@ -72,45 +60,24 @@ public class HttpUtil implements InitializingBean
 		}
 	}
 
-	public CompletableFuture<HttpResponse<String>> requestAsync(String uri)
-	{
-		return this.requestAsync(uri, HttpMethod.GET, null, null);
-	}
-
-	public CompletableFuture<HttpResponse<String>> requestAsync(String uri, HttpMethod method)
-	{
-		return this.requestAsync(uri, method, null, null);
-	}
-
-	public CompletableFuture<HttpResponse<String>> requestAsync(String uri, HttpMethod method, String body)
-	{
-		return this.requestAsync(uri, method, body, null);
-	}
-
-	public CompletableFuture<HttpResponse<String>> requestAsync(String uri, HttpMethod method, String body, Map<String, String> header)
+	@Override
+	public CompletableFuture<StringResponse> requestAsync(String uri, String method, String body, Map<String, String> header)
 	{
 		HttpRequest.BodyPublisher publisher = this.publisher(body);
 		HttpRequest.Builder builder = this.builder(uri, method, header, publisher);
-		return httpClient.sendAsync(builder.build(), HttpResponse.BodyHandlers.ofString());
+		CompletableFuture<HttpResponse<String>> future = httpClient.sendAsync(builder.build(), HttpResponse.BodyHandlers.ofString());
+		return future.thenApply(s -> new DefaultStringResponse(s));
 	}
 
-	public HttpResponse<Path> downloadSync(String uri, Path file)
-	{
-		return this.downloadSync(uri, HttpMethod.GET, null, file, null);
-	}
-
-	public HttpResponse<Path> downloadSync(String uri, HttpMethod method, String body, Path file)
-	{
-		return this.downloadSync(uri, method, body, file);
-	}
-
-	public HttpResponse<Path> downloadSync(String uri, HttpMethod method, String body, Path file, Map<String, String> header)
+	@Override
+	public PathResponse downloadSync(String uri, String method, String body, Path file, Map<String, String> header)
 	{
 		HttpRequest.BodyPublisher publisher = this.publisher(body);
 		HttpRequest.Builder builder = this.builder(uri, method, header, publisher);
 		try
 		{
-			return httpClient.send(builder.build(), HttpResponse.BodyHandlers.ofFile(file));
+			HttpResponse<Path> response = httpClient.send(builder.build(), HttpResponse.BodyHandlers.ofFile(file));
+			return new DefaultPathResponse(response);
 		}
 		catch (Exception e)
 		{
@@ -119,42 +86,24 @@ public class HttpUtil implements InitializingBean
 		}
 	}
 
-	public CompletableFuture<HttpResponse<Path>> downloadAsync(String uri, Path file)
-	{
-		return this.downloadAsync(uri, HttpMethod.GET, null, file, null);
-	}
-
-	public CompletableFuture<HttpResponse<Path>> downloadAsync(String uri, HttpMethod method, String body, Path file)
-	{
-		return this.downloadAsync(uri, method, body, file, null);
-	}
-
-	public CompletableFuture<HttpResponse<Path>> downloadAsync(String uri, HttpMethod method, String body, Path file, Map<String, String> header)
+	@Override
+	public CompletableFuture<PathResponse> downloadAsync(String uri, String method, String body, Path file, Map<String, String> header)
 	{
 		HttpRequest.BodyPublisher publisher = this.publisher(body);
 		HttpRequest.Builder builder = this.builder(uri, method, header, publisher);
-		return httpClient.sendAsync(builder.build(), HttpResponse.BodyHandlers.ofFile(file));
+		CompletableFuture<HttpResponse<Path>> future = httpClient.sendAsync(builder.build(), HttpResponse.BodyHandlers.ofFile(file));
+		return future.thenApply(s -> new DefaultPathResponse(s));
 	}
 
-	public HttpResponse<String> uploadSync(String uri, HttpMethod method, Path file)
-	{
-		Map<String, Path> fileParam = Map.of(file.getFileName().toString(), file);
-		return this.uploadSync(uri, method, null, fileParam, null);
-	}
-
-	public HttpResponse<String> uploadSync(String uri, HttpMethod method, Path file, Map<String, String> header)
-	{
-		Map<String, Path> fileParam = Map.of(file.getFileName().toString(), file);
-		return this.uploadSync(uri, method, null, fileParam, header);
-	}
-
-	public HttpResponse<String> uploadSync(String uri, HttpMethod method, Map<String, String> textParam, Map<String, Path> fileParam, Map<String, String> header)
+	@Override
+	public StringResponse uploadSync(String uri, String method, Map<String, String> textParam, Map<String, Path> fileParam, Map<String, String> header)
 	{
 		HttpRequest.BodyPublisher publisher = this.buildBodyPublisher(textParam, fileParam);
 		HttpRequest.Builder builder = this.builder(uri, method, header, publisher);
 		try
 		{
-			return httpClient.send(builder.build(), HttpResponse.BodyHandlers.ofString());
+			HttpResponse<String> response = httpClient.send(builder.build(), HttpResponse.BodyHandlers.ofString());
+			return new DefaultStringResponse(response);
 		}
 		catch (Exception e)
 		{
@@ -163,26 +112,16 @@ public class HttpUtil implements InitializingBean
 		}
 	}
 
-	public CompletableFuture<HttpResponse<String>> uploadAsync(String uri, HttpMethod method, Path file)
-	{
-		Map<String, Path> fileParam = Map.of(file.getFileName().toString(), file);
-		return this.uploadAsync(uri, method, null, fileParam, null);
-	}
-
-	public CompletableFuture<HttpResponse<String>> uploadAsync(String uri, HttpMethod method, Path file, Map<String, String> header)
-	{
-		Map<String, Path> fileParam = Map.of(file.getFileName().toString(), file);
-		return this.uploadAsync(uri, method, null, fileParam, header);
-	}
-
-	public CompletableFuture<HttpResponse<String>> uploadAsync(String uri, HttpMethod method, Map<String, String> textParam, Map<String, Path> fileParam, Map<String, String> header)
+	@Override
+	public CompletableFuture<StringResponse> uploadAsync(String uri, String method, Map<String, String> textParam, Map<String, Path> fileParam, Map<String, String> header)
 	{
 		HttpRequest.BodyPublisher publisher = this.buildBodyPublisher(textParam, fileParam);
 		HttpRequest.Builder builder = this.builder(uri, method, header, publisher);
-		return httpClient.sendAsync(builder.build(), HttpResponse.BodyHandlers.ofString());
+		CompletableFuture<HttpResponse<String>> future = httpClient.sendAsync(builder.build(), HttpResponse.BodyHandlers.ofString());
+		return future.thenApply(s -> new DefaultStringResponse(s));
 	}
 
-	private HttpRequest.Builder builder(String uri, HttpMethod method, Map<String, String> header, HttpRequest.BodyPublisher publisher)
+	private HttpRequest.Builder builder(String uri, String method, Map<String, String> header, HttpRequest.BodyPublisher publisher)
 	{
 		String url = (baseUrl != null && !baseUrl.isEmpty()) ? baseUrl + uri : uri;
 		HttpRequest.Builder builder = HttpRequest.newBuilder(URI.create(url));
@@ -199,7 +138,7 @@ public class HttpUtil implements InitializingBean
 		{
 			builder.header(entry.getKey(), entry.getValue());
 		}
-		builder.method(method.getName(), publisher);
+		builder.method(method, publisher);
 		builder.timeout(Duration.ofMillis(timeout));
 		return builder;
 	}
@@ -312,4 +251,5 @@ public class HttpUtil implements InitializingBean
 	{
 		this.taskExecutor = taskExecutor;
 	}
+
 }

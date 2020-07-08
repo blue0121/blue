@@ -1,7 +1,7 @@
 package blue.internal.core.config;
 
 import blue.core.common.SimpleBeanDefinitionParser;
-import blue.core.http.HttpUtil;
+import blue.internal.core.http.DefaultHttpInvoker;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.w3c.dom.Element;
@@ -12,11 +12,11 @@ import java.util.Map;
  * @author Jin Zheng
  * @since 2020-04-25
  */
-public class HttpUtilParser extends SimpleBeanDefinitionParser
+public class HttpInvokerParser extends SimpleBeanDefinitionParser
 {
-	public HttpUtilParser()
+	public HttpInvokerParser()
 	{
-		this.clazz = HttpUtil.class;
+		this.clazz = DefaultHttpInvoker.class;
 	}
 
 	@Override
