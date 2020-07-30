@@ -269,7 +269,30 @@ public class ReflectionUtil
 		
 		return field;
 	}
-	
+
+	/**
+	 * 从 setter/getter 方法名称取得字段名称
+	 *
+	 * @param methodName getter/getter 方法名称
+	 * @return field 字段
+	 */
+	public static String field(String methodName)
+	{
+		String name = null;
+		if (methodName.startsWith("is"))
+		{
+			name = methodName.substring(2);
+		}
+		else if (methodName.startsWith("set") || methodName.startsWith("get"))
+		{
+			name = methodName.substring(3);
+		}
+		if (name == null || name.isEmpty())
+			return null;
+
+		return name.substring(0, 1).toLowerCase() + name.substring(1);
+	}
+
 	/**
 	 * 获取对象的名称
 	 * 

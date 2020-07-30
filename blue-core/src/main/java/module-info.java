@@ -19,6 +19,7 @@ module blue.core
 	exports blue.core.http;
 	exports blue.core.id;
 	exports blue.core.message;
+	exports blue.core.reflect;
 	exports blue.core.security;
 	exports blue.core.tree;
 	exports blue.core.util;
