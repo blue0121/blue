@@ -39,7 +39,7 @@ public interface BeanField
 	 * 2. field.setAccessible(true) & field.set(target, value)
 	 * @param value
 	 */
-	void setFieldValue(Object value);
+	boolean setFieldValue(Object value);
 
 	/**
 	 * getter method

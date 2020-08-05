@@ -80,17 +80,17 @@ public class DefaultBeanField implements BeanField
 	}
 
 	@Override
-	public void setFieldValue(Object value)
+	public boolean setFieldValue(Object value)
 	{
 		if (target == null || value == null)
 		{
 			logger.warn("bean or value is null");
-			return;
+			return false;
 		}
 
+		boolean flag = false;
 		try
 		{
-			boolean flag = false;
 			if (setterMethod != null)
 			{
 				setterMethod.invoke(target, value);
@@ -100,12 +100,15 @@ public class DefaultBeanField implements BeanField
 			{
 				field.setAccessible(true);
 				field.set(target, value);
+				flag = true;
 			}
 		}
 		catch (Exception e)
 		{
 			logger.error("Invoke setter method error,", e);
+			flag = false;
 		}
+		return flag;
 	}
 
 	@Override
