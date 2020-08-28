@@ -32,7 +32,7 @@ public class HttpParser
 	private Set<Class<?>> clazzSet = new HashSet<>();
 
 	private HttpConfigCache configCache = HttpConfigCache.getInstance();
-	private Set<HttpMethod> methodSet = new HashSet<>();
+	private Set<HttpMethod> methodSet = HttpMethod.all();
 
 	private static HttpParser instance = new HttpParser();
 
@@ -42,12 +42,6 @@ public class HttpParser
 		paramSet.add(Request.class);
 		paramSet.add(UploadFile.class);
 		paramString = paramSet.toString();
-
-		methodSet.add(HttpMethod.GET);
-		methodSet.add(HttpMethod.POST);
-		methodSet.add(HttpMethod.PUT);
-		methodSet.add(HttpMethod.DELETE);
-		methodSet.add(HttpMethod.PATCH);
 	}
 
 	public static HttpParser getInstance()
