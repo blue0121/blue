@@ -7,6 +7,9 @@ import blue.http.annotation.HttpMethod;
 import blue.http.exception.HttpServerException;
 import blue.http.message.Request;
 import blue.http.message.UploadFile;
+import blue.internal.http.annotation.DefaultHttpUrlConfig;
+import blue.internal.http.annotation.HttpConfigCache;
+import blue.internal.http.annotation.HttpUrlKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,37 +31,27 @@ public class HttpParser
 	private String paramString;
 	private Set<Class<?>> clazzSet = new HashSet<>();
 
-	private ParserCache parserCache = ParserCache.getInstance();
+	private HttpConfigCache configCache = HttpConfigCache.getInstance();
 	private Set<HttpMethod> methodSet = new HashSet<>();
 
-	private static volatile HttpParser instance;
+	private static HttpParser instance = new HttpParser();
 
 	private HttpParser()
 	{
 		paramSet.add(String.class);
 		paramSet.add(Request.class);
 		paramSet.add(UploadFile.class);
-
 		paramString = paramSet.toString();
 
 		methodSet.add(HttpMethod.GET);
 		methodSet.add(HttpMethod.POST);
 		methodSet.add(HttpMethod.PUT);
 		methodSet.add(HttpMethod.DELETE);
+		methodSet.add(HttpMethod.PATCH);
 	}
 
 	public static HttpParser getInstance()
 	{
-		if (instance == null)
-		{
-			synchronized (HttpParser.class)
-			{
-				if (instance == null)
-				{
-					instance = new HttpParser();
-				}
-			}
-		}
 		return instance;
 	}
 
@@ -126,12 +119,20 @@ public class HttpParser
 		}
 		for (HttpMethod httpMethod : httpMethodSet)
 		{
-			HttpUrlConfig config = new HttpUrlConfig(url.toString(), httpMethod);
-			if (parserCache.containsConfig(config))
+			DefaultHttpUrlConfig config = new DefaultHttpUrlConfig();
+			config.setName(url.toString());
+			config.setUrl(url.toString());
+			config.setHttpMethod(httpMethod);
+			config.setCharset(charset);
+			config.setContentType(contentType);
+			config.setMethod(method);
+			HttpUrlKey key = config.buildKey();
+
+			if (configCache.contains(key))
 				throw new HttpServerException("url 已经存在: " + config);
 
-			parserCache.putConfig(config, new HttpUrlMethod(charset, method, contentType));
-			logger.info("Found Http: {} [{}] [{}] [{}]，{}.{}()", config.getUrl(), config.getMethod().name(),
+			configCache.put(key, config);
+			logger.info("Found Http: {} [{}] [{}] [{}]，{}.{}()", config.getUrl(), httpMethod.name(),
 					charset.name(), contentType, method.getDeclaringClass().getSimpleName(), method.getName());
 		}
 	}

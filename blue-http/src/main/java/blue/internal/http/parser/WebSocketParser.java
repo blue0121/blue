@@ -4,6 +4,9 @@ import blue.http.annotation.WebSocket;
 import blue.http.exception.HttpServerException;
 import blue.http.exception.WebSocketServerException;
 import blue.http.message.WebSocketRequest;
+import blue.internal.http.annotation.DefaultWebSocketUrlConfig;
+import blue.internal.http.annotation.WebSocketConfigCache;
+import blue.internal.http.annotation.WebSocketUrlKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,9 +27,9 @@ public class WebSocketParser
 	private String paramString;
 	private Set<Class<?>> clazzSet = new HashSet<>();
 
-	private ParserCache parserCache = ParserCache.getInstance();
+	private WebSocketConfigCache configCache = WebSocketConfigCache.getInstance();
 
-	private static volatile WebSocketParser instance;
+	private static WebSocketParser instance = new WebSocketParser();
 
 	private WebSocketParser()
 	{
@@ -36,16 +39,6 @@ public class WebSocketParser
 
 	public static WebSocketParser getInstance()
 	{
-		if (instance == null)
-		{
-			synchronized (WebSocketParser.class)
-			{
-				if (instance == null)
-				{
-					instance = new WebSocketParser();
-				}
-			}
-		}
 		return instance;
 	}
 
@@ -102,11 +95,17 @@ public class WebSocketParser
 			}
 		}
 
-		WebSocketUrlConfig config = new WebSocketUrlConfig(url.toString(), version);
-		if (parserCache.containsConfig(config))
-			throw new WebSocketServerException("已经存在：" + config);
+		DefaultWebSocketUrlConfig config = new DefaultWebSocketUrlConfig();
+		config.setName(url.toString());
+		config.setUrl(url.toString());
+		config.setVersion(version);
+		config.setMethod(method);
+		WebSocketUrlKey key = config.buildKey();
 
-		parserCache.putConfig(config, new WebSocketMethod(method));
+		if (configCache.contains(key))
+			throw new WebSocketServerException("已经存在：" + key);
+
+		configCache.put(key, config);
 		logger.info("Found WebSocket: {}，{}.{}()", config.getUrl(),
 				method.getDeclaringClass().getSimpleName(), method.getName());
 	}

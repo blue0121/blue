@@ -1,0 +1,70 @@
+package blue.internal.http.annotation;
+
+import blue.http.annotation.WebSocketUrlConfig;
+
+import java.lang.reflect.Method;
+
+/**
+ * @author Jin Zheng
+ * @since 1.0 2020-08-28
+ */
+public class DefaultWebSocketUrlConfig implements WebSocketUrlConfig
+{
+	private String name;
+	private String url;
+	private int version;
+	private Method method;
+
+	public DefaultWebSocketUrlConfig()
+	{
+	}
+
+	public WebSocketUrlKey buildKey()
+	{
+		return new WebSocketUrlKey(url, version);
+	}
+
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+
+	public void setUrl(String url)
+	{
+		this.url = url;
+	}
+
+	public void setVersion(int version)
+	{
+		this.version = version;
+	}
+
+	public void setMethod(Method method)
+	{
+		this.method = method;
+	}
+
+	@Override
+	public String getName()
+	{
+		return name;
+	}
+
+	@Override
+	public String getUrl()
+	{
+		return url;
+	}
+
+	@Override
+	public int getVersion()
+	{
+		return version;
+	}
+
+	@Override
+	public Method getMethod()
+	{
+		return method;
+	}
+}

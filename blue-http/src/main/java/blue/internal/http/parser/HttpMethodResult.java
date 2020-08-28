@@ -2,6 +2,7 @@ package blue.internal.http.parser;
 
 import blue.http.annotation.Charset;
 import blue.http.annotation.ContentType;
+import blue.http.annotation.HttpUrlConfig;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -20,6 +21,21 @@ public class HttpMethodResult
 
 	public HttpMethodResult()
 	{
+	}
+
+	public HttpMethodResult(HttpUrlConfig config, Map<String, String> pathMap)
+	{
+		this.charset = config.getCharset();
+		this.method = config.getMethod();
+		this.contentType = config.getContentType();
+		if (pathMap == null)
+		{
+			this.pathMap = new HashMap<>();
+		}
+		else
+		{
+			this.pathMap = new HashMap<>(pathMap);
+		}
 	}
 
 	public HttpMethodResult(HttpUrlMethod method, Map<String, String> pathMap)
