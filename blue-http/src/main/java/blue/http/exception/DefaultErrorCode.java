@@ -96,4 +96,10 @@ public class DefaultErrorCode implements ErrorCode
 		return json.toJSONString();
 	}
 
+	@Override
+	public HttpErrorCodeException newException(Object... args)
+	{
+		return new HttpErrorCodeException(this, args);
+	}
+
 }

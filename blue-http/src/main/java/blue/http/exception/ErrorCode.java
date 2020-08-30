@@ -41,4 +41,11 @@ public interface ErrorCode
 	 */
 	String toJsonString(Object...args);
 
+	/**
+	 * 创建异常
+	 * @param args
+	 * @return
+	 */
+	HttpErrorCodeException newException(Object...args);
+
 }
