@@ -4,7 +4,6 @@ import blue.http.message.Request;
 import blue.http.message.Response;
 import blue.internal.http.handler.parameter.ParameterDispatcher;
 import blue.internal.http.message.DefaultResponse;
-import blue.internal.http.parser.ControllerPostProcessor;
 import blue.internal.http.parser.HttpMethodResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,7 +66,7 @@ public class HttpHandler implements Handler<Request, Response>
 	private void invoke(Request request, DefaultResponse response, HttpMethodResult result)
 	{
 		Method method = result.getMethod();
-		Object object = ControllerPostProcessor.getBean(method.getDeclaringClass());
+		Object object = result.getTarget();
 
 		Class<?>[] paramClasses = method.getParameterTypes();
 		Object[] params = new Object[paramClasses.length];

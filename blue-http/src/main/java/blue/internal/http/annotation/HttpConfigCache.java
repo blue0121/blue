@@ -6,6 +6,7 @@ import blue.internal.http.parser.HttpMethodResult;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -69,6 +70,11 @@ public class HttpConfigCache
 			}
 		}
 		return null;
+	}
+
+	public Collection<HttpUrlConfig> all()
+	{
+		return cache.values();
 	}
 
 }

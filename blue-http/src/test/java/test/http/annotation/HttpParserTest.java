@@ -3,9 +3,9 @@ package test.http.annotation;
 import blue.http.annotation.Charset;
 import blue.http.annotation.ContentType;
 import blue.http.annotation.HttpMethod;
+import blue.internal.http.annotation.HttpConfigCache;
+import blue.internal.http.annotation.HttpUrlKey;
 import blue.internal.http.parser.HttpMethodResult;
-import blue.internal.http.parser.HttpUrlConfig;
-import blue.internal.http.parser.ParserCache;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import test.http.BaseTest;
@@ -16,7 +16,7 @@ import test.http.BaseTest;
  */
 public class HttpParserTest extends BaseTest
 {
-	private ParserCache parserCache = ParserCache.getInstance();
+	private HttpConfigCache parserCache = HttpConfigCache.getInstance();
 
 	public HttpParserTest()
 	{
@@ -25,17 +25,17 @@ public class HttpParserTest extends BaseTest
 	@Test
 	public void test()
 	{
-		HttpUrlConfig config = new HttpUrlConfig("/hello", HttpMethod.POST);
-		HttpMethodResult result = parserCache.getConfig(config);
+		HttpUrlKey key = new HttpUrlKey("/hello", HttpMethod.POST);
+		HttpMethodResult result = parserCache.getConfig(key);
 		System.out.println(result);
 		Assertions.assertNotNull(result);
 		Assertions.assertEquals(Charset.UTF_8, result.getCharset());
 		Assertions.assertEquals(ContentType.AUTO, result.getContentType());
 
-		Assertions.assertTrue(parserCache.containsConfig(new HttpUrlConfig("/echo", HttpMethod.GET)));
-		Assertions.assertTrue(parserCache.containsConfig(new HttpUrlConfig("/echo", HttpMethod.POST)));
-		Assertions.assertTrue(parserCache.containsConfig(new HttpUrlConfig("/echo", HttpMethod.DELETE)));
-		Assertions.assertTrue(parserCache.containsConfig(new HttpUrlConfig("/echo", HttpMethod.PUT)));
+		Assertions.assertTrue(parserCache.contains(new HttpUrlKey("/echo", HttpMethod.GET)));
+		Assertions.assertTrue(parserCache.contains(new HttpUrlKey("/echo", HttpMethod.POST)));
+		Assertions.assertTrue(parserCache.contains(new HttpUrlKey("/echo", HttpMethod.DELETE)));
+		Assertions.assertTrue(parserCache.contains(new HttpUrlKey("/echo", HttpMethod.PUT)));
 	}
 
 }

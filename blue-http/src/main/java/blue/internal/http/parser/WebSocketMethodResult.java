@@ -1,5 +1,7 @@
 package blue.internal.http.parser;
 
+import blue.http.annotation.WebSocketUrlConfig;
+
 import java.lang.reflect.Method;
 
 /**
@@ -8,24 +10,22 @@ import java.lang.reflect.Method;
  */
 public class WebSocketMethodResult
 {
+	private Object target;
 	private Method method;
 
-	public WebSocketMethodResult()
+	public WebSocketMethodResult(WebSocketUrlConfig config)
 	{
+		this.target = config.getTarget();
+		this.method = config.getMethod();
 	}
 
-	public WebSocketMethodResult(Method method)
+	public Object getTarget()
 	{
-		this.method = method;
+		return target;
 	}
 
 	public Method getMethod()
 	{
 		return method;
-	}
-
-	public void setMethod(Method method)
-	{
-		this.method = method;
 	}
 }

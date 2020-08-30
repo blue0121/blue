@@ -19,6 +19,32 @@ public class UrlUtilTest
 		Assertions.assertFalse(UrlUtil.match("/app/user_list", "/app"), "URL匹配错误");
 		Assertions.assertTrue(UrlUtil.match("/app/user_list", "/app/*"), "URL匹配错误");
 	}
-	
+
+	@Test
+	public void testConcat()
+	{
+		Assertions.assertNull(UrlUtil.concat());
+		Assertions.assertEquals("a/b/c/d", UrlUtil.concat("a", "b", "c", "/d"));
+		Assertions.assertEquals("a/b/c", UrlUtil.concat("a", "b", "////c"));
+		Assertions.assertEquals("a/b/c", UrlUtil.concat("a", "////b/", "////c"));
+		Assertions.assertEquals("/a/b/c", UrlUtil.concat("/", "//a", "/b/", "////c"));
+	}
+
+	@Test
+	public void testTrim()
+	{
+		Assertions.assertEquals("/abc/ced", UrlUtil.trim("/abc/ced"));
+		Assertions.assertEquals("/abc/ced", UrlUtil.trim("/abc//ced"));
+		Assertions.assertEquals("/abc/ced", UrlUtil.trim("//abc/ced"));
+		Assertions.assertEquals("/abc/ced", UrlUtil.trim("//abc//ced"));
+		Assertions.assertEquals("/abc/ced", UrlUtil.trim("//abc/////ced"));
+		Assertions.assertEquals("/", UrlUtil.trim("//"));
+
+		Assertions.assertEquals("\\abc\\ced", UrlUtil.trim("\\abc\\ced"));
+		Assertions.assertEquals("\\abc\\ced", UrlUtil.trim("\\abc\\\\ced"));
+		Assertions.assertEquals("\\abc\\ced", UrlUtil.trim("\\\\abc\\ced"));
+		Assertions.assertEquals("\\abc\\ced", UrlUtil.trim("\\\\abc\\\\\\\\ced"));
+		Assertions.assertEquals("\\", UrlUtil.trim("\\\\"));
+	}
 	
 }

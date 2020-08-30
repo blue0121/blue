@@ -12,7 +12,6 @@ import blue.internal.http.message.DefaultRequest;
 import blue.internal.http.message.DefaultUploadFile;
 import blue.internal.http.net.response.ResponseHandlerFactory;
 import blue.internal.http.parser.HttpMethodResult;
-import blue.internal.http.parser.ParserCache;
 import blue.internal.http.util.HttpServerUtil;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
@@ -49,7 +48,6 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<HttpObject>
 	private final TaskExecutor taskExecutor;
 	private final HttpConfig httpConfig;
 	private final WebSocketConfig webSocketConfig;
-	private final ParserCache parserCache = ParserCache.getInstance();
 
 	private Channel channel;
 	private HttpRequest httpRequest;

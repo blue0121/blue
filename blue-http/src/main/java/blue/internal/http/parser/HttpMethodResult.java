@@ -5,7 +5,6 @@ import blue.http.annotation.ContentType;
 import blue.http.annotation.HttpUrlConfig;
 
 import java.lang.reflect.Method;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -15,41 +14,24 @@ import java.util.Map;
 public class HttpMethodResult
 {
 	private Charset charset;
-	private Method method;
 	private ContentType contentType;
 	private Map<String, String> pathMap;
-
-	public HttpMethodResult()
-	{
-	}
+	private Object target;
+	private Method method;
 
 	public HttpMethodResult(HttpUrlConfig config, Map<String, String> pathMap)
 	{
 		this.charset = config.getCharset();
-		this.method = config.getMethod();
 		this.contentType = config.getContentType();
+		this.target = config.getTarget();
+		this.method = config.getMethod();
 		if (pathMap == null)
 		{
-			this.pathMap = new HashMap<>();
+			this.pathMap = Map.of();
 		}
 		else
 		{
-			this.pathMap = new HashMap<>(pathMap);
-		}
-	}
-
-	public HttpMethodResult(HttpUrlMethod method, Map<String, String> pathMap)
-	{
-		this.charset = method.getCharset();
-		this.method = method.getMethod();
-		this.contentType = method.getContentType();
-		if (pathMap == null)
-		{
-			this.pathMap = new HashMap<>();
-		}
-		else
-		{
-			this.pathMap = new HashMap<>(pathMap);
+			this.pathMap = Map.copyOf(pathMap);
 		}
 	}
 
@@ -58,29 +40,9 @@ public class HttpMethodResult
 		return charset;
 	}
 
-	public void setCharset(Charset charset)
-	{
-		this.charset = charset;
-	}
-
-	public Method getMethod()
-	{
-		return method;
-	}
-
-	public void setMethod(Method method)
-	{
-		this.method = method;
-	}
-
 	public ContentType getContentType()
 	{
 		return contentType;
-	}
-
-	public void setContentType(ContentType contentType)
-	{
-		this.contentType = contentType;
 	}
 
 	public Map<String, String> getPathMap()
@@ -88,8 +50,13 @@ public class HttpMethodResult
 		return pathMap;
 	}
 
-	public void setPathMap(Map<String, String> pathMap)
+	public Object getTarget()
 	{
-		this.pathMap = pathMap;
+		return target;
+	}
+
+	public Method getMethod()
+	{
+		return method;
 	}
 }

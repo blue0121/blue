@@ -1,8 +1,8 @@
 package blue.internal.http.config;
 
 import blue.core.util.NumberUtil;
+import blue.internal.http.annotation.FilterCache;
 import blue.internal.http.parser.HttpParser;
-import blue.internal.http.parser.ParserCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -26,7 +26,7 @@ public class HttpConfig implements InitializingBean
 
 	private String ftlRoot;
 
-	private ParserCache parserCache = ParserCache.getInstance();
+	private FilterCache filterCache = FilterCache.getInstance();
 	private FreeMarkerConfig freeMarkerConfig = FreeMarkerConfig.getInstance();
 
 	public HttpConfig()
@@ -41,7 +41,7 @@ public class HttpConfig implements InitializingBean
 		{
 			for (FilterConfig config : filterConfigList)
 			{
-				parserCache.addFilterConfig(config);
+				filterCache.addFilterConfig(config);
 				logger.info("{} Filter name: {}, order: {}, include: {}, exclude: {}",
 						config.getObject().getFilterType(), config.getClazz().getSimpleName(),
 						config.getOrder(), config.getFilterList(), config.getExcludeList());

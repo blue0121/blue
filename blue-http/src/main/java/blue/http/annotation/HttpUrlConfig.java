@@ -1,6 +1,9 @@
 package blue.http.annotation;
 
+import blue.internal.http.annotation.HttpConfigCache;
+
 import java.lang.reflect.Method;
+import java.util.List;
 
 /**
  * @author Jin Zheng
@@ -8,6 +11,15 @@ import java.lang.reflect.Method;
  */
 public interface HttpUrlConfig
 {
+	/**
+	 * all http url config
+	 * @return
+	 */
+	static List<HttpUrlConfig> allConfig()
+	{
+		return List.copyOf(HttpConfigCache.getInstance().all());
+	}
+
 	/**
 	 * http url name
 	 * @return
@@ -43,4 +55,10 @@ public interface HttpUrlConfig
 	 * @return
 	 */
 	Method getMethod();
+
+	/**
+	 * class instance
+	 * @return
+	 */
+	Object getTarget();
 }

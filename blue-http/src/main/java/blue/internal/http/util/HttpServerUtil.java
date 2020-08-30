@@ -4,8 +4,8 @@ import blue.core.util.StringUtil;
 import blue.http.annotation.ContentType;
 import blue.http.annotation.HttpMethod;
 import blue.http.message.Response;
+import blue.internal.http.annotation.HttpConfigCache;
 import blue.internal.http.parser.HttpParser;
-import blue.internal.http.parser.ParserCache;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
@@ -162,7 +162,7 @@ public class HttpServerUtil
 		Map<String, String> param = new HashMap<>();
 		param.put("status", status.toString());
 		param.put("ver", ver);
-		String error = StringUtil.template(errorTpl, param, ParserCache.BRACE_START, ParserCache.BRACE_END);
+		String error = StringUtil.template(errorTpl, param, HttpConfigCache.BRACE_START, HttpConfigCache.BRACE_END);
 		ByteBuf buf = Unpooled.copiedBuffer(error, CharsetUtil.UTF_8);
 		response.content().writeBytes(buf);
 		buf.release();

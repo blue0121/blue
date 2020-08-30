@@ -3,10 +3,11 @@ package blue.internal.http.mapping;
 import blue.http.filter.Filter;
 import blue.http.filter.FilterType;
 import blue.http.message.WebSocketRequest;
+import blue.internal.http.annotation.FilterCache;
+import blue.internal.http.annotation.WebSocketConfigCache;
+import blue.internal.http.annotation.WebSocketUrlKey;
 import blue.internal.http.handler.HandlerChain;
-import blue.internal.http.parser.ParserCache;
 import blue.internal.http.parser.WebSocketMethodResult;
-import blue.internal.http.parser.WebSocketUrlConfig;
 
 import java.util.List;
 
@@ -16,7 +17,8 @@ import java.util.List;
  */
 public class WebSocketHandlerMapping implements HandlerMapping<WebSocketRequest>
 {
-	private ParserCache cache = ParserCache.getInstance();
+	private WebSocketConfigCache webSocketConfigCache = WebSocketConfigCache.getInstance();
+	private FilterCache filterCache = FilterCache.getInstance();
 
 	public WebSocketHandlerMapping()
 	{
@@ -31,12 +33,12 @@ public class WebSocketHandlerMapping implements HandlerMapping<WebSocketRequest>
 	@Override
 	public HandlerChain getHandlerChain(WebSocketRequest request)
 	{
-		WebSocketUrlConfig config = new WebSocketUrlConfig(request.getUrl(), request.getVersion());
-		WebSocketMethodResult result = cache.getConfig(config);
+		WebSocketUrlKey key = new WebSocketUrlKey(request.getUrl(), request.getVersion());
+		WebSocketMethodResult result = webSocketConfigCache.getConfig(key);
 		if (result == null)
 			return null;
 
-		List<Filter<Object, Object>> filterList = cache.matchFilter(request.getUrl(), FilterType.WEB_SOCKET);
+		List<Filter<Object, Object>> filterList = filterCache.matchFilter(request.getUrl(), FilterType.WEB_SOCKET);
 		HandlerChain chain = new HandlerChain(result, filterList);
 		return chain;
 	}

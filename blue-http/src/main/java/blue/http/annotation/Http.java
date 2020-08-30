@@ -18,6 +18,12 @@ import java.lang.annotation.Target;
 public @interface Http
 {
 	/**
+	 * 接口名称
+	 * @return
+	 */
+	String name() default "";
+
+	/**
 	 * 接口地址
 	 */
 	String url();

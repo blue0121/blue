@@ -18,6 +18,7 @@ public class DefaultHttpUrlConfig implements HttpUrlConfig
 	private HttpMethod httpMethod;
 	private Charset charset;
 	private ContentType contentType;
+	private Object target;
 	private Method method;
 
 	public DefaultHttpUrlConfig()
@@ -59,6 +60,11 @@ public class DefaultHttpUrlConfig implements HttpUrlConfig
 		this.method = method;
 	}
 
+	public void setTarget(Object target)
+	{
+		this.target = target;
+	}
+
 	@Override
 	public String getName()
 	{
@@ -93,5 +99,11 @@ public class DefaultHttpUrlConfig implements HttpUrlConfig
 	public Method getMethod()
 	{
 		return method;
+	}
+
+	@Override
+	public Object getTarget()
+	{
+		return target;
 	}
 }

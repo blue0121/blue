@@ -13,6 +13,7 @@ public class DefaultWebSocketUrlConfig implements WebSocketUrlConfig
 	private String name;
 	private String url;
 	private int version;
+	private Object target;
 	private Method method;
 
 	public DefaultWebSocketUrlConfig()
@@ -44,6 +45,11 @@ public class DefaultWebSocketUrlConfig implements WebSocketUrlConfig
 		this.method = method;
 	}
 
+	public void setTarget(Object target)
+	{
+		this.target = target;
+	}
+
 	@Override
 	public String getName()
 	{
@@ -66,5 +72,11 @@ public class DefaultWebSocketUrlConfig implements WebSocketUrlConfig
 	public Method getMethod()
 	{
 		return method;
+	}
+
+	@Override
+	public Object getTarget()
+	{
+		return target;
 	}
 }

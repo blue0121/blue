@@ -1,6 +1,9 @@
 package blue.http.annotation;
 
+import blue.internal.http.annotation.WebSocketConfigCache;
+
 import java.lang.reflect.Method;
+import java.util.List;
 
 /**
  * @author Jin Zheng
@@ -8,6 +11,15 @@ import java.lang.reflect.Method;
  */
 public interface WebSocketUrlConfig
 {
+	/**
+	 * all web socket url config
+	 * @return
+	 */
+	static List<WebSocketUrlConfig> allConfig()
+	{
+		return List.copyOf(WebSocketConfigCache.getInstance().all());
+	}
+
 	/**
 	 * web socket url name
 	 * @return
@@ -31,4 +43,10 @@ public interface WebSocketUrlConfig
 	 * @return
 	 */
 	Method getMethod();
+
+	/**
+	 * class instance
+	 * @return
+	 */
+	Object getTarget();
 }

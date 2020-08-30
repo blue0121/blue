@@ -5,6 +5,7 @@ module blue.core
 	requires java.desktop;
 	requires transitive java.annotation;
 	requires transitive spring.core;
+	requires transitive spring.aop;
 	requires transitive spring.beans;
 	requires transitive spring.context;
 	requires transitive org.slf4j;

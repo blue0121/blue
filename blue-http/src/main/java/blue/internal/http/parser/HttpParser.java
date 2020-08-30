@@ -1,5 +1,6 @@
 package blue.internal.http.parser;
 
+import blue.core.util.UrlUtil;
 import blue.http.annotation.Charset;
 import blue.http.annotation.ContentType;
 import blue.http.annotation.Http;
@@ -15,7 +16,9 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -49,7 +52,7 @@ public class HttpParser
 		return instance;
 	}
 
-	public void parse(Class<?> clazz)
+	public void parse(Object target, Class<?> clazz)
 	{
 		if (clazzSet.contains(clazz))
 			return;
@@ -73,39 +76,36 @@ public class HttpParser
 					throw new HttpServerException(method.getName() + " 的参数只能是：" + paramString);
 			}
 
-			this.parseMethod(method, annoHttp);
+			this.parseMethod(target, method, annoHttp);
 		}
 
 		clazzSet.add(clazz);
 	}
 
-	private void parseMethod(Method method, Http annoHttp)
+	private void parseMethod(Object target, Method method, Http annoHttp)
 	{
+		List<String> urlList = new ArrayList<>();
+		urlList.add(SPLIT);
+		urlList.add(annoHttp.url());
 		Set<HttpMethod> httpMethodSet = new HashSet<>();
 		this.addHttpMethod(httpMethodSet, annoHttp.method());
 
 		Charset charset = annoHttp.charset();
 		ContentType contentType = annoHttp.contentType();
-		StringBuilder url = new StringBuilder(32);
-		if (!annoHttp.url().startsWith(SPLIT))
-		{
-			url.append(SPLIT);
-		}
-		url.append(annoHttp.url());
+		String name = annoHttp.name();
 
 		Http annoMethod = method.getAnnotation(Http.class);
 		if (annoMethod != null) // 方法配置覆盖类配置
 		{
+			urlList.add(SPLIT);
+			urlList.add(annoMethod.url());
 			charset = annoMethod.charset();
 			contentType = annoMethod.contentType();
+			name = annoMethod.name();
 			httpMethodSet.clear();
 			this.addHttpMethod(httpMethodSet, annoMethod.method());
-			if (!annoMethod.url().isEmpty() && !annoMethod.url().startsWith(SPLIT))
-			{
-				url.append(SPLIT);
-			}
-			url.append(annoMethod.url());
 		}
+		String url = UrlUtil.concat(urlList.toArray(new String[0]));
 
 		if (httpMethodSet.isEmpty()) // 没有关联httpMethod
 		{
@@ -114,11 +114,12 @@ public class HttpParser
 		for (HttpMethod httpMethod : httpMethodSet)
 		{
 			DefaultHttpUrlConfig config = new DefaultHttpUrlConfig();
-			config.setName(url.toString());
-			config.setUrl(url.toString());
+			config.setName(name.isEmpty() ? url : name);
+			config.setUrl(url);
 			config.setHttpMethod(httpMethod);
 			config.setCharset(charset);
 			config.setContentType(contentType);
+			config.setTarget(target);
 			config.setMethod(method);
 			HttpUrlKey key = config.buildKey();
 

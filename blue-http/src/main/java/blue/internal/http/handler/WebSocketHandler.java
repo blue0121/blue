@@ -4,7 +4,6 @@ import blue.http.message.WebSocketRequest;
 import blue.http.message.WebSocketResponse;
 import blue.internal.http.handler.parameter.ParameterDispatcher;
 import blue.internal.http.message.DefaultWebSocketResponse;
-import blue.internal.http.parser.ControllerPostProcessor;
 import blue.internal.http.parser.WebSocketMethodResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,7 +64,7 @@ public class WebSocketHandler implements Handler<WebSocketRequest, WebSocketResp
 	private void invoke(WebSocketRequest request, DefaultWebSocketResponse response, WebSocketMethodResult result)
 	{
 		Method method = result.getMethod();
-		Object object = ControllerPostProcessor.getBean(method.getDeclaringClass());
+		Object object = result.getTarget();
 
 		Class<?>[] paramClasses = method.getParameterTypes();
 		Object[] params = new Object[paramClasses.length];

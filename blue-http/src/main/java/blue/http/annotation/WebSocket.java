@@ -18,6 +18,12 @@ import java.lang.annotation.Target;
 public @interface WebSocket
 {
 	/**
+	 * 名称
+	 * @return
+	 */
+	String name() default "";
+
+	/**
 	 * URL
 	 */
 	String url();

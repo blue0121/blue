@@ -1,5 +1,6 @@
 package blue.internal.http.parser;
 
+import blue.core.util.UrlUtil;
 import blue.http.annotation.WebSocket;
 import blue.http.exception.HttpServerException;
 import blue.http.exception.WebSocketServerException;
@@ -12,7 +13,9 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -73,31 +76,28 @@ public class WebSocketParser
 
 	private void parseMethod(Method method, WebSocket annoWebSocket)
 	{
-		StringBuilder url = new StringBuilder(32);
-		if (!annoWebSocket.url().startsWith(HttpParser.SPLIT))
-		{
-			url.append(HttpParser.SPLIT);
-		}
-		url.append(annoWebSocket.url());
+		List<String> urlList = new ArrayList<>();
+		urlList.add(HttpParser.SPLIT);
+		urlList.add(annoWebSocket.url());
 		int version = annoWebSocket.version();
+		String name = annoWebSocket.name();
 
 		WebSocket annoMethod = method.getAnnotation(WebSocket.class);
 		if (annoMethod != null)
 		{
-			if (!annoMethod.url().isEmpty() && !annoMethod.url().startsWith(HttpParser.SPLIT))
-			{
-				url.append(HttpParser.SPLIT);
-			}
-			url.append(annoMethod.url());
+			urlList.add(HttpParser.SPLIT);
+			urlList.add(annoMethod.url());
+			name = annoMethod.name();
 			if (annoMethod.version() > 0)
 			{
 				version = annoMethod.version();
 			}
 		}
+		String url = UrlUtil.concat(urlList.toArray(new String[0]));
 
 		DefaultWebSocketUrlConfig config = new DefaultWebSocketUrlConfig();
-		config.setName(url.toString());
-		config.setUrl(url.toString());
+		config.setName(name.isEmpty() ? url : name);
+		config.setUrl(url);
 		config.setVersion(version);
 		config.setMethod(method);
 		WebSocketUrlKey key = config.buildKey();

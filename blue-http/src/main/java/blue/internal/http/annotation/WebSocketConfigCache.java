@@ -3,6 +3,7 @@ package blue.internal.http.annotation;
 import blue.http.annotation.WebSocketUrlConfig;
 import blue.internal.http.parser.WebSocketMethodResult;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,8 +42,13 @@ public class WebSocketConfigCache
 		if (config == null)
 			return null;
 
-		WebSocketMethodResult result = new WebSocketMethodResult(config.getMethod());
+		WebSocketMethodResult result = new WebSocketMethodResult(config);
 		return result;
+	}
+
+	public Collection<WebSocketUrlConfig> all()
+	{
+		return cache.values();
 	}
 
 }

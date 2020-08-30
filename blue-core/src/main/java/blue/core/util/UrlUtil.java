@@ -153,9 +153,9 @@ public class UrlUtil
 			return url;
 
 		if (url.startsWith(root))
-			url = url.substring(root.length(), url.length());
+			url = url.substring(root.length());
 
-		return url;
+		return trim(url);
 	}
 	
 	/**
@@ -233,6 +233,65 @@ public class UrlUtil
 		}
 		
 		return url.equals(tpl);
+	}
+
+	/**
+	 * 把路径连接一起
+	 * @param paths
+	 * @return
+	 */
+	public static String concat(String...paths)
+	{
+		if (paths.length == 0)
+			return null;
+
+		StringBuilder sb = new StringBuilder(128);
+		for (int i = 0; i < paths.length; i++)
+		{
+			if (i == 0)
+			{
+				sb.append(paths[i]);
+				continue;
+			}
+			if (!paths[i].startsWith("/"))
+			{
+				sb.append("/");
+			}
+			sb.append(paths[i]);
+		}
+		return trim(sb.toString());
+	}
+
+	/**
+	 * 过滤多余的'/'或'\'
+	 * @param path
+	 * @return
+	 */
+	public static String trim(String path)
+	{
+		StringBuilder sb = new StringBuilder(path.length());
+		char last = 0;
+		for (int i = 0; i < path.length(); i++)
+		{
+			char current = path.charAt(i);
+			if (current == '/')
+			{
+				if (last == '/')
+				{
+					continue;
+				}
+			}
+			else if (current == '\\')
+			{
+				if (last == '\\')
+				{
+					continue;
+				}
+			}
+			sb.append(current);
+			last = current;
+		}
+		return sb.toString();
 	}
 	
 }

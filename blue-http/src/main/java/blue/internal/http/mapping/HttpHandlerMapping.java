@@ -3,10 +3,11 @@ package blue.internal.http.mapping;
 import blue.http.filter.Filter;
 import blue.http.filter.FilterType;
 import blue.http.message.Request;
+import blue.internal.http.annotation.FilterCache;
+import blue.internal.http.annotation.HttpConfigCache;
+import blue.internal.http.annotation.HttpUrlKey;
 import blue.internal.http.handler.HandlerChain;
 import blue.internal.http.parser.HttpMethodResult;
-import blue.internal.http.parser.HttpUrlConfig;
-import blue.internal.http.parser.ParserCache;
 
 import java.util.List;
 
@@ -16,7 +17,8 @@ import java.util.List;
  */
 public class HttpHandlerMapping implements HandlerMapping<Request>
 {
-	private ParserCache cache = ParserCache.getInstance();
+	private HttpConfigCache httpConfigCache = HttpConfigCache.getInstance();
+	private FilterCache filterCache = FilterCache.getInstance();
 
 	public HttpHandlerMapping()
 	{
@@ -31,12 +33,12 @@ public class HttpHandlerMapping implements HandlerMapping<Request>
 	@Override
 	public HandlerChain getHandlerChain(Request request)
 	{
-		HttpUrlConfig config = new HttpUrlConfig(request.getUrl(), request.getHttpMethod());
-		HttpMethodResult result = cache.getConfig(config);
+		HttpUrlKey key = new HttpUrlKey(request.getUrl(), request.getHttpMethod());
+		HttpMethodResult result = httpConfigCache.getConfig(key);
 		if (result == null)
 			return null;
 
-		List<Filter<Object, Object>> filterList = cache.matchFilter(request.getUrl(), FilterType.HTTP);
+		List<Filter<Object, Object>> filterList = filterCache.matchFilter(request.getUrl(), FilterType.HTTP);
 		HandlerChain chain = new HandlerChain(result, filterList);
 		return chain;
 	}
