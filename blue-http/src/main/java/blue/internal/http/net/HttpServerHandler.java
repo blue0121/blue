@@ -84,7 +84,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<HttpObject>
 	private void handleRequest(ChannelHandlerContext ctx)
 	{
 		HttpMethod httpMethod = HttpServerUtil.getHttpMethod(ctx, httpRequest,
-				webSocketConfig.getRoot(), httpConfig.getMaxUploadSize());
+				webSocketConfig == null ? null : webSocketConfig.getRoot(), httpConfig.getMaxUploadSize());
 		if (httpMethod == null)
 		{
 			this.isHttp = false;

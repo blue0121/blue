@@ -111,7 +111,7 @@ public class HttpServerUtil
 	                                       String wsRoot, long maxUploadSize)
 	{
 		String uri = request.uri();
-		if (uri.startsWith(wsRoot))
+		if (wsRoot != null && !wsRoot.isEmpty() && uri.startsWith(wsRoot))
 		{
 			ctx.fireChannelRead(request);
 			return null;
