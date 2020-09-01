@@ -28,6 +28,8 @@ public class HttpNamespaceHandler extends NamespaceHandlerSupport
 		this.registerBeanDefinitionParser("ssl-config", new SslConfigParser());
 		this.registerBeanDefinitionParser("web-socket-config", new WebSocketConfigParser());
 		this.registerBeanDefinitionParser("token-web-socket-filter", new TokenWebSocketFilterParser());
+		this.registerBeanDefinitionParser("sleep-http-filter", new SleepHttpFilterParser());
+		this.registerBeanDefinitionParser("token-http-filter", new TokenHttpFilterParser());
 	}
 
 }

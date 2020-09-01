@@ -27,7 +27,7 @@
 			</xsd:all>
 			<xsd:attribute name="id" type="xsd:ID" use="required" />
 			<xsd:attribute name="path" type="xsd:string" default="/api" />
-			<xsd:attribute name="ftl-root" type="xsd:string" default="/ftl/" />
+			<xsd:attribute name="ftl-root" type="xsd:string" />
 			<xsd:attribute name="max-upload-size" type="xsd:integer" default="1048576" />
 		</xsd:complexType>
 	</xsd:element>
@@ -111,6 +111,20 @@
 				</xsd:element>
 			</xsd:all>
 			<xsd:attribute name="id" type="xsd:ID" use="required" />
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="token-http-filter">
+		<xsd:complexType>
+			<xsd:attribute name="id" type="xsd:ID" use="required" />
+			<xsd:attribute name="token-key" type="xsd:string" />
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="sleep-http-filter">
+		<xsd:complexType>
+			<xsd:attribute name="id" type="xsd:ID" use="required" />
+			<xsd:attribute name="millis" type="xsd:string" />
 		</xsd:complexType>
 	</xsd:element>
 	
