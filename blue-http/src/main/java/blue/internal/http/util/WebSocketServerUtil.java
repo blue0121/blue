@@ -1,8 +1,7 @@
 package blue.internal.http.util;
 
+import blue.core.common.ErrorCode;
 import blue.core.util.JsonUtil;
-import blue.http.exception.DefaultErrorCode;
-import blue.http.exception.ErrorCode;
 import blue.http.message.WebSocketResponse;
 import blue.internal.http.message.WebSocketBody;
 import blue.internal.http.message.WebSocketMessage;
@@ -59,7 +58,7 @@ public class WebSocketServerUtil
 		}
 		if (message == null)
 		{
-			sendText(ch, null, null, DefaultErrorCode.INVALID_JSON);
+			sendText(ch, null, null, ErrorCode.INVALID_JSON);
 		}
 		return message;
 	}

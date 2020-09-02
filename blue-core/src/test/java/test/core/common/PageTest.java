@@ -1,6 +1,6 @@
-package test.jdbc.core;
+package test.core.common;
 
-import blue.jdbc.core.Page;
+import blue.core.common.Page;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -17,7 +17,7 @@ public class PageTest
 	@Test
 	public void test1()
 	{
-		Page page = Page.newPage(2, 1);
+		Page page = new Page(2, 1);
 		page.setTotalResult(10);
 		Assertions.assertEquals(5, page.getTotalPage());
 		Assertions.assertEquals(10, page.getTotalResult());
@@ -35,7 +35,7 @@ public class PageTest
 	@Test
 	public void test2()
 	{
-		Page page = Page.newPage(3, 2);
+		Page page = new Page(3, 2);
 		page.setTotalResult(10);
 		Assertions.assertEquals(4, page.getTotalPage());
 		Assertions.assertEquals(10, page.getTotalResult());

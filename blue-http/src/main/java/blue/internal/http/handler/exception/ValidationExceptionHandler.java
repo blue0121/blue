@@ -1,8 +1,8 @@
 package blue.internal.http.handler.exception;
 
-import blue.http.exception.DefaultErrorCode;
-import blue.http.exception.ErrorCode;
+import blue.core.common.ErrorCode;
 import blue.internal.http.handler.HandlerResponse;
+import io.netty.handler.codec.http.HttpResponseStatus;
 
 import javax.validation.ValidationException;
 
@@ -23,8 +23,8 @@ public class ValidationExceptionHandler implements ExceptionHandler
 			return;
 
 		ValidationException ex = (ValidationException) response.getCause();
-		ErrorCode errorCode = DefaultErrorCode.INVALID_PARAM;
+		ErrorCode errorCode = ErrorCode.INVALID_PARAM;
 		response.setResult(errorCode.toJsonString(ex.getMessage()));
-		response.setHttpStatus(errorCode.getHttpStatus());
+		response.setHttpStatus(HttpResponseStatus.valueOf(errorCode.getHttpStatus()));
 	}
 }

@@ -1,18 +1,26 @@
-package blue.internal.jdbc.core;
-
-import blue.jdbc.core.Page;
+package blue.core.common;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * 数据库分页对象
- * 
- * @author zhengj
- * @date 2009-4-3 1.0
+ *
+ * @author Jin Zheng
+ * @since 1.0 2020-09-02
  */
-public class DefaultPage implements Page
+public class Page
 {
+	/**
+	 * 页面开始索引
+	 */
+	public static final int PAGE_NUMBER = 1;
+
+	/**
+	 * 每页记录数
+	 */
+	public static final int ITEMS_PER_PAGE = 20;
+
 	/**
 	 * 总记录数
 	 */
@@ -43,18 +51,17 @@ public class DefaultPage implements Page
 	 */
 	private List<?> results = new ArrayList<>();
 
-	public DefaultPage()
+	public Page()
 	{
 		this(ITEMS_PER_PAGE, PAGE_NUMBER);
 	}
-	
-	public DefaultPage(int itemsPerPage, int pageNumber)
+
+	public Page(int itemsPerPage, int pageNumber)
 	{
 		this.setItemsPerPage(itemsPerPage);
 		this.setPageNumber(pageNumber);
 	}
 
-	@Override
 	public void setTotalResult(int totalResult) throws IllegalArgumentException
 	{
 		if (totalResult < 0)
@@ -64,7 +71,6 @@ public class DefaultPage implements Page
 		this.totalPage = (totalResult + itemsPerPage - 1) / itemsPerPage;
 	}
 
-	@Override
 	public void setPageNumber(int pageNumber) throws IllegalArgumentException
 	{
 		if (pageNumber < 1)
@@ -74,38 +80,32 @@ public class DefaultPage implements Page
 		this.rowIndex = itemsPerPage * (pageNumber - 1);
 	}
 
-	@Override
 	public int getTotalResult()
 	{
 		return totalResult;
 	}
 
-	@Override
 	public int getItemsPerPage()
 	{
 		return itemsPerPage;
 	}
 
-	@Override
 	public int getTotalPage()
 	{
 		return totalPage;
 	}
 
-	@Override
 	public int getRowIndex()
 	{
 		return rowIndex;
 	}
 
-	@Override
 	public int getPageNumber()
 	{
 		return pageNumber;
 	}
 
 	@SuppressWarnings("unchecked")
-	@Override
 	public <T> List<T> getResults()
 	{
 		List<T> list = new ArrayList<>();
@@ -116,30 +116,26 @@ public class DefaultPage implements Page
 		return list;
 	}
 
-	@Override
 	public boolean hasNextPage()
 	{
 		return pageNumber < totalPage;
 	}
 
-	@Override
 	public boolean hasPreviewPage()
 	{
 		return pageNumber > 1;
 	}
 
-	@Override
 	public void setResults(List<?> objectList)
 	{
 		this.results = objectList;
 	}
 
-	@Override
 	public void setItemsPerPage(int itemsPerPage)
 	{
 		if (itemsPerPage < 1)
 			throw new IllegalArgumentException("每页记录数不能小于 1");
-		
+
 		this.itemsPerPage = itemsPerPage;
 		this.rowIndex = itemsPerPage * (pageNumber - 1);
 	}

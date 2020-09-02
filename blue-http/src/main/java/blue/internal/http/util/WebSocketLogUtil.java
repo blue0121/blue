@@ -1,7 +1,7 @@
 package blue.internal.http.util;
 
-import blue.http.exception.ErrorCode;
-import blue.http.exception.HttpErrorCodeException;
+import blue.core.common.ErrorCode;
+import blue.core.common.ErrorCodeException;
 import blue.http.exception.HttpServerException;
 import blue.http.message.WebSocketRequest;
 import blue.internal.http.handler.HandlerResponse;
@@ -29,7 +29,7 @@ public class WebSocketLogUtil
 		Throwable cause = response.getCause();
 		if (cause != null)
 		{
-			if (cause.getClass() == HttpServerException.class || cause.getClass() == HttpErrorCodeException.class)
+			if (cause.getClass() == HttpServerException.class || cause.getClass() == ErrorCodeException.class)
 			{
 				StackTraceElement[] elements = cause.getStackTrace();
 				StackTraceElement element = elements.length > 0 ? elements[0] : null;

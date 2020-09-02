@@ -1,6 +1,6 @@
-package test.http.exception;
+package test.core.common;
 
-import blue.http.exception.DefaultErrorCode;
+import blue.core.common.ErrorCode;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.junit.jupiter.api.Assertions;
@@ -10,16 +10,16 @@ import org.junit.jupiter.api.Test;
  * @author Jin Zheng
  * @since 2020-01-27
  */
-public class DefaultErrorCodeTest
+public class ErrorCodeTest
 {
-	public DefaultErrorCodeTest()
+	public ErrorCodeTest()
 	{
 	}
 
 	@Test
 	public void test()
 	{
-		String msg = DefaultErrorCode.ERROR.toJsonString();
+		String msg = ErrorCode.ERROR.toJsonString();
 		System.out.println(msg);
 		JSONObject json = JSON.parseObject(msg);
 		Assertions.assertEquals(500000, json.getIntValue("code"));

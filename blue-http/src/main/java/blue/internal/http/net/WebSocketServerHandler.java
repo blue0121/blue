@@ -1,6 +1,6 @@
 package blue.internal.http.net;
 
-import blue.http.exception.DefaultErrorCode;
+import blue.core.common.ErrorCode;
 import blue.http.message.WebSocketRequest;
 import blue.http.message.WebSocketResponse;
 import blue.internal.http.config.WebSocketConfig;
@@ -48,7 +48,7 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<TextWebS
 		HandlerChain chain = HandlerMappingFactory.getInstance().getHandlerChain(request);
 		if (chain == null)
 		{
-			WebSocketServerUtil.sendText(ch, message, null, DefaultErrorCode.NOT_FOUND);
+			WebSocketServerUtil.sendText(ch, message, null, ErrorCode.NOT_FOUND);
 			return;
 		}
 		taskExecutor.execute(() ->

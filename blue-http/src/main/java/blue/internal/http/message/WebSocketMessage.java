@@ -1,6 +1,6 @@
 package blue.internal.http.message;
 
-import blue.http.exception.ErrorCode;
+import blue.core.common.ErrorCode;
 
 /**
  * @author Jin Zheng

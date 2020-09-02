@@ -1,7 +1,7 @@
 package blue.internal.http.handler.exception;
 
-import blue.http.exception.DefaultErrorCode;
-import blue.http.exception.HttpErrorCodeException;
+import blue.core.common.ErrorCode;
+import blue.core.common.ErrorCodeException;
 import blue.http.exception.HttpServerException;
 import blue.internal.http.handler.HandlerResponse;
 import com.alibaba.fastjson.JSONException;
@@ -26,7 +26,7 @@ public class  ExceptionDispatcher
 		this.exceptionHandlerMap.put(BeansException.class, new BeansExceptionHandler());
 		this.exceptionHandlerMap.put(JSONException.class, new JSONExceptionHandler());
 		this.exceptionHandlerMap.put(HttpServerException.class, new HttpServerExceptionHandler());
-		this.exceptionHandlerMap.put(HttpErrorCodeException.class, new HttpErrorCodeExceptionHandler());
+		this.exceptionHandlerMap.put(ErrorCodeException.class, new ErrorCodeExceptionHandler());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -38,7 +38,7 @@ public class  ExceptionDispatcher
 			handler.handle(response);
 			return;
 		}
-		response.setResult(DefaultErrorCode.ERROR.toJsonString());
+		response.setResult(ErrorCode.ERROR.toJsonString());
 		response.setHttpStatus(HttpResponseStatus.INTERNAL_SERVER_ERROR);
 	}
 

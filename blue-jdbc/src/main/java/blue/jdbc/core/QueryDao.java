@@ -1,7 +1,7 @@
 package blue.jdbc.core;
 
+import blue.core.common.Page;
 import blue.core.util.BeanUtil;
-import blue.internal.jdbc.core.DefaultPage;
 import blue.internal.jdbc.core.JdbcObjectTemplate;
 import blue.internal.jdbc.parser.CacheEntity;
 import blue.internal.jdbc.parser.CacheId;
@@ -98,7 +98,7 @@ public abstract class QueryDao<T, R> implements InitializingBean
 	public Page listPage(T param, Page page)
 	{
 		if (page == null)
-			page = new DefaultPage();
+			page = new Page();
 
 		int rows = this.getTotalResult(param);
 		page.setTotalResult(rows);

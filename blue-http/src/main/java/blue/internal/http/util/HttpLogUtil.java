@@ -1,6 +1,6 @@
 package blue.internal.http.util;
 
-import blue.http.exception.HttpErrorCodeException;
+import blue.core.common.ErrorCodeException;
 import blue.http.exception.HttpServerException;
 import blue.http.message.Request;
 import blue.http.message.UploadFile;
@@ -34,7 +34,7 @@ public class HttpLogUtil
 		log(request, "Error", content);
 		if (cause != null)
 		{
-			if (cause.getClass() == HttpServerException.class || cause.getClass() == HttpErrorCodeException.class)
+			if (cause.getClass() == HttpServerException.class || cause.getClass() == ErrorCodeException.class)
 			{
 				StackTraceElement[] elements = cause.getStackTrace();
 				StackTraceElement element = elements.length > 0 ? elements[0] : null;

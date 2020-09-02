@@ -1,8 +1,8 @@
 package blue.internal.http.handler.exception;
 
-import blue.http.exception.DefaultErrorCode;
-import blue.http.exception.ErrorCode;
+import blue.core.common.ErrorCode;
 import blue.internal.http.handler.HandlerResponse;
+import io.netty.handler.codec.http.HttpResponseStatus;
 import org.springframework.beans.BeansException;
 
 /**
@@ -21,8 +21,8 @@ public class BeansExceptionHandler implements ExceptionHandler
 		if (!(response.getCause() instanceof BeansException))
 			return;
 
-		ErrorCode errorCode = DefaultErrorCode.NOT_FOUND;
+		ErrorCode errorCode = ErrorCode.NOT_FOUND;
 		response.setResult(errorCode.toJsonString());
-		response.setHttpStatus(errorCode.getHttpStatus());
+		response.setHttpStatus(HttpResponseStatus.valueOf(errorCode.getHttpStatus()));
 	}
 }

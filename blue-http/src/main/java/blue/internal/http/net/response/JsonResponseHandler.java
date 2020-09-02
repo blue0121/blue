@@ -1,7 +1,7 @@
 package blue.internal.http.net.response;
 
+import blue.core.common.ErrorCode;
 import blue.core.util.JsonUtil;
-import blue.http.exception.ErrorCode;
 import blue.http.message.Response;
 import blue.internal.http.util.HttpServerUtil;
 import com.alibaba.fastjson.JSONObject;

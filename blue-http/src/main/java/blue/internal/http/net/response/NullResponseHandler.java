@@ -1,11 +1,11 @@
 package blue.internal.http.net.response;
 
-import blue.http.exception.DefaultErrorCode;
-import blue.http.exception.ErrorCode;
+import blue.core.common.ErrorCode;
 import blue.http.message.Response;
 import blue.internal.http.util.HttpServerUtil;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.HttpRequest;
+import io.netty.handler.codec.http.HttpResponseStatus;
 
 /**
  * @author Jin Zheng
@@ -26,9 +26,9 @@ public class NullResponseHandler implements ResponseHandler
 	@Override
 	public void handle(Channel ch, HttpRequest request, Response response)
 	{
-		ErrorCode errorCode = DefaultErrorCode.SUCCESS;
+		ErrorCode errorCode = ErrorCode.SUCCESS;
 		response.setResult(errorCode.toJsonString());
-		response.setHttpStatus(errorCode.getHttpStatus());
+		response.setHttpStatus(HttpResponseStatus.valueOf(errorCode.getHttpStatus()));
 		HttpServerUtil.sendText(ch, request, response, true);
 	}
 }

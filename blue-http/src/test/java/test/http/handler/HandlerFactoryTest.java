@@ -1,10 +1,9 @@
 package test.http.handler;
 
+import blue.core.common.ErrorCode;
 import blue.http.annotation.Charset;
 import blue.http.annotation.ContentType;
 import blue.http.annotation.HttpMethod;
-import blue.http.exception.DefaultErrorCode;
-import blue.http.exception.ErrorCode;
 import blue.http.message.Request;
 import blue.http.message.Response;
 import blue.internal.http.handler.HandlerChain;
@@ -71,7 +70,7 @@ public class HandlerFactoryTest extends BaseTest
 		Assertions.assertNotNull(response.getCause());
 		Assertions.assertEquals(ValidationException.class, response.getCause().getClass());
 		JSONObject json = JSON.parseObject(response.getResult().toString());
-		Assertions.assertEquals(DefaultErrorCode.INVALID_PARAM.getCode(), json.getIntValue(ErrorCode.CODE));
+		Assertions.assertEquals(ErrorCode.INVALID_PARAM.getCode(), json.getIntValue(ErrorCode.CODE));
 	}
 
 	@Test

@@ -1,12 +1,10 @@
-package blue.http.exception;
-
-import io.netty.handler.codec.http.HttpResponseStatus;
+package blue.core.common;
 
 /**
  * @author Jin Zheng
  * @since 2020-01-27
  */
-public class HttpErrorCodeException extends RuntimeException
+public class ErrorCodeException extends RuntimeException
 {
 	private static final long serialVersionUID = 1L;
 
@@ -14,7 +12,7 @@ public class HttpErrorCodeException extends RuntimeException
 	private Object[] args;
 	private String message;
 
-	public HttpErrorCodeException(ErrorCode errorCode, Object...args)
+	public ErrorCodeException(ErrorCode errorCode, Object...args)
 	{
 		this.errorCode = errorCode;
 		this.args = args;
@@ -31,7 +29,7 @@ public class HttpErrorCodeException extends RuntimeException
 		return errorCode.getCode();
 	}
 
-	public HttpResponseStatus getHttpStatus()
+	public int getHttpStatus()
 	{
 		return errorCode.getHttpStatus();
 	}
