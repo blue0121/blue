@@ -31,11 +31,11 @@
 			<xsd:attribute name="username" type="xsd:string" use="required" />
 			<xsd:attribute name="password" type="xsd:string" use="required" />
 			<xsd:attribute name="validation-query" type="xsd:string" default="select 1" />
-			<xsd:attribute name="initial-size" type="xsd:positiveInteger" default="5" />
-			<xsd:attribute name="max-total" type="xsd:positiveInteger" default="100" />
-			<xsd:attribute name="max-idle" type="xsd:positiveInteger" default="10" />
-			<xsd:attribute name="min-idle" type="xsd:positiveInteger" default="5" />
-			<xsd:attribute name="max-wait-millis" type="xsd:positiveInteger" default="60000" />
+			<xsd:attribute name="initial-size" type="xsd:string" default="5" />
+			<xsd:attribute name="max-total" type="xsd:string" default="100" />
+			<xsd:attribute name="max-idle" type="xsd:string" default="10" />
+			<xsd:attribute name="min-idle" type="xsd:string" default="5" />
+			<xsd:attribute name="max-wait-millis" type="xsd:string" default="60000" />
 		</xsd:complexType>
 	</xsd:element>
 	
@@ -65,8 +65,8 @@
 			</xsd:sequence>
 			<xsd:attribute name="id" type="xsd:ID" use="required" />
 			<xsd:attribute name="ref-data-source" type="xsd:string" use="required" />
-			<xsd:attribute name="debug" type="xsd:boolean" default="false" />
-			<xsd:attribute name="escape" type="xsd:boolean" default="true" />
+			<xsd:attribute name="debug" type="xsd:string" default="false" />
+			<xsd:attribute name="escape" type="xsd:string" default="true" />
 			<xsd:attribute name="scan-packages" type="xsd:string" use="optional" />
 			<xsd:attribute name="machine-id-properties" type="xsd:string" use="optional" />
 		</xsd:complexType>
