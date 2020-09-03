@@ -1,6 +1,7 @@
 package blue.internal.jdbc.util;
 
 import blue.core.dict.DictParser;
+import blue.core.dict.Dictionary;
 import blue.core.util.BeanUtil;
 import blue.internal.jdbc.parser.CacheEntity;
 import blue.internal.jdbc.parser.CacheMapper;
@@ -191,7 +192,7 @@ public class ObjectRowMapper<T> implements RowMapper<T>
 			Timestamp timestamp = rs.getTimestamp(i);
 			return timestamp == null ? null : timestamp.toLocalDateTime();
 		}
-		else if (type.isEnum())
+		else if (Dictionary.class.isAssignableFrom(type))
 		{
 			int index = rs.getInt(i);
 			if (rs.wasNull())

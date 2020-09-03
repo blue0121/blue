@@ -1,6 +1,7 @@
 package blue.internal.jdbc.util;
 
 import blue.core.dict.DictParser;
+import blue.core.dict.Dictionary;
 import blue.internal.jdbc.parser.CacheColumn;
 import blue.internal.jdbc.parser.CacheEntity;
 import blue.internal.jdbc.parser.CacheId;
@@ -116,7 +117,7 @@ public class ObjectUtil
 			return null;
 
 		Class<?> clazz = val.getClass();
-		if (clazz.isEnum())
+		if (Dictionary.class.isAssignableFrom(clazz))
 			return DictParser.getInstance().getFromObject(val);
 
 		if ("".equals(val))

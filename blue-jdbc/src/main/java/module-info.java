@@ -3,6 +3,7 @@ module blue.jdbc
 	requires transitive java.sql;
 	requires blue.core;
 	requires transitive spring.jdbc;
+	requires transitive spring.tx;
 	requires org.aspectj.weaver;
 	requires commons.dbcp2;
 

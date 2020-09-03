@@ -31,7 +31,7 @@
 		<slf4j.version>1.7.30</slf4j.version>
 		<log4j2.version>2.13.0</log4j2.version>
 		<fastjson.version>1.2.62</fastjson.version>
-		<spring.version>5.2.3.RELEASE</spring.version>
+		<spring.version>5.2.8.RELEASE</spring.version>
 		<cglib.version>3.3.0</cglib.version>
 		<aspectjweaver.version>1.9.5</aspectjweaver.version>
 		<caffeine.version>2.8.1</caffeine.version>
