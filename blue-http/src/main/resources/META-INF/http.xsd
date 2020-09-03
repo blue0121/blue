@@ -28,7 +28,7 @@
 			<xsd:attribute name="id" type="xsd:ID" use="required" />
 			<xsd:attribute name="path" type="xsd:string" default="/api" />
 			<xsd:attribute name="ftl-root" type="xsd:string" />
-			<xsd:attribute name="max-upload-size" type="xsd:integer" default="1048576" />
+			<xsd:attribute name="max-upload-size" type="xsd:string" default="1048576" />
 		</xsd:complexType>
 	</xsd:element>
 	
@@ -37,7 +37,7 @@
 			<xsd:attribute name="ref" type="xsd:string" use="required" />
 			<xsd:attribute name="filters" type="xsd:string" use="required" />
 			<xsd:attribute name="excludes" type="xsd:string" use="optional" />
-			<xsd:attribute name="order" type="xsd:positiveInteger" default="10" />
+			<xsd:attribute name="order" type="xsd:string" default="10" />
 		</xsd:complexType>
 	</xsd:element>
 	
@@ -66,7 +66,7 @@
 	<xsd:element name="ssl-config">
 		<xsd:complexType>
 			<xsd:attribute name="id" type="xsd:ID" use="required" />
-			<xsd:attribute name="enable" type="xsd:boolean" default="true" />
+			<xsd:attribute name="enable" type="xsd:string" default="true" />
 			<xsd:attribute name="jks-path" type="xsd:string" />
 			<xsd:attribute name="password" type="xsd:string" />
 			<xsd:attribute name="alias" type="xsd:string" />
@@ -77,8 +77,8 @@
 	<xsd:element name="http-server">
 		<xsd:complexType>
 			<xsd:attribute name="id" type="xsd:ID" />
-			<xsd:attribute name="port" type="xsd:positiveInteger" default="8080" />
-			<xsd:attribute name="io-thread" type="xsd:positiveInteger" use="optional" />
+			<xsd:attribute name="port" type="xsd:string" default="8080" />
+			<xsd:attribute name="io-thread" type="xsd:string" use="optional" />
 			<xsd:attribute name="ref-task-executor" type="xsd:string" default="taskExecutor" />
 			<xsd:attribute name="ref-http-config" type="xsd:string" use="optional" />
 			<xsd:attribute name="ref-ssl-config" type="xsd:string" use="optional" />
