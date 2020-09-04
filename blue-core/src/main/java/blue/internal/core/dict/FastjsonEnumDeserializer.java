@@ -1,6 +1,7 @@
 package blue.internal.core.dict;
 
 import blue.core.dict.DictParser;
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.parser.DefaultJSONParser;
 import com.alibaba.fastjson.parser.JSONToken;
 import com.alibaba.fastjson.parser.deserializer.ObjectDeserializer;
@@ -35,6 +36,12 @@ public class FastjsonEnumDeserializer implements ObjectDeserializer
 		{
 			String strValue = parser.parseObject(String.class);
 			return (T) dictParser.getFromField(clazz, strValue);
+		}
+		else if (token == JSONToken.LBRACE)
+		{
+			JSONObject object = parser.parseObject();
+			int intValue = object.getIntValue("value");
+			return (T) dictParser.getFromIndex(clazz, intValue);
 		}
 		return null;
 	}

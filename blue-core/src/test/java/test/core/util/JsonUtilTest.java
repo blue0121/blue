@@ -7,6 +7,7 @@ import blue.internal.core.dict.FastjsonEnumDeserializer;
 import blue.internal.core.dict.FastjsonEnumSerializer;
 import com.alibaba.fastjson.parser.ParserConfig;
 import com.alibaba.fastjson.serializer.SerializeConfig;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import test.core.model.Group;
 
@@ -48,6 +49,8 @@ public class JsonUtilTest
 
 		Group g2 = JsonUtil.fromString(json, Group.class);
 		System.out.println(JsonUtil.toString(g2));
+		Assertions.assertEquals(Type.NO, g2.getType());
+		Assertions.assertEquals(State.NORMAL, g2.getState());
 
 		String json2 = "{\"id\":1,\"name\":\"blue\",\"type\":\"YES\",\"state\":\"DELETE\"}";
 		Group g3 = JsonUtil.fromString(json2, Group.class);

@@ -20,7 +20,7 @@ public abstract class Dictionary
 	@Override
 	public String toString()
 	{
-		return String.format("<span style=\"color: %s;\">%s</span>", color.name().toLowerCase(), name);
+		return String.format("%s", name);
 	}
 
 	public int getIndex()

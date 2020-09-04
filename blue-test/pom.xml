@@ -73,6 +73,7 @@
 						--add-exports org.junit.platform.commons/org.junit.platform.commons.util=ALL-UNNAMED
 						--add-exports org.junit.platform.commons/org.junit.platform.commons.logging=ALL-UNNAMED
 						--add-exports blue.test/test.test.jdbc=org.junit.platform.commons
+						--add-exports blue.test/test.test.jdbc.model=ALL-UNNAMED
 						--add-opens blue.test/test.test.jdbc=spring.beans,spring.core
 						--add-opens blue.test/test.test.jdbc.dao=spring.beans,spring.core
 						--add-opens blue.test/test.test.jdbc.model=spring.beans,spring.core,blue.jdbc,blue.core,fastjson

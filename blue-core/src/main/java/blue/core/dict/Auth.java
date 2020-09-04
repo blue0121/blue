@@ -8,10 +8,10 @@ package blue.core.dict;
  */
 public final class Auth extends Dictionary
 {
-	public static final Auth UNDONE = new Auth(-1, "未完成", Color.PURPLE);
-	public static final Auth PENDING = new Auth(0, "待审核", Color.BLACK);
-	public static final Auth APPROVE = new Auth(1, "审核通过", Color.BLUE);
-	public static final Auth UNAPPROVE = new Auth(2, "审核未通过", Color.RED);
+	public static final Auth UNDONE = new Auth(-1, "未完成", Color.PRIMARY);
+	public static final Auth PENDING = new Auth(0, "待审核", Color.INFO);
+	public static final Auth APPROVE = new Auth(1, "审核通过", Color.SUCCESS);
+	public static final Auth UNAPPROVE = new Auth(2, "审核未通过", Color.DANGER);
 	
 	private Auth(int index, String name, Color color)
 	{

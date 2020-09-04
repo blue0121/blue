@@ -8,8 +8,8 @@ package blue.core.dict;
  */
 public final class Type extends Dictionary
 {
-	public static final Type NO = new Type(0, "否", Color.RED);
-	public static final Type YES = new Type(1, "是", Color.BLUE);
+	public static final Type NO = new Type(0, "否", Color.DANGER);
+	public static final Type YES = new Type(1, "是", Color.PRIMARY);
 	
 	private Type(int index, String name, Color color)
 	{

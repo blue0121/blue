@@ -11,6 +11,12 @@ import java.util.Map;
  */
 public enum Color
 {
+	PRIMARY("主要"),
+	INFO("信息"),
+	SUCCESS("成功"),
+	WARNING("警告"),
+	DANGER("危险"),
+
 	BLACK("黑色"),
 	SILVER("银色"),
 	GRAY("灰色"),
@@ -29,7 +35,7 @@ public enum Color
 
 	private String name;
 	
-	private Color(String name)
+	Color(String name)
 	{
 		this.name = name;
 	}

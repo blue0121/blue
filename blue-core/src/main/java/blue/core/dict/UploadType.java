@@ -8,11 +8,11 @@ package blue.core.dict;
  */
 public final class UploadType extends Dictionary
 {
-	public static final UploadType UNKNOWN = new UploadType(0, "未知", Color.BLACK);
-	public static final UploadType PIC = new UploadType(1, "图片", Color.BLUE);
-	public static final UploadType VIDEO = new UploadType(2, "视频", Color.RED);
-	public static final UploadType DOC = new UploadType(3, "文档", Color.MAROON);
-	public static final UploadType ZIP = new UploadType(4, "压缩包", Color.PURPLE);
+	public static final UploadType UNKNOWN = new UploadType(0, "未知", Color.INFO);
+	public static final UploadType PIC = new UploadType(1, "图片", Color.PRIMARY);
+	public static final UploadType VIDEO = new UploadType(2, "视频", Color.DANGER);
+	public static final UploadType DOC = new UploadType(3, "文档", Color.SUCCESS);
+	public static final UploadType ZIP = new UploadType(4, "压缩包", Color.WARNING);
 
 	private UploadType(int index, String name, Color color)
 	{

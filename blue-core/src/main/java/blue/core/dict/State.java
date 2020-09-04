@@ -8,8 +8,8 @@ package blue.core.dict;
  */
 public final class State extends Dictionary
 {
-	public static final State NORMAL = new State(0, "正常", Color.BLUE);
-	public static final State DELETE = new State(1, "作废", Color.RED);
+	public static final State NORMAL = new State(0, "正常", Color.PRIMARY);
+	public static final State DELETE = new State(1, "作废", Color.DANGER);
 
 	private State(int index, String name, Color color)
 	{

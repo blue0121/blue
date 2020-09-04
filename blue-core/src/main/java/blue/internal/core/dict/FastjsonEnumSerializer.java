@@ -1,5 +1,6 @@
 package blue.internal.core.dict;
 
+import blue.core.dict.DictParser;
 import blue.core.dict.Dictionary;
 import com.alibaba.fastjson.serializer.JSONSerializer;
 import com.alibaba.fastjson.serializer.ObjectSerializer;
@@ -14,6 +15,13 @@ import java.lang.reflect.Type;
  */
 public class FastjsonEnumSerializer implements ObjectSerializer
 {
+	public static final String VALUE = "value";
+	public static final String FIELD = "field";
+	public static final String LABEL = "label";
+	public static final String COLOR = "color";
+
+	private DictParser dictParser = DictParser.getInstance();
+
 	public FastjsonEnumSerializer()
 	{
 	}
@@ -22,11 +30,16 @@ public class FastjsonEnumSerializer implements ObjectSerializer
 	public void write(JSONSerializer serializer, Object object, Object fieldName, Type fieldType, int features) throws IOException
 	{
 		SerializeWriter out = serializer.out;
-
 		if (object instanceof Dictionary)
 		{
 			Dictionary dict = (Dictionary) object;
-			out.writeInt(dict.getIndex());
+			String color = dict.getColor() == null ? "" : dict.getColor().name().toLowerCase();
+			String field = dictParser.getFieldFromObject(dict);
+			out.writeFieldValue('{', VALUE, dict.getIndex());
+			out.writeFieldValue(',', FIELD, field);
+			out.writeFieldValue(',', LABEL, dict.getName());
+			out.writeFieldValue(',', COLOR, color);
+			out.write('}');
 		}
 
 	}

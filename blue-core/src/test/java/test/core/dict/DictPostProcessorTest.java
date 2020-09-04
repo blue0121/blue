@@ -2,9 +2,14 @@ package test.core.dict;
 
 import blue.core.dict.DictParser;
 import blue.core.dict.State;
+import blue.core.dict.Type;
+import blue.internal.core.dict.FastjsonEnumSerializer;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializeConfig;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
+import test.core.model.Group;
 
 /**
  * @author Jin Zheng
@@ -38,6 +43,16 @@ public class DictPostProcessorTest
 		Assertions.assertEquals(one, test.core.dict.Test.ONE);
 
 		Assertions.assertEquals(1, dictParser.getFromObject(test.core.dict.Test.ONE).intValue());
+	}
+
+	@Test
+	public void print()
+	{
+		SerializeConfig.getGlobalInstance().put(Type.class, new FastjsonEnumSerializer());
+		SerializeConfig.getGlobalInstance().put(State.class, new FastjsonEnumSerializer());
+		Group group = new Group(1, "blue", Type.YES, State.NORMAL);
+		String json = JSON.toJSONString(group);
+		System.out.println(json);
 	}
 
 }

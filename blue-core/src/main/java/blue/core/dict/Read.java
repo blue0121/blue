@@ -8,8 +8,8 @@ package blue.core.dict;
  */
 public final class Read extends Dictionary
 {
-	public static final Read UNREAD = new Read(0, "未读", Color.RED);
-	public static final Read READ = new Read(1, "已读", Color.BLUE);
+	public static final Read UNREAD = new Read(0, "未读", Color.DANGER);
+	public static final Read READ = new Read(1, "已读", Color.PRIMARY);
 	
 	private Read(int index, String name, Color color)
 	{
