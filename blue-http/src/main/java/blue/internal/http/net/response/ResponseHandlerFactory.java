@@ -45,7 +45,7 @@ public class ResponseHandlerFactory
 
 	public void handle(Channel ch, HttpRequest request, Response response)
 	{
-		if (response == null || response.getResult() == null)
+		if (response == null)
 		{
 			logger.warn("Response is null");
 			return;

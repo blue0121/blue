@@ -20,7 +20,8 @@ public abstract class Dictionary
 	@Override
 	public String toString()
 	{
-		return String.format("%s", name);
+		String type = this.getClass().getSimpleName();
+		return String.format("%s{%s}", type, name);
 	}
 
 	public int getIndex()

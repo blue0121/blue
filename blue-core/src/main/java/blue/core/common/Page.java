@@ -19,7 +19,7 @@ public class Page
 	/**
 	 * 每页记录数
 	 */
-	public static final int ITEMS_PER_PAGE = 20;
+	public static final int ITEMS_PER_PAGE = 10;
 
 	/**
 	 * 总记录数
