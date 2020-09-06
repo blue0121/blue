@@ -116,9 +116,11 @@ public class ObjectUtil
 		if (val == null)
 			return null;
 
-		Class<?> clazz = val.getClass();
-		if (Dictionary.class.isAssignableFrom(clazz))
-			return DictParser.getInstance().getFromObject(val);
+		if (val instanceof Dictionary)
+		{
+			Dictionary dict = (Dictionary) val;
+			return DictParser.getInstance().getFromObject(dict);
+		}
 
 		if ("".equals(val))
 			return null;

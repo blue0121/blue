@@ -18,13 +18,15 @@ public class DictClassHandler implements ClassHandler
 	{
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void handle(Class<?> clazz)
 	{
 		if (Dictionary.class.isAssignableFrom(clazz))
 		{
-			DictParser.getInstance().parse(clazz);
-			ParserConfig.getGlobalInstance().putDeserializer(clazz, new FastjsonEnumDeserializer(clazz));
+			Class<Dictionary> dictClazz = (Class<Dictionary>)clazz;
+			DictParser.getInstance().parse(dictClazz);
+			ParserConfig.getGlobalInstance().putDeserializer(clazz, new FastjsonEnumDeserializer(dictClazz));
 			SerializeConfig.getGlobalInstance().put(clazz, new FastjsonEnumSerializer());
 		}
 		

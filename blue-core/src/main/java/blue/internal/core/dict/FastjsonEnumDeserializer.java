@@ -1,6 +1,7 @@
 package blue.internal.core.dict;
 
 import blue.core.dict.DictParser;
+import blue.core.dict.Dictionary;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.parser.DefaultJSONParser;
 import com.alibaba.fastjson.parser.JSONToken;
@@ -15,9 +16,9 @@ import java.lang.reflect.Type;
 public class FastjsonEnumDeserializer implements ObjectDeserializer
 {
 	private DictParser dictParser = DictParser.getInstance();
-	private Class<?> clazz;
+	private Class<? extends Dictionary> clazz;
 
-	public FastjsonEnumDeserializer(Class<?> clazz)
+	public FastjsonEnumDeserializer(Class<? extends Dictionary> clazz)
 	{
 		this.clazz = clazz;
 	}

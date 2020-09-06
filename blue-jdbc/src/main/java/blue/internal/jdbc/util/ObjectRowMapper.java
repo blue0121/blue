@@ -198,7 +198,7 @@ public class ObjectRowMapper<T> implements RowMapper<T>
 			if (rs.wasNull())
 				return null;
 			
-			return dictParser.getFromIndex(type, index);
+			return dictParser.getFromIndex((Class<Dictionary>)type, index);
 		}
 		
 		return rs.getObject(i);
