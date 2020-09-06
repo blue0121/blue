@@ -26,10 +26,12 @@ module blue.core
 	exports blue.core.util;
 
 	exports blue.internal.core.config to spring.beans;
-	exports blue.internal.core.dict to spring.beans;
+	exports blue.internal.core.dict to spring.beans,fastjson;
 	exports blue.internal.core.http to spring.beans;
 	exports blue.internal.core.message to blue.redis,blue.mqtt,blue.jms,blue.kafka;
 
 	opens blue.core.common to fastjson;
+
+	opens blue.internal.core.dict to fastjson;
 }
 
