@@ -88,5 +88,28 @@
 			<xsd:attribute name="cron" type="xsd:string" use="optional" />
 		</xsd:complexType>
 	</xsd:element>
+
+	<xsd:element name="cache-manager">
+		<xsd:complexType>
+			<xsd:choice minOccurs="1" maxOccurs="unbounded">
+				<xsd:element ref="cache-config" />
+			</xsd:choice>
+			<xsd:attribute name="id" type="xsd:ID" use="required" />
+			<xsd:attribute name="ref-redisson" type="xsd:string" use="required" />
+			<xsd:attribute name="prefix" type="xsd:string" default="" />
+			<xsd:attribute name="default-ttl" type="xsd:string" default="600000" />
+			<xsd:attribute name="default-local-ttl" type="xsd:string" default="60000" />
+			<xsd:attribute name="default-allow-null-values" type="xsd:string" default="true" />
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="cache-config">
+		<xsd:complexType>
+			<xsd:attribute name="name" type="xsd:string" use="required" />
+			<xsd:attribute name="ttl" type="xsd:string" use="required" />
+			<xsd:attribute name="local-ttl" type="xsd:string" use="required" />
+			<xsd:attribute name="allow-null-values" type="xsd:string" use="optional" />
+		</xsd:complexType>
+	</xsd:element>
 	
 </xsd:schema>

@@ -11,6 +11,7 @@ module blue.redis
 	exports blue.redis.producer;
 	exports blue.redis.sequence;
 
+	exports blue.internal.redis.cache to spring.beans;
 	exports blue.internal.redis.codec to spring.beans;
 	exports blue.internal.redis.config to spring.beans;
 	exports blue.internal.redis.consumer to spring.beans;
