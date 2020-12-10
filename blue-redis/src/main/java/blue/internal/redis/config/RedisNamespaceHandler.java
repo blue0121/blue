@@ -24,5 +24,6 @@ public class RedisNamespaceHandler extends NamespaceHandlerSupport
 		this.registerBeanDefinitionParser("atomic-sequence", new AtomicSequenceParser());
 		this.registerBeanDefinitionParser("date-sequence", new DateSequenceParser());
 		this.registerBeanDefinitionParser("reset-sequence", new ResetSequenceParser());
+		this.registerBeanDefinitionParser("l2-cache", new L2CacheParser());
 	}
 }
