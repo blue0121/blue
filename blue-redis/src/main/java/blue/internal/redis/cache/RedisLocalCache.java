@@ -1,12 +1,11 @@
 package blue.internal.redis.cache;
 
-import org.redisson.api.RLocalCachedMap;
-import org.redisson.api.RLock;
+import blue.redis.cache.L2Cache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.Cache;
 import org.springframework.cache.support.AbstractValueAdaptingCache;
 
-import java.lang.reflect.Constructor;
 import java.util.concurrent.Callable;
 
 /**
@@ -17,24 +16,26 @@ public class RedisLocalCache extends AbstractValueAdaptingCache
 {
 	private static Logger logger = LoggerFactory.getLogger(RedisLocalCache.class);
 
-	private final RLocalCachedMap<Object, Object> cache;
+	private final L2Cache cache;
+	private final String name;
 
-	public RedisLocalCache(RLocalCachedMap<Object, Object> cache, boolean allowNullValues)
+	public RedisLocalCache(L2Cache cache, String name, boolean allowNullValues)
 	{
 		super(allowNullValues);
 		this.cache = cache;
+		this.name = name;
 	}
 
 	@Override
 	protected Object lookup(Object key)
 	{
-		return cache.get(key);
+		return cache.getSync(key.toString());
 	}
 
 	@Override
 	public String getName()
 	{
-		return cache.getName();
+		return name;
 	}
 
 	@Override
@@ -46,23 +47,10 @@ public class RedisLocalCache extends AbstractValueAdaptingCache
 	@Override
 	public <T> T get(Object key, Callable<T> valueLoader)
 	{
-		Object value = cache.get(key);
+		Object value = cache.getSync(key.toString());
 		if (value == null)
 		{
-			RLock lock = cache.getLock(key);
-			lock.lock();
-			try
-			{
-				value = cache.get(key);
-				if (value == null)
-				{
-					value = putValue(key, valueLoader, value);
-				}
-			}
-			finally
-			{
-				lock.unlock();
-			}
+			value = putValue(key, valueLoader, value);
 		}
 		return (T) fromStoreValue(value);
 	}
@@ -72,27 +60,12 @@ public class RedisLocalCache extends AbstractValueAdaptingCache
 	{
 		if (!this.isAllowNullValues() && value == null)
 		{
-			cache.remove(key);
+			cache.removeSync(key.toString());
 			return;
 		}
 
 		value = toStoreValue(value);
-		cache.fastPut(key, value);
-	}
-
-	@Override
-	public ValueWrapper putIfAbsent(Object key, Object value)
-	{
-		Object prevValue;
-		if (!this.isAllowNullValues() && value == null)
-		{
-			prevValue = cache.get(key);
-		}
-		else
-		{
-			prevValue = cache.putIfAbsent(key, this.toStoreValue(value));
-		}
-		return toValueWrapper(prevValue);
+		cache.setSync(key.toString(), value);
 	}
 
 	private <T> Object putValue(Object key, Callable<T> valueLoader, Object value)
@@ -103,18 +76,7 @@ public class RedisLocalCache extends AbstractValueAdaptingCache
 		}
 		catch (Exception ex)
 		{
-			RuntimeException exception;
-			try
-			{
-				Class<?> c = Class.forName("org.springframework.cache.Cache$ValueRetrievalException");
-				Constructor<?> constructor = c.getConstructor(Object.class, Callable.class, Throwable.class);
-				exception = (RuntimeException) constructor.newInstance(key, valueLoader, ex);
-			}
-			catch (Exception e)
-			{
-				throw new IllegalStateException(e);
-			}
-			throw exception;
+			return new Cache.ValueRetrievalException(key, valueLoader, ex);
 		}
 		this.put(key, value);
 		return value;
@@ -123,12 +85,12 @@ public class RedisLocalCache extends AbstractValueAdaptingCache
 	@Override
 	public void evict(Object key)
 	{
-		cache.fastRemove(key);
+		cache.removeSync(key.toString());
 	}
 
 	@Override
 	public void clear()
 	{
-		cache.clear();
+		cache.clearSync();
 	}
 }

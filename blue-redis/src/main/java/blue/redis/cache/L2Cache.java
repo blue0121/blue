@@ -127,6 +127,11 @@ public interface L2Cache
 
 	void removeSync(String...names);
 
+	/**
+	 * clear
+	 */
+	void clearAsync();
 
+	void clearSync();
 
 }

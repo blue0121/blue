@@ -26,8 +26,8 @@ public class CacheConfig
 	@Override
 	public String toString()
 	{
-		return String.format("%s{ttl: %d, localTtl: %d, localMaxSize: %d}",
-				this.getClass().getSimpleName(), ttl, localTtl, localMaxSize);
+		return String.format("%s{ttl: %d, localTtl: %d, localMaxSize: %d, timeout: %d}",
+				this.getClass().getSimpleName(), ttl, localTtl, localMaxSize, timeout);
 	}
 
 	public long ttl()

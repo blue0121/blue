@@ -1,32 +1,34 @@
 package blue.internal.redis.cache;
 
-import org.redisson.api.LocalCachedMapOptions;
+import blue.core.util.AssertUtil;
+import blue.redis.cache.CacheConfig;
+import blue.redis.cache.L2Cache;
 import org.redisson.api.RedissonClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author Jin Zheng
  * @since 2020-12-05
  */
-public class RedisCacheManager implements CacheManager
+public class RedisCacheManager implements CacheManager, InitializingBean
 {
 	private static Logger logger = LoggerFactory.getLogger(RedisCacheManager.class);
 
 	private RedissonClient redisson;
 	private String prefix;
+	private RedisCacheConfig config = new RedisCacheConfig();
 	private boolean allowNullValues = true;
 
-	private Map<String, CacheConfig> configMap = new HashMap<>();
+	private final ConcurrentMap<String, RedisCacheConfig> configMap = new ConcurrentHashMap<>();
 	private final ConcurrentMap<String, Cache> cacheMap = new ConcurrentHashMap<>();
 
 	public RedisCacheManager()
@@ -44,24 +46,24 @@ public class RedisCacheManager implements CacheManager
 		return this.createCache(name, config);
 	}
 
-	private CacheConfig getCacheConfig(String name)
+	private RedisCacheConfig getCacheConfig(String name)
 	{
-		return configMap.computeIfAbsent(name, k -> new CacheConfig());
+		return configMap.computeIfAbsent(name, k ->
+		{
+			RedisCacheConfig c = config.copy();
+			c.setName(name);
+			return c;
+		});
 	}
 
-	private Cache createCache(String name, CacheConfig config)
+	private Cache createCache(String name, RedisCacheConfig config)
 	{
 		return cacheMap.computeIfAbsent(name, k ->
 		{
-			var options = LocalCachedMapOptions.defaults()
-					.cacheSize(config.getMaxSize())
-					.evictionPolicy(LocalCachedMapOptions.EvictionPolicy.LFU)
-					.reconnectionStrategy(LocalCachedMapOptions.ReconnectionStrategy.CLEAR)
-					.maxIdle(config.getMaxIdleTime())
-					.timeToLive(config.getTtl());
-			var map = redisson.getLocalCachedMap(name, options);
-			map.expire(config.getTtl(), TimeUnit.MILLISECONDS);
-			return new RedisLocalCache(map, allowNullValues);
+			CacheConfig c = new CacheConfig(config.getTtl(), config.getLocalTtl(), config.getLocalMaxSize(), config.getTimeout());
+			String keyPrefix = prefix + name;
+			L2Cache cache = L2Cache.create(redisson, keyPrefix, c);
+			return new RedisLocalCache(cache, keyPrefix, allowNullValues);
 		});
 	}
 
@@ -91,22 +93,49 @@ public class RedisCacheManager implements CacheManager
 		this.prefix = prefix;
 	}
 
-	public boolean isAllowNullValues()
+	public RedisCacheConfig getConfig()
 	{
-		return allowNullValues;
+		return config.copy();
 	}
 
-	public void setAllowNullValues(boolean allowNullValues)
+	public void setDefaultTtl(long ttl)
 	{
-		this.allowNullValues = allowNullValues;
+		if (ttl > 0)
+		{
+			config.setTtl(ttl);
+		}
 	}
 
-	public Map<String, CacheConfig> getConfigMap()
+	public void setDefaultLocalTtl(long localTtl)
+	{
+		if (localTtl > 0)
+		{
+			config.setLocalTtl(localTtl);
+		}
+	}
+
+	public void setDefaultLocalMaxSize(long size)
+	{
+		if (size > 0)
+		{
+			config.setLocalMaxSize(size);
+		}
+	}
+
+	public void setDefaultTimeout(long timeout)
+	{
+		if (timeout > 0)
+		{
+			config.setTimeout(timeout);
+		}
+	}
+
+	public Map<String, RedisCacheConfig> getConfigMap()
 	{
 		return Map.copyOf(configMap);
 	}
 
-	public void setConfigMap(Map<String, CacheConfig> configMap)
+	public void setConfigMap(Map<String, RedisCacheConfig> configMap)
 	{
 		if (configMap != null && !configMap.isEmpty())
 		{
@@ -117,5 +146,12 @@ public class RedisCacheManager implements CacheManager
 	public Map<String, Cache> getCacheMap()
 	{
 		return Map.copyOf(cacheMap);
+	}
+
+	@Override
+	public void afterPropertiesSet()
+	{
+		AssertUtil.notNull(redisson, "Redisson");
+		AssertUtil.notNull(prefix, "Prefix");
 	}
 }

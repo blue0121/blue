@@ -101,7 +101,7 @@
 		</xsd:complexType>
 	</xsd:element>
 
-	<!--<xsd:element name="cache-manager">
+	<xsd:element name="cache-manager">
 		<xsd:complexType>
 			<xsd:choice minOccurs="1" maxOccurs="unbounded">
 				<xsd:element ref="cache-config" />
@@ -111,17 +111,19 @@
 			<xsd:attribute name="prefix" type="xsd:string" default="" />
 			<xsd:attribute name="default-ttl" type="xsd:string" default="600000" />
 			<xsd:attribute name="default-local-ttl" type="xsd:string" default="60000" />
-			<xsd:attribute name="default-allow-null-values" type="xsd:string" default="true" />
+			<xsd:attribute name="default-local-max-size" type="xsd:string" default="1000" />
+			<xsd:attribute name="default-timeout" type="xsd:string" default="2000" />
 		</xsd:complexType>
 	</xsd:element>
 
 	<xsd:element name="cache-config">
 		<xsd:complexType>
 			<xsd:attribute name="name" type="xsd:string" use="required" />
-			<xsd:attribute name="ttl" type="xsd:string" use="required" />
-			<xsd:attribute name="local-ttl" type="xsd:string" use="required" />
-			<xsd:attribute name="allow-null-values" type="xsd:string" use="optional" />
+			<xsd:attribute name="ttl" type="xsd:string" />
+			<xsd:attribute name="local-ttl" type="xsd:string" />
+			<xsd:attribute name="local-max-size" type="xsd:string" />
+			<xsd:attribute name="timeout" type="xsd:string" />
 		</xsd:complexType>
-	</xsd:element>-->
+	</xsd:element>
 	
 </xsd:schema>

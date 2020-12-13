@@ -8,6 +8,7 @@ import com.github.benmanes.caffeine.cache.AsyncLoadingCache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import org.redisson.api.BatchOptions;
 import org.redisson.api.RBatch;
+import org.redisson.api.RSet;
 import org.redisson.api.RedissonClient;
 import org.redisson.api.listener.MessageListener;
 import org.redisson.api.listener.StatusListener;
@@ -18,9 +19,11 @@ import org.springframework.beans.factory.InitializingBean;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.Executor;
@@ -37,6 +40,7 @@ public class DefaultL2Cache implements L2Cache, AsyncCacheLoader<String, LocalVa
 	private static Logger logger = LoggerFactory.getLogger(DefaultL2Cache.class);
 	private static final String SPLIT = ":";
 	private static final String KEY_SPLIT = ";:;";
+	private static final String SET_SUFFIX = "~set";
 	private static final String TOPIC_PREFIX = "local_cache_remove:";
 
 	private RedissonClient redisson;
@@ -194,6 +198,7 @@ public class DefaultL2Cache implements L2Cache, AsyncCacheLoader<String, LocalVa
 			keyList.add(key);
 			batch.getBucket(key).setAsync(valueList.get(i));
 		}
+		batch.getSet(this.buildSetKey()).addAllAsync(nameList);
 		this.pubOperation(batch, nameList);
 		return batch;
 	}
@@ -224,7 +229,47 @@ public class DefaultL2Cache implements L2Cache, AsyncCacheLoader<String, LocalVa
 		RBatch batch = this.createBatch();
 		String[] keys = this.buildKeys(names);
 		batch.getKeys().deleteAsync(keys);
+		List<String> nameList = Arrays.asList(names);
+		batch.getSet(this.buildSetKey()).removeAllAsync(nameList);
 		this.pubOperation(batch, Arrays.asList(names));
+		return batch;
+	}
+
+	@Override
+	public void clearAsync()
+	{
+		String setKey = this.buildSetKey();
+		RSet<String> rset = redisson.getSet(setKey);
+		rset.readAllAsync().thenAccept(nameSet ->
+		{
+			RBatch batch = this.clearOperation(setKey, nameSet);
+			batch.executeAsync().thenAccept(r ->
+			{
+				this.logOperation("clear", nameSet);
+				cache.synchronous().invalidateAll();
+			});
+		});
+	}
+
+	@Override
+	public void clearSync()
+	{
+		String setKey = this.buildSetKey();
+		RSet<String> rset = redisson.getSet(setKey);
+		Set<String> nameSet = rset.readAll();
+		RBatch batch = this.clearOperation(setKey, nameSet);
+		batch.execute();
+		this.logOperation("clear", nameSet);
+		cache.synchronous().invalidateAll();
+	}
+
+	private RBatch clearOperation(String setKey, Set<String> nameSet)
+	{
+		RBatch batch = this.createBatch();
+		String[] names = nameSet.toArray(new String[0]);
+		String[] keys = this.buildKeys(names);
+		batch.getKeys().deleteAsync(keys);
+		batch.getSet(setKey).deleteAsync();
 		return batch;
 	}
 
@@ -258,7 +303,17 @@ public class DefaultL2Cache implements L2Cache, AsyncCacheLoader<String, LocalVa
 		return keys;
 	}
 
-	private void logOperation(String operation, List<String> nameList)
+	private String buildSetKey()
+	{
+		return keyPrefix + SET_SUFFIX;
+	}
+
+	private String buildTopic()
+	{
+		return TOPIC_PREFIX + keyPrefix;
+	}
+
+	private void logOperation(String operation, Collection<String> nameList)
 	{
 		logger.info("Redis {}, prefix: {}, names: {}", operation, keyPrefix, nameList);
 	}
@@ -268,10 +323,10 @@ public class DefaultL2Cache implements L2Cache, AsyncCacheLoader<String, LocalVa
 		logger.info("Redis {}, prefix: {}, names: {}", operation, keyPrefix, Arrays.toString(names));
 	}
 
-	private void pubOperation(RBatch batch, List<String> nameList)
+	private void pubOperation(RBatch batch, Collection<String> nameList)
 	{
 		var messages = StringUtil.join(nameList, KEY_SPLIT);
-		var topic = TOPIC_PREFIX + keyPrefix;
+		var topic = this.buildTopic();
 		batch.getTopic(topic).publishAsync(messages)
 				.thenAccept(r -> logger.info("Publish, channel: {}, message: {}", topic, messages));
 	}
@@ -403,7 +458,7 @@ public class DefaultL2Cache implements L2Cache, AsyncCacheLoader<String, LocalVa
 		this.cache = Caffeine.newBuilder()
 				.maximumSize(localMaxSize)
 				.buildAsync(this);
-		var topic = TOPIC_PREFIX + keyPrefix;
+		var topic = this.buildTopic();
 		var rtopic = redisson.getTopic(topic);
 		rtopic.addListenerAsync(this).thenAccept(r -> logger.info("Subscribe status, channel: {}", topic));
 		rtopic.addListenerAsync(String.class, this)
@@ -416,6 +471,6 @@ public class DefaultL2Cache implements L2Cache, AsyncCacheLoader<String, LocalVa
 	@Override
 	public void destroy()
 	{
-		redisson.getTopic(TOPIC_PREFIX + keyPrefix).removeAllListeners();
+		redisson.getTopic(this.buildTopic()).removeAllListeners();
 	}
 }

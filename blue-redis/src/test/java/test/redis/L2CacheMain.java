@@ -43,6 +43,8 @@ public class L2CacheMain
 		Thread.sleep(10);
 		logger.info("key: k2, value: {}", (String)cache.getSync("k2"));
 
+		cache.clearSync();
+		getAsync(cache, nameList);
 
 		Thread.sleep(5000);
 		ctx.close();
