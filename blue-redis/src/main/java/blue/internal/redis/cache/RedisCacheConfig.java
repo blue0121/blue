@@ -14,6 +14,7 @@ public class RedisCacheConfig
 
 	public RedisCacheConfig()
 	{
+		this.name = "default";
 	}
 
 	public RedisCacheConfig copy()
@@ -25,6 +26,13 @@ public class RedisCacheConfig
 		config.localMaxSize = this.localMaxSize;
 		config.timeout = timeout;
 		return config;
+	}
+
+	@Override
+	public String toString()
+	{
+		return String.format("%s{name: %s, ttl: %dms, localTtl: %dms, localMaxSize: %dms, timeout: %dms}",
+				this.getClass().getSimpleName(), name, ttl, localTtl, localMaxSize, timeout);
 	}
 
 	public String getName()

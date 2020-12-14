@@ -1,0 +1,25 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:cache="http://www.springframework.org/schema/cache"
+       xmlns:redis="http://blue.com/schema/redis"
+       xmlns:redisson="http://redisson.org/schema/redisson"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd
+       http://blue.com/schema/redis http://blue.com/schema/redis.xsd
+	   http://redisson.org/schema/redisson http://redisson.org/schema/redisson/redisson.xsd">
+	
+	<redis:fastjson-codec id="fastjsonCodec" />
+	<bean id="jsonCodec" class="org.redisson.codec.JsonJacksonCodec" />
+	
+	<redisson:client id="redisson"  codec-ref="fastjsonCodec">
+		<redisson:single-server address="redis://127.0.0.1:6379" />
+	</redisson:client>
+	
+	<cache:annotation-driven cache-manager="cacheManager" />
+	<redis:cache-manager id="cacheManager" ref-redisson="redisson" prefix="test.">
+		<redis:cache-config name="user" ttl="1000" local-ttl="300" />
+	</redis:cache-manager>
+	
+	<bean id="userService" class="test.redis.service.UserService" />
+
+</beans>

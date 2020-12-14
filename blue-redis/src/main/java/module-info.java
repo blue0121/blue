@@ -21,5 +21,5 @@ module blue.redis
 	exports blue.internal.redis.producer to spring.beans;
 	exports blue.internal.redis.sequence to spring.beans;
 
-	opens blue.internal.redis.codec to redisson;
+	//opens blue.internal.redis.codec to redisson;
 }

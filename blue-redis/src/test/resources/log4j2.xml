@@ -8,10 +8,7 @@
 	</Appenders>
 	
 	<Loggers>
-		<Logger name="blue.core" level="debug" includeLocation="false" additivity="false">
-			<AppenderRef ref="con" />
-		</Logger>
-		<Logger name="blue.redis" level="debug" includeLocation="false" additivity="false">
+		<Logger name="blue" level="debug" includeLocation="false" additivity="false">
 			<AppenderRef ref="con" />
 		</Logger>
 		

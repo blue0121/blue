@@ -103,7 +103,7 @@
 
 	<xsd:element name="cache-manager">
 		<xsd:complexType>
-			<xsd:choice minOccurs="1" maxOccurs="unbounded">
+			<xsd:choice minOccurs="0" maxOccurs="unbounded">
 				<xsd:element ref="cache-config" />
 			</xsd:choice>
 			<xsd:attribute name="id" type="xsd:ID" use="required" />

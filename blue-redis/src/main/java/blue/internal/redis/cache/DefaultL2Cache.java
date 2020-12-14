@@ -6,6 +6,7 @@ import blue.redis.cache.L2Cache;
 import com.github.benmanes.caffeine.cache.AsyncCacheLoader;
 import com.github.benmanes.caffeine.cache.AsyncLoadingCache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.Expiry;
 import org.redisson.api.BatchOptions;
 import org.redisson.api.RBatch;
 import org.redisson.api.RSet;
@@ -34,7 +35,8 @@ import java.util.function.Consumer;
  * @author Jin Zheng
  * @since 1.0 2020-12-08
  */
-public class DefaultL2Cache implements L2Cache, AsyncCacheLoader<String, LocalValueWrapper>,
+public class DefaultL2Cache implements L2Cache,
+		AsyncCacheLoader<String, LocalValueWrapper>, Expiry<String, LocalValueWrapper>,
 		MessageListener<String>, StatusListener, InitializingBean, DisposableBean
 {
 	private static Logger logger = LoggerFactory.getLogger(DefaultL2Cache.class);
@@ -196,7 +198,7 @@ public class DefaultL2Cache implements L2Cache, AsyncCacheLoader<String, LocalVa
 		{
 			String key = this.buildKey(nameList.get(i));
 			keyList.add(key);
-			batch.getBucket(key).setAsync(valueList.get(i));
+			batch.getBucket(key).setAsync(valueList.get(i), ttl, TimeUnit.MILLISECONDS);
 		}
 		batch.getSet(this.buildSetKey()).addAllAsync(nameList);
 		this.pubOperation(batch, nameList);
@@ -315,12 +317,18 @@ public class DefaultL2Cache implements L2Cache, AsyncCacheLoader<String, LocalVa
 
 	private void logOperation(String operation, Collection<String> nameList)
 	{
-		logger.info("Redis {}, prefix: {}, names: {}", operation, keyPrefix, nameList);
+		if (logger.isDebugEnabled())
+		{
+			logger.debug("Redis {}, prefix: {}, names: {}", operation, keyPrefix, nameList);
+		}
 	}
 
 	private void logOperation(String operation, String...names)
 	{
-		logger.info("Redis {}, prefix: {}, names: {}", operation, keyPrefix, Arrays.toString(names));
+		if (logger.isDebugEnabled())
+		{
+			logger.debug("Redis {}, prefix: {}, names: {}", operation, keyPrefix, Arrays.toString(names));
+		}
 	}
 
 	private void pubOperation(RBatch batch, Collection<String> nameList)
@@ -385,7 +393,6 @@ public class DefaultL2Cache implements L2Cache, AsyncCacheLoader<String, LocalVa
 				});
 		return (CompletableFuture<LocalValueWrapper>) future;
 	}
-
 	@Override
 	public CompletableFuture<Map<String, LocalValueWrapper>> asyncLoadAll(Iterable<? extends String> keys, Executor executor)
 	{
@@ -415,6 +422,30 @@ public class DefaultL2Cache implements L2Cache, AsyncCacheLoader<String, LocalVa
 	}
 
 	/**
+	 * Caffeine::Expiry interface
+	 *
+	 * @param key
+	 * @param value
+	 * @param currentTime
+	 * @return
+	 */
+	@Override
+	public long expireAfterCreate(String key, LocalValueWrapper value, long currentTime)
+	{
+		return this.getLocalTtl(key) * 1_000_000;
+	}
+	@Override
+	public long expireAfterUpdate(String key, LocalValueWrapper value, long currentTime, long currentDuration)
+	{
+		return this.getLocalTtl(key) * 1_000_000;
+	}
+	@Override
+	public long expireAfterRead(String key, LocalValueWrapper value, long currentTime, long currentDuration)
+	{
+		return currentDuration;
+	}
+
+	/**
 	 * Redisson::MessageListener interface
 	 *
 	 * @param channel
@@ -423,7 +454,7 @@ public class DefaultL2Cache implements L2Cache, AsyncCacheLoader<String, LocalVa
 	@Override
 	public void onMessage(CharSequence channel, String names)
 	{
-		logger.info("onMessage, channel: {}, names: {}", channel, names);
+		logger.debug("onMessage, channel: {}, names: {}", channel, names);
 		if (names == null || names.isEmpty())
 			return;
 
@@ -455,8 +486,11 @@ public class DefaultL2Cache implements L2Cache, AsyncCacheLoader<String, LocalVa
 	{
 		AssertUtil.notNull(redisson, "Redisson");
 		AssertUtil.notEmpty(keyPrefix, "KeyPrefix");
+		logger.info("config, keyPrefix: {}, ttl: {}ms, localTtl: {}ms, localMaxSize: {}ms, timeout: {}ms",
+				keyPrefix, ttl, localTtl, localMaxSize, timeout);
 		this.cache = Caffeine.newBuilder()
 				.maximumSize(localMaxSize)
+				.expireAfter(this)
 				.buildAsync(this);
 		var topic = this.buildTopic();
 		var rtopic = redisson.getTopic(topic);

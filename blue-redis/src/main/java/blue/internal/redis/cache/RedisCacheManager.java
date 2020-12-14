@@ -11,6 +11,7 @@ import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -135,11 +136,14 @@ public class RedisCacheManager implements CacheManager, InitializingBean
 		return Map.copyOf(configMap);
 	}
 
-	public void setConfigMap(Map<String, RedisCacheConfig> configMap)
+	public void setConfigList(List<RedisCacheConfig> configList)
 	{
-		if (configMap != null && !configMap.isEmpty())
+		if (configList != null && !configList.isEmpty())
 		{
-			this.configMap.putAll(configMap);
+			for (var config : configList)
+			{
+				this.configMap.put(config.getName(), config);
+			}
 		}
 	}
 
@@ -153,5 +157,10 @@ public class RedisCacheManager implements CacheManager, InitializingBean
 	{
 		AssertUtil.notNull(redisson, "Redisson");
 		AssertUtil.notNull(prefix, "Prefix");
+		logger.info("config: {}", config);
+		for (var entry : configMap.entrySet())
+		{
+			logger.info("config: {}", entry.getValue());
+		}
 	}
 }

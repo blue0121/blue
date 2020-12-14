@@ -50,7 +50,7 @@ public class RedisLocalCache extends AbstractValueAdaptingCache
 		Object value = cache.getSync(key.toString());
 		if (value == null)
 		{
-			value = putValue(key, valueLoader, value);
+			value = putValue(key, valueLoader);
 		}
 		return (T) fromStoreValue(value);
 	}
@@ -64,12 +64,13 @@ public class RedisLocalCache extends AbstractValueAdaptingCache
 			return;
 		}
 
-		value = toStoreValue(value);
-		cache.setSync(key.toString(), value);
+		Object newValue = toStoreValue(value);
+		cache.setSync(key.toString(), newValue);
 	}
 
-	private <T> Object putValue(Object key, Callable<T> valueLoader, Object value)
+	private <T> Object putValue(Object key, Callable<T> valueLoader)
 	{
+		Object value = null;
 		try
 		{
 			value = valueLoader.call();
