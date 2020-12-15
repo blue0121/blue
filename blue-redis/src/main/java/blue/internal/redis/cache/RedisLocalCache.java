@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.Cache;
 import org.springframework.cache.support.AbstractValueAdaptingCache;
+import org.springframework.cache.support.NullValue;
 
 import java.util.concurrent.Callable;
 
@@ -93,5 +94,16 @@ public class RedisLocalCache extends AbstractValueAdaptingCache
 	public void clear()
 	{
 		cache.clearSync();
+	}
+
+	@Override
+	protected Object fromStoreValue(Object storeValue) {
+		if (storeValue == null)
+			return null;
+
+		if (this.isAllowNullValues() && storeValue instanceof NullValue) {
+			return null;
+		}
+		return storeValue;
 	}
 }
