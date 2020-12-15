@@ -490,6 +490,7 @@ public class DefaultL2Cache implements L2Cache,
 				keyPrefix, ttl, localTtl, localMaxSize, timeout);
 		this.cache = Caffeine.newBuilder()
 				.maximumSize(localMaxSize)
+				.softValues()
 				.expireAfter(this)
 				.buildAsync(this);
 		var topic = this.buildTopic();
