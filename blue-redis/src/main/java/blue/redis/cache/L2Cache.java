@@ -13,7 +13,6 @@ import java.util.function.Consumer;
  */
 public interface L2Cache
 {
-	long DEFAULT_LOCAL_TTL = -1;
 
 	static L2Cache create(RedissonClient redisson, String keyPrefix, CacheConfig cacheConfig)
 	{
@@ -35,13 +34,7 @@ public interface L2Cache
 	 */
 	String keyPrefix();
 
-	long ttl();
-
-	long localTtl();
-
-	long localMaxSize();
-
-	long timeout();
+	CacheConfig cacheConfig();
 
 	/**
 	 * get value by name
@@ -66,12 +59,14 @@ public interface L2Cache
 	 */
 	default void setAsync(String name, Object value)
 	{
-		this.setAsync(name, value, this.ttl(), DEFAULT_LOCAL_TTL);
+		CacheConfig config = this.cacheConfig();
+		this.setAsync(name, value, config.ttl(), config.localTtl());
 	}
 
 	default void setAsync(String name, Object value, long ttl)
 	{
-		this.setAsync(name, value, ttl, DEFAULT_LOCAL_TTL);
+		CacheConfig config = this.cacheConfig();
+		this.setAsync(name, value, ttl, config.localTtl());
 	}
 
 	default void setAsync(String name, Object value, long ttl, long localTtl)
@@ -81,24 +76,28 @@ public interface L2Cache
 
 	default void setAsync(List<String> nameList, List<?> valueList)
 	{
-		this.setAsync(nameList, valueList, this.ttl(), DEFAULT_LOCAL_TTL);
+		CacheConfig config = this.cacheConfig();
+		this.setAsync(nameList, valueList, config.ttl(), config.localTtl());
 	}
 
 	default void setAsync(List<String> nameList, List<?> valueList, long ttl)
 	{
-		this.setAsync(nameList, valueList, ttl, DEFAULT_LOCAL_TTL);
+		CacheConfig config = this.cacheConfig();
+		this.setAsync(nameList, valueList, ttl, config.localTtl());
 	}
 
 	void setAsync(List<String> nameList, List<?> valueList, long ttl, long localTtl);
 
 	default void setSync(String name, Object value)
 	{
-		this.setSync(name, value, this.ttl(), DEFAULT_LOCAL_TTL);
+		CacheConfig config = this.cacheConfig();
+		this.setSync(name, value, config.ttl(), config.localTtl());
 	}
 
 	default void setSync(String name, Object value, long ttl)
 	{
-		this.setSync(name, value, ttl, DEFAULT_LOCAL_TTL);
+		CacheConfig config = this.cacheConfig();
+		this.setSync(name, value, ttl, config.localTtl());
 	}
 
 	default void setSync(String name, Object value, long ttl, long localTtl)
@@ -108,12 +107,14 @@ public interface L2Cache
 
 	default void setSync(List<String> nameList, List<?> valueList)
 	{
-		this.setSync(nameList, valueList, this.ttl(), DEFAULT_LOCAL_TTL);
+		CacheConfig config = this.cacheConfig();
+		this.setSync(nameList, valueList, config.ttl(), config.localTtl());
 	}
 
 	default void setSync(List<String> nameList, List<?> valueList, long ttl)
 	{
-		this.setSync(nameList, valueList, ttl, DEFAULT_LOCAL_TTL);
+		CacheConfig config = this.cacheConfig();
+		this.setSync(nameList, valueList, ttl, config.localTtl());
 	}
 
 	void setSync(List<String> nameList, List<?> valueList, long ttl, long localTtl);

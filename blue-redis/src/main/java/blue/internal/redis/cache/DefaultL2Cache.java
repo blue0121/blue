@@ -2,6 +2,7 @@ package blue.internal.redis.cache;
 
 import blue.core.util.AssertUtil;
 import blue.core.util.StringUtil;
+import blue.redis.cache.CacheConfig;
 import blue.redis.cache.L2Cache;
 import com.github.benmanes.caffeine.cache.AsyncCacheLoader;
 import com.github.benmanes.caffeine.cache.AsyncLoadingCache;
@@ -47,10 +48,7 @@ public class DefaultL2Cache implements L2Cache,
 
 	private RedissonClient redisson;
 	private String keyPrefix;
-	private long ttl;
-	private long localTtl;
-	private long localMaxSize;
-	private long timeout;
+	private final DefaultCacheConfig config = new DefaultCacheConfig();
 	private final Map<String, Long> localTtlMap = new HashMap<>();
 	private AsyncLoadingCache<String, LocalValueWrapper> cache;
 
@@ -65,27 +63,9 @@ public class DefaultL2Cache implements L2Cache,
 	}
 
 	@Override
-	public long ttl()
+	public CacheConfig cacheConfig()
 	{
-		return ttl;
-	}
-
-	@Override
-	public long localTtl()
-	{
-		return localTtl;
-	}
-
-	@Override
-	public long localMaxSize()
-	{
-		return localMaxSize;
-	}
-
-	@Override
-	public long timeout()
-	{
-		return timeout;
+		return config;
 	}
 
 	public void setRedisson(RedissonClient redisson)
@@ -100,22 +80,22 @@ public class DefaultL2Cache implements L2Cache,
 
 	public void setTtl(long ttl)
 	{
-		this.ttl = ttl;
+		config.setTtl(ttl);
 	}
 
 	public void setLocalTtl(long localTtl)
 	{
-		this.localTtl = localTtl;
+		config.setLocalTtl(localTtl);
 	}
 
 	public void setLocalMaxSize(long localMaxSize)
 	{
-		this.localMaxSize = localMaxSize;
+		config.setLocalMaxSize(localMaxSize);
 	}
 
 	public void setTimeout(long timeout)
 	{
-		this.timeout = timeout;
+		config.setTimeout(timeout);
 	}
 
 	@Override
@@ -281,8 +261,8 @@ public class DefaultL2Cache implements L2Cache,
 				.executionMode(BatchOptions.ExecutionMode.IN_MEMORY)
 				.skipResult()
 				//.syncSlaves(2, timeout, TimeUnit.MILLISECONDS)
-				.responseTimeout(timeout, TimeUnit.MILLISECONDS)
-				.retryInterval(timeout, TimeUnit.MILLISECONDS)
+				.responseTimeout(config.timeout(), TimeUnit.MILLISECONDS)
+				.retryInterval(config.timeout(), TimeUnit.MILLISECONDS)
 				.retryAttempts(2);
 		return redisson.createBatch(options);
 	}
@@ -352,7 +332,7 @@ public class DefaultL2Cache implements L2Cache,
 		if (localTtl != null && localTtl.longValue() > 0)
 			return localTtl.longValue();
 
-		return this.localTtl;
+		return this.config.localTtl();
 	}
 	private void removeLocalTtl(String...names)
 	{
@@ -486,11 +466,10 @@ public class DefaultL2Cache implements L2Cache,
 	{
 		AssertUtil.notNull(redisson, "Redisson");
 		AssertUtil.notEmpty(keyPrefix, "KeyPrefix");
-		logger.info("config, keyPrefix: {}, ttl: {}ms, localTtl: {}ms, localMaxSize: {}ms, timeout: {}ms",
-				keyPrefix, ttl, localTtl, localMaxSize, timeout);
+		logger.info("L2Cache, keyPrefix: {}, ttl: {}ms, localTtl: {}ms, localMaxSize: {}ms, timeout: {}ms",
+				keyPrefix, config.ttl(), config.localTtl(), config.localMaxSize(), config.timeout());
 		this.cache = Caffeine.newBuilder()
-				.maximumSize(localMaxSize)
-				.softValues()
+				.maximumSize(config.localMaxSize())
 				.expireAfter(this)
 				.buildAsync(this);
 		var topic = this.buildTopic();

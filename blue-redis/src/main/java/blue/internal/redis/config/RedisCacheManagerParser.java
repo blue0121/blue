@@ -1,7 +1,7 @@
 package blue.internal.redis.config;
 
 import blue.core.common.SimpleBeanDefinitionParser;
-import blue.internal.redis.cache.RedisCacheConfig;
+import blue.internal.redis.cache.DefaultCacheConfig;
 import blue.internal.redis.cache.RedisCacheManager;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
@@ -51,7 +51,7 @@ public class RedisCacheManagerParser extends SimpleBeanDefinitionParser
 			{
 				Element element = (Element) node;
 				RootBeanDefinition definition = new RootBeanDefinition();
-				definition.setBeanClass(RedisCacheConfig.class);
+				definition.setBeanClass(DefaultCacheConfig.class);
 				this.parse(element, definition, "name", "name");
 				this.parse(element, definition, "ttl", "ttl");
 				this.parse(element, definition, "localTtl", "local-ttl");

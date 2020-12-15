@@ -33,7 +33,7 @@ public class CacheMain
 
 	private static void save(UserService service)
 	{
-		for (int i = 0; i < 2; i++)
+		for (int i = 0; i < 5; i++)
 		{
 			service.save(new User(i, "test_" + i));
 		}
@@ -42,7 +42,7 @@ public class CacheMain
 	private static void get(UserService service)
 	{
 		System.out.println("=============== get ===============");
-		for (int i = 0; i < 2; i++)
+		for (int i = 0; i < 5; i++)
 		{
 			User user = service.get(i);
 			if (user == null)
@@ -60,6 +60,7 @@ public class CacheMain
 	private static void remove(UserService service)
 	{
 		service.remove(1);
+		service.remove(4);
 	}
 
 }

@@ -1,10 +1,12 @@
 package blue.internal.redis.cache;
 
+import blue.redis.cache.CacheConfig;
+
 /**
  * @author Jin Zheng
  * @since 2020-12-05
  */
-public class RedisCacheConfig
+public class DefaultCacheConfig implements CacheConfig
 {
 	private String name;
 	private long ttl = 10 * 60 * 1000;
@@ -12,19 +14,19 @@ public class RedisCacheConfig
 	private long localMaxSize = 1000;
 	private long timeout = 2 * 1000;
 
-	public RedisCacheConfig()
+	public DefaultCacheConfig()
 	{
 		this.name = "default";
 	}
 
-	public RedisCacheConfig copy()
+	public DefaultCacheConfig copy()
 	{
-		RedisCacheConfig config = new RedisCacheConfig();
+		DefaultCacheConfig config = new DefaultCacheConfig();
 		config.name = this.name;
 		config.ttl = this.ttl;
 		config.localTtl = this.localTtl;
 		config.localMaxSize = this.localMaxSize;
-		config.timeout = timeout;
+		config.timeout = this.timeout;
 		return config;
 	}
 
@@ -35,7 +37,7 @@ public class RedisCacheConfig
 				this.getClass().getSimpleName(), name, ttl, localTtl, localMaxSize, timeout);
 	}
 
-	public String getName()
+	public String name()
 	{
 		return name;
 	}
@@ -45,43 +47,59 @@ public class RedisCacheConfig
 		this.name = name;
 	}
 
-	public long getTtl()
+	@Override
+	public long ttl()
 	{
 		return ttl;
 	}
 
 	public void setTtl(long ttl)
 	{
-		this.ttl = ttl;
+		if (ttl > 0)
+		{
+			this.ttl = ttl;
+		}
 	}
 
-	public long getLocalTtl()
+	@Override
+	public long localTtl()
 	{
 		return localTtl;
 	}
 
 	public void setLocalTtl(long localTtl)
 	{
-		this.localTtl = localTtl;
+		if (localTtl > 0)
+		{
+			this.localTtl = localTtl;
+		}
 	}
 
-	public long getLocalMaxSize()
+	@Override
+	public long localMaxSize()
 	{
 		return localMaxSize;
 	}
 
 	public void setLocalMaxSize(long localMaxSize)
 	{
-		this.localMaxSize = localMaxSize;
+		if (localMaxSize > 0)
+		{
+			this.localMaxSize = localMaxSize;
+		}
 	}
 
-	public long getTimeout()
+	@Override
+	public long timeout()
 	{
 		return timeout;
 	}
 
 	public void setTimeout(long timeout)
 	{
-		this.timeout = timeout;
+		if (timeout > 0)
+		{
+			this.timeout = timeout;
+		}
 	}
 }

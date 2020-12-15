@@ -1,7 +1,6 @@
 package blue.internal.redis.cache;
 
 import blue.core.util.AssertUtil;
-import blue.redis.cache.CacheConfig;
 import blue.redis.cache.L2Cache;
 import org.redisson.api.RedissonClient;
 import org.slf4j.Logger;
@@ -26,10 +25,10 @@ public class RedisCacheManager implements CacheManager, InitializingBean
 
 	private RedissonClient redisson;
 	private String prefix;
-	private RedisCacheConfig config = new RedisCacheConfig();
+	private DefaultCacheConfig config = new DefaultCacheConfig();
 	private boolean allowNullValues = true;
 
-	private final ConcurrentMap<String, RedisCacheConfig> configMap = new ConcurrentHashMap<>();
+	private final ConcurrentMap<String, DefaultCacheConfig> configMap = new ConcurrentHashMap<>();
 	private final ConcurrentMap<String, Cache> cacheMap = new ConcurrentHashMap<>();
 
 	public RedisCacheManager()
@@ -47,23 +46,22 @@ public class RedisCacheManager implements CacheManager, InitializingBean
 		return this.createCache(name, config);
 	}
 
-	private RedisCacheConfig getCacheConfig(String name)
+	private DefaultCacheConfig getCacheConfig(String name)
 	{
 		return configMap.computeIfAbsent(name, k ->
 		{
-			RedisCacheConfig c = config.copy();
+			DefaultCacheConfig c = config.copy();
 			c.setName(name);
 			return c;
 		});
 	}
 
-	private Cache createCache(String name, RedisCacheConfig config)
+	private Cache createCache(String name, DefaultCacheConfig config)
 	{
 		return cacheMap.computeIfAbsent(name, k ->
 		{
-			CacheConfig c = new CacheConfig(config.getTtl(), config.getLocalTtl(), config.getLocalMaxSize(), config.getTimeout());
 			String keyPrefix = prefix + name;
-			L2Cache cache = L2Cache.create(redisson, keyPrefix, c);
+			L2Cache cache = L2Cache.create(redisson, keyPrefix, config);
 			return new RedisLocalCache(cache, keyPrefix, allowNullValues);
 		});
 	}
@@ -94,7 +92,7 @@ public class RedisCacheManager implements CacheManager, InitializingBean
 		this.prefix = prefix;
 	}
 
-	public RedisCacheConfig getConfig()
+	public DefaultCacheConfig getConfig()
 	{
 		return config.copy();
 	}
@@ -131,18 +129,18 @@ public class RedisCacheManager implements CacheManager, InitializingBean
 		}
 	}
 
-	public Map<String, RedisCacheConfig> getConfigMap()
+	public Map<String, DefaultCacheConfig> getConfigMap()
 	{
 		return Map.copyOf(configMap);
 	}
 
-	public void setConfigList(List<RedisCacheConfig> configList)
+	public void setConfigList(List<DefaultCacheConfig> configList)
 	{
 		if (configList != null && !configList.isEmpty())
 		{
 			for (var config : configList)
 			{
-				this.configMap.put(config.getName(), config);
+				this.configMap.put(config.name(), config);
 			}
 		}
 	}

@@ -1,52 +1,30 @@
 package blue.redis.cache;
 
+import blue.internal.redis.cache.DefaultCacheConfig;
+
 /**
  * @author Jin Zheng
  * @since 1.0 2020-12-08
  */
-public class CacheConfig
+public interface CacheConfig
 {
-	private long ttl = 10 * 60 * 1000;
-	private long localTtl = 50 * 1000;
-	private long localMaxSize = 1000;
-	private long timeout = 2 * 1000;
 
-	public CacheConfig()
+	static CacheConfig create(long ttl, long localTtl, long localMaxSize, long timeout)
 	{
+		DefaultCacheConfig config = new DefaultCacheConfig();
+		config.setTtl(ttl);
+		config.setLocalTtl(localTtl);
+		config.setLocalMaxSize(localMaxSize);
+		config.setTimeout(timeout);
+		return config;
 	}
 
-	public CacheConfig(long ttl, long localTtl, long localMaxSize, long timeout)
-	{
-		this.ttl = ttl;
-		this.localTtl = localTtl;
-		this.localMaxSize = localMaxSize;
-		this.timeout = timeout;
-	}
+	long ttl();
 
-	@Override
-	public String toString()
-	{
-		return String.format("%s{ttl: %dms, localTtl: %dms, localMaxSize: %dms, timeout: %dms}",
-				this.getClass().getSimpleName(), ttl, localTtl, localMaxSize, timeout);
-	}
+	long localTtl();
 
-	public long ttl()
-	{
-		return ttl;
-	}
+	long localMaxSize();
 
-	public long localTtl()
-	{
-		return localTtl;
-	}
+	long timeout();
 
-	public long localMaxSize()
-	{
-		return localMaxSize;
-	}
-
-	public long timeout()
-	{
-		return timeout;
-	}
 }
