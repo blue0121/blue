@@ -1,7 +1,7 @@
 package blue.internal.monitor.config;
 
 import blue.core.common.SimpleBeanDefinitionParser;
-import blue.monitor.metrics.PrometheusRegistry;
+import blue.internal.monitor.metrics.PrometheusRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.w3c.dom.Element;

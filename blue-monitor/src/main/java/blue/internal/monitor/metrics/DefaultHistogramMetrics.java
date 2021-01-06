@@ -1,8 +1,8 @@
-package blue.monitor.metrics;
+package blue.internal.monitor.metrics;
 
 import blue.core.util.NumberUtil;
 import blue.core.util.StringUtil;
-import blue.internal.monitor.metrics.HistogramMetrics;
+import blue.monitor.metrics.HistogramMetrics;
 import io.prometheus.client.Histogram;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

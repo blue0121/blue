@@ -1,7 +1,7 @@
-package blue.monitor.metrics;
+package blue.internal.monitor.metrics;
 
 import blue.core.util.StringUtil;
-import blue.internal.monitor.metrics.CounterMetrics;
+import blue.monitor.metrics.CounterMetrics;
 import io.prometheus.client.Counter;
 
 /**

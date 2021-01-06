@@ -1,4 +1,4 @@
-package blue.internal.monitor.metrics;
+package blue.monitor.metrics;
 
 /**
  * @author Jin Zheng

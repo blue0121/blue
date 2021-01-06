@@ -1,4 +1,4 @@
-package blue.monitor.metrics;
+package blue.internal.monitor.metrics;
 
 import blue.core.util.AssertUtil;
 import io.prometheus.client.CollectorRegistry;

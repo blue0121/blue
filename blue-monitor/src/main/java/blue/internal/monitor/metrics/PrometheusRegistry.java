@@ -1,4 +1,4 @@
-package blue.monitor.metrics;
+package blue.internal.monitor.metrics;
 
 import io.prometheus.client.CollectorRegistry;
 import io.prometheus.client.exporter.PushGateway;

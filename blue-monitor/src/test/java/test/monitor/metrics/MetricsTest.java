@@ -1,7 +1,7 @@
 package test.monitor.metrics;
 
-import blue.internal.monitor.metrics.CounterMetrics;
-import blue.internal.monitor.metrics.HistogramMetrics;
+import blue.monitor.metrics.CounterMetrics;
+import blue.monitor.metrics.HistogramMetrics;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
