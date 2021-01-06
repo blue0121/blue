@@ -1,8 +1,8 @@
 package test.mqtt.listener;
 
-import blue.core.message.ProducerListener;
 import blue.core.util.JsonUtil;
-import blue.mqtt.model.MqttTopic;
+import blue.mqtt.MqttProducerListener;
+import blue.mqtt.MqttTopic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
  * @author Jin Zheng
  * @since 1.0 2019-07-30
  */
-public class DefaultProducerListener implements ProducerListener<MqttTopic, Object>
+public class DefaultProducerListener implements MqttProducerListener<Object>
 {
 	private static Logger logger = LoggerFactory.getLogger(DefaultProducerListener.class);
 

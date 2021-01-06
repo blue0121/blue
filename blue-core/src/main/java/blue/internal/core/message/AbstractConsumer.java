@@ -2,9 +2,9 @@ package blue.internal.core.message;
 
 import blue.core.message.MessageException;
 import blue.core.message.Topic;
+import blue.core.util.AssertUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.task.TaskExecutor;
 
@@ -12,51 +12,49 @@ import java.util.List;
 
 /**
  * @author Jin Zheng
- * @since 2019-06-29
+ * @since 1.0 2021-01-04
  */
-public abstract class AbstractListenerContainer implements InitializingBean, DisposableBean
+public abstract class AbstractConsumer<T extends Topic> implements Consumer<T>, InitializingBean
 {
-	private static Logger logger = LoggerFactory.getLogger(AbstractListenerContainer.class);
+	private static Logger logger = LoggerFactory.getLogger(AbstractConsumer.class);
 
+	protected String name;
 	protected List<ConsumerListenerConfig> configList;
 	protected TaskExecutor taskExecutor;
 	protected ExceptionHandler<Topic, Object> exceptionHandler;
 
-	public AbstractListenerContainer()
+	public AbstractConsumer()
 	{
 	}
 
 	@Override
-	public void destroy() throws Exception
-	{
-		logger.info("Destroy AbstractListenerContainer");
-	}
-
-	@Override
-	public void afterPropertiesSet() throws Exception
+	public void afterPropertiesSet()
 	{
 		this.check();
-		logger.info("ConsumerListener size: {}", configList.size());
-		this.start();
+		logger.info("Consumer '{}' ConsumerListener size: {}", name, configList.size());
+		this.subscribe(configList);
 	}
 
-	protected abstract void start();
+	protected abstract void subscribe(List<ConsumerListenerConfig> configList);
 
 	protected void check()
 	{
-		if (configList == null || configList.isEmpty())
-			throw new MessageException("ConsumerListener config is null");
-
 		if (exceptionHandler == null)
 		{
-			logger.info("Default ExceptionHandler is empty, use LoggerExceptionHandler");
+			logger.info("Consumer '{}' default ExceptionHandler is empty, use LoggerExceptionHandler", name);
 			exceptionHandler = new LoggerExceptionHandler<>();
 		}
 
 		if (this.isMultiThread() && taskExecutor == null)
 			throw new MessageException("TaskExecutor config is null");
 
-		for (ConsumerListenerConfig config : configList)
+		this.checkHandler(configList);
+	}
+
+	protected void checkHandler(List<ConsumerListenerConfig> configList)
+	{
+		AssertUtil.notEmpty(configList, "ConsumerListenerList");
+		for (var config : configList)
 		{
 			if (config.getExceptionHandler() == null)
 			{
@@ -77,6 +75,16 @@ public abstract class AbstractListenerContainer implements InitializingBean, Dis
 				return true;
 		}
 		return false;
+	}
+
+	public String getName()
+	{
+		return name;
+	}
+
+	public void setName(String name)
+	{
+		this.name = name;
 	}
 
 	public List<ConsumerListenerConfig> getConfigList()

@@ -1,7 +1,7 @@
 package blue.internal.redis.producer;
 
-import blue.core.message.ProducerListener;
 import blue.core.message.Topic;
+import blue.internal.core.message.ProducerListener;
 
 import java.util.List;
 import java.util.concurrent.CountDownLatch;

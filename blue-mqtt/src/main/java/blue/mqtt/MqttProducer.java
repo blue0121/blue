@@ -1,7 +1,6 @@
-package blue.mqtt.producer;
+package blue.mqtt;
 
-import blue.core.message.Producer;
-import blue.mqtt.model.MqttTopic;
+import blue.internal.core.message.Producer;
 
 /**
  * @author Jin Zheng

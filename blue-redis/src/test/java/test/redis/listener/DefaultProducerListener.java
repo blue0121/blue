@@ -1,8 +1,8 @@
 package test.redis.listener;
 
-import blue.core.message.ProducerListener;
 import blue.core.message.Topic;
 import blue.core.util.JsonUtil;
+import blue.internal.core.message.ProducerListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

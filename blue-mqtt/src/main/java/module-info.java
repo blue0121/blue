@@ -6,9 +6,7 @@ module blue.mqtt
 	requires mqtt.client;
 	requires hawtbuf;
 
-	exports blue.mqtt.exception;
-	exports blue.mqtt.model;
-	exports blue.mqtt.producer;
+	exports blue.mqtt;
 
 	exports blue.internal.mqtt.config to spring.beans;
 	exports blue.internal.mqtt.consumer to spring.beans;

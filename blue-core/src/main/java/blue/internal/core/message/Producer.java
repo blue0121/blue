@@ -1,4 +1,6 @@
-package blue.core.message;
+package blue.internal.core.message;
+
+import blue.core.message.Topic;
 
 import java.util.List;
 

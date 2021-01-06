@@ -1,6 +1,5 @@
 package blue.internal.core.message;
 
-import blue.core.message.ProducerListener;
 import blue.core.message.Topic;
 import blue.core.util.JsonUtil;
 import org.slf4j.Logger;
@@ -21,14 +20,17 @@ public class LoggerProducerListener<T extends Topic, V> implements ProducerListe
 	@Override
 	public void onSuccess(T topic, V message)
 	{
-		String json = message instanceof CharSequence ? message.toString() : JsonUtil.output(message);
-		logger.info("Success, {}, value: {}", topic, json);
+		if (logger.isDebugEnabled())
+		{
+			String json = JsonUtil.output(message);
+			logger.debug("Success, {}, value: {}", topic, json);
+		}
 	}
 
 	@Override
 	public void onFailure(T topic, V message, Throwable cause)
 	{
-		String json = message instanceof CharSequence ? message.toString() : JsonUtil.output(message);
+		String json = JsonUtil.output(message);
 		logger.error("Error, {}, value: {}", topic, json);
 		logger.error("Error: ", cause);
 	}

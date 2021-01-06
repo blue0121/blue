@@ -1,4 +1,4 @@
-package blue.mqtt.exception;
+package blue.mqtt;
 
 import blue.core.message.MessageException;
 

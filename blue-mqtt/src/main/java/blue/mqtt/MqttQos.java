@@ -1,4 +1,4 @@
-package blue.mqtt.model;
+package blue.mqtt;
 
 import org.fusesource.mqtt.client.QoS;
 

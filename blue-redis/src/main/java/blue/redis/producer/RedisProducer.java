@@ -1,7 +1,7 @@
 package blue.redis.producer;
 
-import blue.core.message.Producer;
 import blue.core.message.Topic;
+import blue.internal.core.message.Producer;
 
 /**
  * @author Jin Zheng

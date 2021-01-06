@@ -1,8 +1,8 @@
 package blue.internal.jms.producer;
 
-import blue.core.message.ProducerListener;
 import blue.core.util.AssertUtil;
 import blue.core.util.JsonUtil;
+import blue.internal.core.message.ProducerListener;
 import blue.internal.jms.consumer.DefaultMessageListener;
 import blue.internal.jms.consumer.JmsListenerConfig;
 import blue.jms.exception.JmsException;

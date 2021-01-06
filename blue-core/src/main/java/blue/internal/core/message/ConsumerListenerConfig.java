@@ -1,9 +1,7 @@
 package blue.internal.core.message;
 
-import blue.core.message.ConsumerListener;
-import blue.core.message.ExceptionHandler;
 import blue.core.message.MessageException;
-import blue.core.message.Topic;
+import blue.core.util.AssertUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -21,10 +19,10 @@ public class ConsumerListenerConfig implements InitializingBean
 
 	protected Class<?> clazz;
 	protected String topic;
-	protected ConsumerListener<Topic, Object> listener;
+	protected ConsumerListener listener;
 	protected boolean multiThread;
 	protected TaskExecutor taskExecutor;
-	protected ExceptionHandler<Topic, Object> exceptionHandler;
+	protected ExceptionHandler exceptionHandler;
 
 	public ConsumerListenerConfig()
 	{
@@ -33,17 +31,14 @@ public class ConsumerListenerConfig implements InitializingBean
 	@Override
 	public void afterPropertiesSet() throws Exception
 	{
-		if (topic == null || topic.isEmpty())
-			throw new MessageException("Topic is empty");
-
-		if (listener == null)
-			throw new MessageException(topic + " ConsumerListener is empty");
+		AssertUtil.notEmpty(topic, "Topic");
+		AssertUtil.notNull(listener, "ConsumerListener");
 
 		if (!multiThread && taskExecutor != null)
 			throw new MessageException(topic + " is not multi-thread，not need TaskExecutor consumer");
 
 		ParameterizedType type = (ParameterizedType) listener.getClass().getGenericInterfaces()[0];
-		clazz = (Class<?>) type.getActualTypeArguments()[1];
+		clazz = (Class<?>) type.getActualTypeArguments()[0];
 	}
 
 	@Override
@@ -72,12 +67,12 @@ public class ConsumerListenerConfig implements InitializingBean
 		this.taskExecutor = taskExecutor;
 	}
 
-	public ConsumerListener<Topic, Object> getListener()
+	public ConsumerListener getListener()
 	{
 		return listener;
 	}
 
-	public void setListener(ConsumerListener<Topic, Object> listener)
+	public void setListener(ConsumerListener listener)
 	{
 		this.listener = listener;
 	}
@@ -92,12 +87,12 @@ public class ConsumerListenerConfig implements InitializingBean
 		this.multiThread = multiThread;
 	}
 
-	public ExceptionHandler<Topic, Object> getExceptionHandler()
+	public ExceptionHandler getExceptionHandler()
 	{
 		return exceptionHandler;
 	}
 
-	public void setExceptionHandler(ExceptionHandler<Topic, Object> exceptionHandler)
+	public void setExceptionHandler(ExceptionHandler exceptionHandler)
 	{
 		this.exceptionHandler = exceptionHandler;
 	}

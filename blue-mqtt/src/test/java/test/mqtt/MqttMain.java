@@ -1,8 +1,8 @@
 package test.mqtt;
 
-import blue.mqtt.model.MqttQos;
-import blue.mqtt.model.MqttTopic;
-import blue.mqtt.producer.MqttProducer;
+import blue.mqtt.MqttProducer;
+import blue.mqtt.MqttQos;
+import blue.mqtt.MqttTopic;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import test.mqtt.model.User;
 

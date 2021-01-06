@@ -1,6 +1,6 @@
 package blue.jms.producer;
 
-import blue.core.message.Producer;
+import blue.internal.core.message.Producer;
 import blue.jms.model.JmsTopic;
 
 /**

@@ -5,6 +5,8 @@ import com.alibaba.fastjson.parser.Feature;
 import com.alibaba.fastjson.parser.ParserConfig;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 
+import java.nio.charset.StandardCharsets;
+
 /**
  * @author Jin Zheng
  * @since 1.0 2019-07-26
@@ -34,6 +36,12 @@ public class JsonUtil
 		if (object == null)
 			return new byte[0];
 
+		if (object instanceof byte[])
+			return (byte[]) object;
+
+		if (object instanceof CharSequence)
+			return object.toString().getBytes(StandardCharsets.UTF_8);
+
 		return JSON.toJSONBytes(object, serializer);
 	}
 
@@ -45,10 +53,17 @@ public class JsonUtil
 		return JSON.parseObject(bytes, Object.class, feature);
 	}
 
+	@SuppressWarnings("unchecked")
 	public static <T> T fromBytes(byte[] bytes, Class<T> clazz)
 	{
 		if (bytes == null || bytes.length == 0)
 			return null;
+
+		if (clazz == byte[].class)
+			return (T) bytes;
+
+		if (CharSequence.class.isAssignableFrom(clazz))
+			return (T) new String(bytes, StandardCharsets.UTF_8);
 
 		return JSON.parseObject(bytes, clazz, feature);
 	}
@@ -57,6 +72,12 @@ public class JsonUtil
 	{
 		if (object == null)
 			return null;
+
+		if (object instanceof byte[])
+			return String.format("{%d byte array}", ((byte[]) object).length);
+
+		if (object instanceof CharSequence)
+			return object.toString();
 
 		return JSON.toJSONString(object, outstream);
 	}
@@ -78,10 +99,14 @@ public class JsonUtil
 		return (T)JSON.parseObject(json, Object.class, feature);
 	}
 
+	@SuppressWarnings("unchecked")
 	public static <T> T fromString(String json, Class<T> clazz)
 	{
 		if (json == null || json.isEmpty())
 			return null;
+
+		if (clazz == String.class)
+			return (T) json;
 
 		return JSON.parseObject(json, clazz, feature);
 	}

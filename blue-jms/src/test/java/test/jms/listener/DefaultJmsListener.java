@@ -1,7 +1,7 @@
 package test.jms.listener;
 
-import blue.core.message.ConsumerListener;
 import blue.core.util.JsonUtil;
+import blue.internal.core.message.ConsumerListener;
 import blue.jms.model.JmsTopic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

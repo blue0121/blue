@@ -1,8 +1,8 @@
 package test.mqtt.listener;
 
-import blue.core.message.ConsumerListener;
 import blue.core.util.JsonUtil;
-import blue.mqtt.model.MqttTopic;
+import blue.mqtt.MqttConsumerListener;
+import blue.mqtt.MqttTopic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import test.mqtt.model.User;
@@ -11,7 +11,7 @@ import test.mqtt.model.User;
  * @author Jin Zheng
  * @since 2019-06-30
  */
-public class DefaultMqttListener implements ConsumerListener<MqttTopic, User>
+public class DefaultMqttListener implements MqttConsumerListener<User>
 {
 	private static Logger logger = LoggerFactory.getLogger(DefaultMqttListener.class);
 

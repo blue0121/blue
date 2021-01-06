@@ -1,13 +1,14 @@
 package blue.internal.mqtt.producer;
 
-import blue.core.message.ProducerListener;
 import blue.core.util.AssertUtil;
 import blue.core.util.WaitUtil;
+import blue.internal.core.message.AbstractProducer;
 import blue.internal.core.message.LoggerProducerListener;
-import blue.mqtt.exception.MqttException;
-import blue.mqtt.model.MqttQos;
-import blue.mqtt.model.MqttTopic;
-import blue.mqtt.producer.MqttProducer;
+import blue.internal.core.message.ProducerListener;
+import blue.mqtt.MqttException;
+import blue.mqtt.MqttProducer;
+import blue.mqtt.MqttQos;
+import blue.mqtt.MqttTopic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -21,7 +22,7 @@ import java.util.concurrent.atomic.LongAdder;
  * @author Jin Zheng
  * @since 2019-06-30
  */
-public class DefaultMqttProducer implements MqttProducer, InitializingBean
+public class DefaultMqttProducer extends AbstractProducer<MqttTopic> implements MqttProducer, InitializingBean
 {
 	private static Logger logger = LoggerFactory.getLogger(DefaultMqttProducer.class);
 
@@ -29,7 +30,7 @@ public class DefaultMqttProducer implements MqttProducer, InitializingBean
 	private List<MqttClient> mqttClientList = new ArrayList<>();
 	private MqttClient mqttClient;
 	private MqttQos defaultQos;
-	private int batch;
+	private int batch = 1;
 	private ProducerListener<MqttTopic, Object> listener;
 
 	public DefaultMqttProducer()
@@ -75,10 +76,9 @@ public class DefaultMqttProducer implements MqttProducer, InitializingBean
 	@Override
 	public void afterPropertiesSet() throws Exception
 	{
-		if (mqttClient == null)
-			throw new MqttException("mqttClient is null");
-		if (defaultQos == null)
-			throw new MqttException("defaultQos is empty");
+		AssertUtil.notNull(mqttClient, "MqttClient");
+		AssertUtil.notNull(defaultQos, "DefaultQos");
+
 		if (batch < 1)
 			throw new MqttException("batch is less than 1");
 		if (batch > 200)
@@ -96,14 +96,14 @@ public class DefaultMqttProducer implements MqttProducer, InitializingBean
 		if (this.listener == null)
 		{
 			this.listener = new LoggerProducerListener<>();
-			logger.info("Default ProducerListener is empty, use LoggerProducerListener");
+			logger.info("'{}' Default ProducerListener is empty, use LoggerProducerListener", name);
 		}
 	}
 
 	private void initBatchMqttClient(int index) throws Exception
 	{
 		MqttClient client = new MqttClient();
-		client.setUrl(mqttClient.getUrl());
+		client.setBroker(mqttClient.getBroker());
 		client.setUsername(mqttClient.getUsername());
 		client.setPassword(mqttClient.getPassword());
 		client.setTimeout(mqttClient.getTimeout());

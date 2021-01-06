@@ -1,8 +1,8 @@
 package test.redis.listener;
 
-import blue.core.message.ConsumerListener;
 import blue.core.message.Topic;
 import blue.core.util.JsonUtil;
+import blue.internal.core.message.ConsumerListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import test.redis.model.User;

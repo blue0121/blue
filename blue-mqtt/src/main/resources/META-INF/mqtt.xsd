@@ -9,7 +9,7 @@
 	<xsd:element name="client">
 		<xsd:complexType>
 			<xsd:attribute name="id" type="xsd:ID" use="required" />
-			<xsd:attribute name="url" type="xsd:string" use="required" />
+			<xsd:attribute name="broker" type="xsd:string" use="required" />
 			<xsd:attribute name="username" type="xsd:string" use="optional" />
 			<xsd:attribute name="password" type="xsd:string" use="optional" />
 			<xsd:attribute name="client-id" type="xsd:string" use="optional" />
@@ -30,12 +30,13 @@
 		</xsd:complexType>
 	</xsd:element>
 	
-	<xsd:element name="listener-container">
+	<xsd:element name="consumer">
 		<xsd:complexType>
 			<xsd:choice minOccurs="1" maxOccurs="unbounded">
 				<xsd:element ref="listener" />
 			</xsd:choice>
 			<xsd:attribute name="id" type="xsd:ID" use="required" />
+			<xsd:attribute name="default-qos" type="mqttQos" default="0" />
 			<xsd:attribute name="ref-mqtt-client" type="xsd:string" use="required" />
 			<xsd:attribute name="ref-exception-handler" type="xsd:string" use="optional" />
 			<xsd:attribute name="ref-task-executor" type="xsd:string" use="optional" />

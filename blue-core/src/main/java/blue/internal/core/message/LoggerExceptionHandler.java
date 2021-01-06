@@ -1,6 +1,5 @@
 package blue.internal.core.message;
 
-import blue.core.message.ExceptionHandler;
 import blue.core.message.Topic;
 import blue.core.util.JsonUtil;
 import org.slf4j.Logger;
@@ -21,7 +20,7 @@ public class LoggerExceptionHandler<T extends Topic, V> implements ExceptionHand
 	@Override
 	public void onError(T topic, V message, Exception e)
 	{
-		String json = message instanceof CharSequence ? message.toString() : JsonUtil.output(message);
+		String json = JsonUtil.output(message);
 		logger.error("Error, {}, value: {}", topic, json);
 		logger.error("Error: ", e);
 	}

@@ -1,8 +1,8 @@
 package blue.internal.mqtt.consumer;
 
 import blue.internal.core.message.ConsumerListenerConfig;
-import blue.mqtt.exception.MqttException;
-import blue.mqtt.model.MqttQos;
+import blue.mqtt.MqttException;
+import blue.mqtt.MqttQos;
 
 /**
  * @author Jin Zheng
@@ -40,5 +40,4 @@ public class MqttListenerConfig extends ConsumerListenerConfig
 	{
 		this.qos = MqttQos.valueOf(qos);
 	}
-
 }

@@ -1,8 +1,8 @@
 package blue.internal.kafka.handler;
 
-import blue.core.message.ConsumerListener;
-import blue.core.message.ExceptionHandler;
 import blue.core.message.Topic;
+import blue.internal.core.message.ConsumerListener;
+import blue.internal.core.message.ExceptionHandler;
 import blue.internal.kafka.consumer.KafkaListenerConfig;
 import blue.internal.kafka.offset.OffsetManager;
 import org.apache.kafka.clients.consumer.Consumer;

@@ -1,7 +1,7 @@
 package test.kafka.listener;
 
-import blue.core.message.ConsumerListener;
 import blue.core.util.JsonUtil;
+import blue.internal.core.message.ConsumerListener;
 import blue.kafka.model.KafkaTopic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

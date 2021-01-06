@@ -9,15 +9,14 @@
 	
 	<core:task-executor id="taskExecutor" core-pool-size="10" max-pool-size="1000" queue-capacity="10000" keep-alive-seconds="60" />
 	
-	<mqtt:client id="mqttClient" url="tcp://localhost:1883" username="admin" password="admin" />
-	<mqtt:producer id="mqttProducer" batch="3" default-qos="0" ref-mqtt-client="mqttClient" ref-producer-listener="producerListener" />
+	<mqtt:client id="mqttClient" broker="tcp://localhost:1883" username="admin" password="admin" client-id="$RANDOM" />
+	<mqtt:producer id="mqttProducer" batch="1" default-qos="0" ref-mqtt-client="mqttClient" ref-producer-listener="producerListener" />
 	
-	<mqtt:listener-container id="mqttListenerContainer" ref-mqtt-client="mqttClient" ref-task-executor="taskExecutor">
+	<mqtt:consumer id="mqttConsumer" default-qos="0" ref-mqtt-client="mqttClient" ref-task-executor="taskExecutor">
 		<mqtt:listener topic="$share/group1/test/+" ref-listener="mqttListener" />
-	</mqtt:listener-container>
+	</mqtt:consumer>
 	
 	<bean id="producerListener" class="test.mqtt.listener.DefaultProducerListener" />
-	
 	<bean id="mqttListener" class="test.mqtt.listener.DefaultMqttListener" />
 
 </beans>

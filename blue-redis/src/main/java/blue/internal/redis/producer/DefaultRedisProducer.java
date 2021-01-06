@@ -1,10 +1,10 @@
 package blue.internal.redis.producer;
 
-import blue.core.message.ProducerListener;
 import blue.core.message.Topic;
 import blue.core.util.AssertUtil;
 import blue.core.util.WaitUtil;
 import blue.internal.core.message.LoggerProducerListener;
+import blue.internal.core.message.ProducerListener;
 import blue.redis.producer.RedisProducer;
 import org.redisson.api.RFuture;
 import org.redisson.api.RTopic;

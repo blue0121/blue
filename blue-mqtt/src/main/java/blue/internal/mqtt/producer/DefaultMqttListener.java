@@ -1,10 +1,9 @@
 package blue.internal.mqtt.producer;
 
-import blue.core.message.ByteValue;
 import blue.core.util.JsonUtil;
 import blue.internal.mqtt.consumer.MqttListenerConfig;
 import blue.internal.mqtt.consumer.MqttTopicUtil;
-import blue.mqtt.model.MqttTopic;
+import blue.mqtt.MqttTopic;
 import org.fusesource.hawtbuf.Buffer;
 import org.fusesource.hawtbuf.UTF8Buffer;
 import org.fusesource.mqtt.client.Callback;
@@ -12,9 +11,9 @@ import org.fusesource.mqtt.client.ExtendedListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @author Jin Zheng
@@ -28,7 +27,7 @@ public class DefaultMqttListener implements ExtendedListener
 	private static final String QUEUE = "$queue/";
 	private static final String SPLIT = "/";
 
-	private List<MqttListenerConfig> configList = new ArrayList<>();
+	private List<MqttListenerConfig> configList = new CopyOnWriteArrayList<>();
 
 	public DefaultMqttListener()
 	{
@@ -80,18 +79,11 @@ public class DefaultMqttListener implements ExtendedListener
 		return MqttTopicUtil.isMatched(topicFilter, topic);
 	}
 
+	@SuppressWarnings("unchecked")
 	private void invoke(String topic, byte[] payload, MqttListenerConfig listener, String type)
 	{
 		Class<?> clazz = listener.getClazz();
-		Object value = null;
-		if (clazz == ByteValue.class)
-		{
-			value = new ByteValue(payload);
-		}
-		else
-		{
-			value = JsonUtil.fromBytes(payload);
-		}
+		Object value = JsonUtil.fromBytes(payload, clazz);
 		try
 		{
 			listener.getListener().onReceive(new MqttTopic(topic, null), value);

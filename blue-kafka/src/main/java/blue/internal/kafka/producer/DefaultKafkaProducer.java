@@ -1,9 +1,9 @@
 package blue.internal.kafka.producer;
 
-import blue.core.message.ProducerListener;
 import blue.core.util.AssertUtil;
 import blue.core.util.WaitUtil;
 import blue.internal.core.message.LoggerProducerListener;
+import blue.internal.core.message.ProducerListener;
 import blue.internal.kafka.codec.FastjsonSerializer;
 import blue.kafka.model.KafkaTopic;
 import blue.kafka.producer.KafkaProducer;

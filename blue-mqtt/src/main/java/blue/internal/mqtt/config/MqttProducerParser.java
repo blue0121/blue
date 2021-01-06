@@ -22,6 +22,7 @@ public class MqttProducerParser extends SimpleBeanDefinitionParser
 	@Override
 	protected void doParseInternal(Element element, ParserContext parserContext, BeanDefinitionBuilder builder)
 	{
+		this.parse(element, builder, "name", "id");
 		this.parse(element, builder, "defaultQos", "default-qos");
 		this.parse(element, builder, "batch", "batch");
 		this.parseRef(element, builder, "mqttClient", "ref-mqtt-client");

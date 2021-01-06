@@ -1,4 +1,4 @@
-package blue.mqtt.model;
+package blue.mqtt;
 
 import blue.core.message.Topic;
 

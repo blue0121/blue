@@ -19,6 +19,6 @@ public class MqttNamespaceHandler extends NamespaceHandlerSupport
 	{
 		this.registerBeanDefinitionParser("client", new MqttClientParser());
 		this.registerBeanDefinitionParser("producer", new MqttProducerParser());
-		this.registerBeanDefinitionParser("listener-container", new MqttListenerContrainerParser());
+		this.registerBeanDefinitionParser("consumer", new MqttConsumerParser());
 	}
 }

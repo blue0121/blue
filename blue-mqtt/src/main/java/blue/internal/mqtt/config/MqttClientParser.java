@@ -22,7 +22,8 @@ public class MqttClientParser extends SimpleBeanDefinitionParser
 	@Override
 	protected void doParseInternal(Element element, ParserContext parserContext, BeanDefinitionBuilder builder)
 	{
-		this.parse(element, builder, "url", "url");
+		this.parse(element, builder, "name", "id");
+		this.parse(element, builder, "broker", "broker");
 		this.parse(element, builder, "username", "username");
 		this.parse(element, builder, "password", "password");
 		this.parse(element, builder, "clientId", "client-id");

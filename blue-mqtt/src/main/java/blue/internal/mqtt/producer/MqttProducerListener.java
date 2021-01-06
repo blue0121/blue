@@ -1,7 +1,7 @@
 package blue.internal.mqtt.producer;
 
-import blue.core.message.ProducerListener;
-import blue.mqtt.model.MqttTopic;
+import blue.internal.core.message.ProducerListener;
+import blue.mqtt.MqttTopic;
 
 import java.util.concurrent.CountDownLatch;
 
