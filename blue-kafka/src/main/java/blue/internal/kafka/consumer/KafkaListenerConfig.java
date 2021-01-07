@@ -25,7 +25,7 @@ public class KafkaListenerConfig extends ConsumerListenerConfig
 	}
 
 	@Override
-	public void afterPropertiesSet() throws Exception
+	public void afterPropertiesSet()
 	{
 		super.afterPropertiesSet();
 

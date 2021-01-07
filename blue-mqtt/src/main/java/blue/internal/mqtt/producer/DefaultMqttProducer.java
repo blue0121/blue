@@ -96,7 +96,7 @@ public class DefaultMqttProducer extends AbstractProducer<MqttTopic> implements 
 		if (this.listener == null)
 		{
 			this.listener = new LoggerProducerListener<>();
-			logger.info("'{}' Default ProducerListener is empty, use LoggerProducerListener", name);
+			logger.info("JMS '{}' Default ProducerListener is empty, use LoggerProducerListener", name);
 		}
 	}
 

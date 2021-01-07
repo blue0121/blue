@@ -1,7 +1,7 @@
 package blue.internal.jms.config;
 
 import blue.core.common.SimpleBeanDefinitionParser;
-import blue.internal.jms.producer.DefaultJmsProducer;
+import blue.internal.jms.producer.JmsClient;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.w3c.dom.Element;
@@ -12,19 +12,17 @@ import org.w3c.dom.Element;
  * @author Jin Zheng
  * @since 1.0 2019-04-10
  */
-public class JmsProducerParser extends SimpleBeanDefinitionParser
+public class JmsClientParser extends SimpleBeanDefinitionParser
 {
-	public JmsProducerParser()
+	public JmsClientParser()
 	{
-		this.clazz = DefaultJmsProducer.class;
+		this.clazz = JmsClient.class;
 	}
 
 	@Override
 	protected void doParseInternal(Element element, ParserContext parserContext, BeanDefinitionBuilder builder)
 	{
 		this.parse(element, builder, "name", "id");
-		this.parseRef(element, builder, "jmsClient", "ref-jms-client");
-		this.parseRef(element, builder, "taskExecutor", "ref-task-executor");
-		this.parseRef(element, builder, "producerListener", "ref-producer-listener");
+		this.parseRef(element, builder, "connection", "ref-connection");
 	}
 }

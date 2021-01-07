@@ -1,7 +1,6 @@
-package blue.jms.producer;
+package blue.jms;
 
 import blue.internal.core.message.Producer;
-import blue.jms.model.JmsTopic;
 
 /**
  * @author Jin Zheng

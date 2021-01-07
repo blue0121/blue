@@ -1,4 +1,4 @@
-package blue.jms.model;
+package blue.jms;
 
 /**
  * @author Jin Zheng

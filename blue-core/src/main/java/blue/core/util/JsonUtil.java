@@ -87,6 +87,12 @@ public class JsonUtil
 		if (object == null)
 			return null;
 
+		if (object instanceof byte[])
+			return String.format("{%d byte array}", ((byte[]) object).length);
+
+		if (object instanceof CharSequence)
+			return object.toString();
+
 		return JSON.toJSONString(object, serializer);
 	}
 

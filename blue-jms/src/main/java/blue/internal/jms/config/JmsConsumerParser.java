@@ -1,8 +1,8 @@
 package blue.internal.jms.config;
 
 import blue.core.common.ListenerContainerParser;
+import blue.internal.jms.consumer.DefaultJmsConsumer;
 import blue.internal.jms.consumer.JmsListenerConfig;
-import blue.internal.jms.consumer.JmsListenerContainer;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.beans.factory.xml.ParserContext;
@@ -15,11 +15,11 @@ import org.w3c.dom.NodeList;
  * @author Jin Zheng
  * @since 1.0 2019-04-10
  */
-public class JmsListenerContrainerParser extends ListenerContainerParser
+public class JmsConsumerParser extends ListenerContainerParser
 {
-	public JmsListenerContrainerParser()
+	public JmsConsumerParser()
 	{
-		this.clazz = JmsListenerContainer.class;
+		this.clazz = DefaultJmsConsumer.class;
 	}
 
 	@Override
@@ -31,7 +31,8 @@ public class JmsListenerContrainerParser extends ListenerContainerParser
 			this.parseListenerConfig(configList, builder.getRawBeanDefinition(), JmsListenerConfig.class);
 		}
 
-		this.parseRef(element, builder, "producer", "ref-jms-producer");
+		this.parse(element, builder, "name", "id");
+		this.parseRef(element, builder, "jmsClient", "ref-jms-client");
 		this.parseRef(element, builder, "exceptionHandler", "ref-exception-handler");
 		this.parseRef(element, builder, "taskExecutor", "ref-task-executor");
 	}

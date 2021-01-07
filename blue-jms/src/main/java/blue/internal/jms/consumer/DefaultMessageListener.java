@@ -26,6 +26,7 @@ public class DefaultMessageListener implements MessageListener
 		this.listenerConfig = listenerConfig;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void onMessage(Message message)
 	{
@@ -35,7 +36,7 @@ public class DefaultMessageListener implements MessageListener
 			if (message instanceof TextMessage)
 			{
 				TextMessage textMessage = (TextMessage) message;
-				object = this.fromText(textMessage.getText());
+				object = JsonUtil.fromString(textMessage.getText(), listenerConfig.getClazz());
 				if (listenerConfig.isMultiThread())
 				{
 					Object tmp = object;
@@ -55,14 +56,6 @@ public class DefaultMessageListener implements MessageListener
 		{
 			listenerConfig.getExceptionHandler().onError(topic, object, e);
 		}
-	}
-
-	private Object fromText(String text)
-	{
-		if (listenerConfig.getClazz() == String.class)
-			return text;
-		else
-			return JsonUtil.fromString(text);
 	}
 
 }

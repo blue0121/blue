@@ -41,6 +41,7 @@ public class DefaultMqttConsumer extends AbstractConsumer<MqttTopic> implements 
 			config.setTopic(topic.getTopic());
 			config.setQos(topic.getQos() == null ? defaultQos.getType() : topic.getQos().getType());
 			config.setListener(listener);
+			config.afterPropertiesSet();
 			configList.add(config);
 		}
 		this.checkHandler(configList);

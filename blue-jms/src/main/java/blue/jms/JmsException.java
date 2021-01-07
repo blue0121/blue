@@ -1,4 +1,4 @@
-package blue.jms.exception;
+package blue.jms;
 
 import blue.core.message.MessageException;
 

@@ -18,7 +18,8 @@ public class JmsNamespaceHandler extends NamespaceHandlerSupport
 	public void init()
 	{
 		this.registerBeanDefinitionParser("qpid-connection", new QpidConnectionParser());
+		this.registerBeanDefinitionParser("client", new JmsClientParser());
 		this.registerBeanDefinitionParser("producer", new JmsProducerParser());
-		this.registerBeanDefinitionParser("listener-container", new JmsListenerContrainerParser());
+		this.registerBeanDefinitionParser("consumer", new JmsConsumerParser());
 	}
 }

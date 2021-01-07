@@ -1,8 +1,8 @@
 package blue.internal.jms.consumer;
 
+import blue.core.util.AssertUtil;
 import blue.internal.core.message.ConsumerListenerConfig;
-import blue.jms.exception.JmsException;
-import blue.jms.model.JmsType;
+import blue.jms.JmsType;
 
 /**
  * @author Jin Zheng
@@ -17,11 +17,10 @@ public class JmsListenerConfig extends ConsumerListenerConfig
 	}
 
 	@Override
-	public void afterPropertiesSet() throws Exception
+	public void afterPropertiesSet()
 	{
 		super.afterPropertiesSet();
-		if (type == null)
-			throw new JmsException("type is empty");
+		AssertUtil.notNull(type, "JmsType");
 	}
 
 	@Override

@@ -1,8 +1,8 @@
 package test.jms;
 
-import blue.jms.model.JmsTopic;
-import blue.jms.model.JmsType;
-import blue.jms.producer.JmsProducer;
+import blue.jms.JmsProducer;
+import blue.jms.JmsTopic;
+import blue.jms.JmsType;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import test.jms.model.User;
 

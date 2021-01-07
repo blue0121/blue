@@ -17,24 +17,31 @@
 		</xsd:complexType>
 	</xsd:element>
 	
-	<xsd:element name="producer">
+	<xsd:element name="client">
 		<xsd:complexType>
 			<xsd:attribute name="id" type="xsd:ID" use="required" />
 			<xsd:attribute name="ref-connection" type="xsd:string" use="required" />
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="producer">
+		<xsd:complexType>
+			<xsd:attribute name="id" type="xsd:ID" use="required" />
+			<xsd:attribute name="ref-jms-client" type="xsd:string" use="required" />
 			<xsd:attribute name="ref-task-executor" type="xsd:string" use="required" />
 			<xsd:attribute name="ref-producer-listener" type="xsd:string" use="optional" />
 		</xsd:complexType>
 	</xsd:element>
 	
-	<xsd:element name="listener-container">
+	<xsd:element name="consumer">
 		<xsd:complexType>
 			<xsd:choice minOccurs="1" maxOccurs="unbounded">
 				<xsd:element ref="listener" />
 			</xsd:choice>
 			<xsd:attribute name="id" type="xsd:ID" use="required" />
-			<xsd:attribute name="ref-jms-producer" type="xsd:string" use="required" />
-			<xsd:attribute name="ref-exception-handler" type="xsd:string" use="optional" />
+			<xsd:attribute name="ref-jms-client" type="xsd:string" use="required" />
 			<xsd:attribute name="ref-task-executor" type="xsd:string" use="optional" />
+			<xsd:attribute name="ref-exception-handler" type="xsd:string" use="optional" />
 		</xsd:complexType>
 	</xsd:element>
 	

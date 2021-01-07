@@ -1,4 +1,4 @@
-package blue.jms.model;
+package blue.jms;
 
 import blue.core.message.Topic;
 
@@ -41,13 +41,13 @@ public class JmsTopic extends Topic
 			return false;
 		}
 		JmsTopic jmsTopic = (JmsTopic) o;
-		return topic.equals(jmsTopic.topic) && type == jmsTopic.type;
+		return topic.equals(jmsTopic.topic);
 	}
 
 	@Override
 	public int hashCode()
 	{
-		return Objects.hash(topic, type);
+		return Objects.hash(topic);
 	}
 
 }

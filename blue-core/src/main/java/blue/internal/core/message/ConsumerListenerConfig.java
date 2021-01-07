@@ -29,7 +29,7 @@ public class ConsumerListenerConfig implements InitializingBean
 	}
 
 	@Override
-	public void afterPropertiesSet() throws Exception
+	public void afterPropertiesSet()
 	{
 		AssertUtil.notEmpty(topic, "Topic");
 		AssertUtil.notNull(listener, "ConsumerListener");

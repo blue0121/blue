@@ -1,7 +1,7 @@
 package blue.internal.mqtt.consumer;
 
+import blue.core.util.AssertUtil;
 import blue.internal.core.message.ConsumerListenerConfig;
-import blue.mqtt.MqttException;
 import blue.mqtt.MqttQos;
 
 /**
@@ -17,11 +17,10 @@ public class MqttListenerConfig extends ConsumerListenerConfig
 	}
 
 	@Override
-	public void afterPropertiesSet() throws Exception
+	public void afterPropertiesSet()
 	{
 		super.afterPropertiesSet();
-		if (qos == null)
-			throw new MqttException("Qos is empty");
+		AssertUtil.notNull(qos, "MqttQos");
 	}
 
 	@Override

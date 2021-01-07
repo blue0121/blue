@@ -1,8 +1,8 @@
 package test.jms.listener;
 
 import blue.core.util.JsonUtil;
-import blue.internal.core.message.ProducerListener;
-import blue.jms.model.JmsTopic;
+import blue.jms.JmsProducerListener;
+import blue.jms.JmsTopic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
  * @author Jin Zheng
  * @since 1.0 2019-07-30
  */
-public class DefaultProducerListener implements ProducerListener<JmsTopic, Object>
+public class DefaultProducerListener implements JmsProducerListener<Object>
 {
 	private static Logger logger = LoggerFactory.getLogger(DefaultProducerListener.class);
 
