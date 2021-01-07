@@ -1,4 +1,4 @@
-package blue.kafka.model;
+package blue.kafka;
 
 import blue.core.message.Topic;
 

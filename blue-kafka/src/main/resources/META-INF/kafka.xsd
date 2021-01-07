@@ -14,7 +14,7 @@
 		</xsd:complexType>
 	</xsd:element>
 
-	<xsd:element name="listener-container">
+	<xsd:element name="consumer">
 		<xsd:complexType>
 			<xsd:choice minOccurs="1" maxOccurs="unbounded">
 				<xsd:element ref="listener" />

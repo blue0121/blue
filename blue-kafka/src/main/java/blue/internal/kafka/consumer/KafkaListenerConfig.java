@@ -2,7 +2,7 @@ package blue.internal.kafka.consumer;
 
 import blue.internal.core.message.ConsumerListenerConfig;
 import blue.internal.kafka.offset.OffsetManager;
-import blue.kafka.exception.KafkaException;
+import blue.kafka.KafkaException;
 
 import java.util.regex.Pattern;
 

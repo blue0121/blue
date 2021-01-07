@@ -1,7 +1,7 @@
 package test.kafka;
 
-import blue.kafka.model.KafkaTopic;
-import blue.kafka.producer.KafkaProducer;
+import blue.kafka.KafkaProducer;
+import blue.kafka.KafkaTopic;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import test.kafka.model.User;
 

@@ -1,8 +1,8 @@
 package blue.internal.kafka.config;
 
 import blue.core.common.ListenerContainerParser;
+import blue.internal.kafka.consumer.DefaultKafkaConsumer;
 import blue.internal.kafka.consumer.KafkaListenerConfig;
-import blue.internal.kafka.consumer.KafkaListenerContainer;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.beans.factory.xml.ParserContext;
@@ -15,11 +15,11 @@ import org.w3c.dom.NodeList;
  * @author Jin Zheng
  * @since 1.0 2019-04-11
  */
-public class KafkaListenerContainerParser extends ListenerContainerParser
+public class KafkaConsumerParser extends ListenerContainerParser
 {
-	public KafkaListenerContainerParser()
+	public KafkaConsumerParser()
 	{
-		this.clazz = KafkaListenerContainer.class;
+		this.clazz = DefaultKafkaConsumer.class;
 	}
 
 	@Override
@@ -31,6 +31,7 @@ public class KafkaListenerContainerParser extends ListenerContainerParser
 			this.parseListenerConfig(configList, builder.getRawBeanDefinition(), KafkaListenerConfig.class);
 		}
 
+		this.parse(element, builder, "name", "id");
 		this.parseRef(element, builder, "config", "ref-config");
 		this.parseRef(element, builder, "exceptionHandler", "ref-exception-handler");
 		this.parseRef(element, builder, "taskExecutor", "ref-task-executor");

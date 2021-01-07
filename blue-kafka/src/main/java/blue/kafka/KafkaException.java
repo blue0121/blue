@@ -1,4 +1,4 @@
-package blue.kafka.exception;
+package blue.kafka;
 
 import blue.core.message.MessageException;
 

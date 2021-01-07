@@ -1,8 +1,8 @@
 package test.kafka.listener;
 
 import blue.core.util.JsonUtil;
-import blue.internal.core.message.ProducerListener;
-import blue.kafka.model.KafkaTopic;
+import blue.kafka.KafkaProducerListener;
+import blue.kafka.KafkaTopic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
  * @author Jin Zheng
  * @since 1.0 2020-07-07
  */
-public class DefaultProducerListener implements ProducerListener<KafkaTopic, Object>
+public class DefaultProducerListener implements KafkaProducerListener<Object>
 {
 	private static Logger logger = LoggerFactory.getLogger(DefaultProducerListener.class);
 

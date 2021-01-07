@@ -18,7 +18,7 @@ public class KafkaNamespaceHandler extends NamespaceHandlerSupport
 	public void init()
 	{
 		this.registerBeanDefinitionParser("producer", new KafkaProducerParser());
-		this.registerBeanDefinitionParser("listener-container", new KafkaListenerContainerParser());
+		this.registerBeanDefinitionParser("consumer", new KafkaConsumerParser());
 		this.registerBeanDefinitionParser("memory-offset-manager", new KafkaMemoryOffsetManagerParser());
 	}
 }

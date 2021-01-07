@@ -4,9 +4,7 @@ module blue.kafka
 	requires blue.core;
 	requires kafka.clients;
 
-	exports blue.kafka.exception;
-	exports blue.kafka.model;
-	exports blue.kafka.producer;
+	exports blue.kafka;
 
 	//exports blue.internal.kafka.codec to kafka.clients;
 	exports blue.internal.kafka.config to spring.beans;

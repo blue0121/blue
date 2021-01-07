@@ -1,7 +1,6 @@
-package blue.kafka.producer;
+package blue.kafka;
 
 import blue.internal.core.message.Producer;
-import blue.kafka.model.KafkaTopic;
 
 /**
  * @author Jin Zheng

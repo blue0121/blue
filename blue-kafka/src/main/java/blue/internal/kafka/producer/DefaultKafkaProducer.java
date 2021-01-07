@@ -2,11 +2,12 @@ package blue.internal.kafka.producer;
 
 import blue.core.util.AssertUtil;
 import blue.core.util.WaitUtil;
+import blue.internal.core.message.AbstractProducer;
 import blue.internal.core.message.LoggerProducerListener;
 import blue.internal.core.message.ProducerListener;
 import blue.internal.kafka.codec.FastjsonSerializer;
-import blue.kafka.model.KafkaTopic;
-import blue.kafka.producer.KafkaProducer;
+import blue.kafka.KafkaProducer;
+import blue.kafka.KafkaTopic;
 import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -29,7 +30,8 @@ import java.util.concurrent.CountDownLatch;
  * @author Jin Zheng
  * @since 1.0 2019-11-12
  */
-public class DefaultKafkaProducer implements KafkaProducer, InitializingBean, DisposableBean
+public class DefaultKafkaProducer extends AbstractProducer<KafkaTopic>
+		implements KafkaProducer, InitializingBean, DisposableBean
 {
 	private static Logger logger = LoggerFactory.getLogger(DefaultKafkaProducer.class);
 
@@ -53,12 +55,6 @@ public class DefaultKafkaProducer implements KafkaProducer, InitializingBean, Di
 			producer.send(record, callback);
 		}
 		WaitUtil.await(latch);
-	}
-
-	@Override
-	public void sendAsync(KafkaTopic topic, Object message)
-	{
-		this.sendAsync(topic, message, null);
 	}
 
 	@Override
@@ -146,11 +142,11 @@ public class DefaultKafkaProducer implements KafkaProducer, InitializingBean, Di
 		AssertUtil.notNull(config, "kafka config");
 
 		if (!config.containsKey(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG)) {
-			logger.info("config '{}' is empty, default: {}", ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+			logger.info("Kafka '{}' config '{}' is empty, default: {}", ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, name, StringSerializer.class.getName());
 			config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
 		}
 		if (!config.containsKey(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG)) {
-			logger.info("config '{}' is empty, default: {}", ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, FastjsonSerializer.class.getName());
+			logger.info("Kafka '{}' config '{}' is empty, default: {}", ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, name, FastjsonSerializer.class.getName());
 			config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, FastjsonSerializer.class.getName());
 		}
 		producer = new org.apache.kafka.clients.producer.KafkaProducer<>(config);
@@ -158,7 +154,7 @@ public class DefaultKafkaProducer implements KafkaProducer, InitializingBean, Di
 		if (defaultListener == null)
 		{
 			defaultListener = new LoggerProducerListener<>();
-			logger.info("Default ProducerListener is empty, use LoggerProducerListener");
+			logger.info("Kafka '{}' Default ProducerListener is empty, use LoggerProducerListener", name);
 		}
 	}
 

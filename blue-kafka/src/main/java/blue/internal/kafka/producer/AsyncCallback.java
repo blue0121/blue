@@ -1,7 +1,7 @@
 package blue.internal.kafka.producer;
 
 import blue.internal.core.message.ProducerListener;
-import blue.kafka.model.KafkaTopic;
+import blue.kafka.KafkaTopic;
 import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.RecordMetadata;
 

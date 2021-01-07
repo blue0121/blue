@@ -1,8 +1,8 @@
 package test.kafka.listener;
 
 import blue.core.util.JsonUtil;
-import blue.internal.core.message.ConsumerListener;
-import blue.kafka.model.KafkaTopic;
+import blue.kafka.KafkaConsumerListener;
+import blue.kafka.KafkaTopic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import test.kafka.model.User;
@@ -11,7 +11,7 @@ import test.kafka.model.User;
  * @author Jin Zheng
  * @since 1.0 2020-07-07
  */
-public class DefaultKafkaListener implements ConsumerListener<KafkaTopic, User>
+public class DefaultKafkaListener implements KafkaConsumerListener<User>
 {
 	private static Logger logger = LoggerFactory.getLogger(DefaultKafkaListener.class);
 

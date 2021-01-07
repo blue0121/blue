@@ -5,9 +5,7 @@ module blue.jms
 	requires blue.core;
 	requires qpid.client;
 
-	exports blue.jms.exception;
-	exports blue.jms.model;
-	exports blue.jms.producer;
+	exports blue.jms;
 
 	exports blue.internal.jms.config to spring.beans;
 	exports blue.internal.jms.consumer to spring.beans;

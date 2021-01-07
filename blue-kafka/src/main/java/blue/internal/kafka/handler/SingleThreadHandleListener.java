@@ -1,7 +1,7 @@
 package blue.internal.kafka.handler;
 
 import blue.internal.kafka.consumer.KafkaListenerConfig;
-import blue.kafka.model.KafkaTopic;
+import blue.kafka.KafkaTopic;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
