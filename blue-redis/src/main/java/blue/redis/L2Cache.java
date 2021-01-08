@@ -1,4 +1,4 @@
-package blue.redis.cache;
+package blue.redis;
 
 import blue.internal.redis.cache.DefaultL2Cache;
 import org.redisson.api.RedissonClient;

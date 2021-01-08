@@ -1,7 +1,7 @@
 package blue.internal.redis.sequence;
 
 import blue.core.util.AssertUtil;
-import blue.redis.sequence.Sequence;
+import blue.redis.Sequence;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;

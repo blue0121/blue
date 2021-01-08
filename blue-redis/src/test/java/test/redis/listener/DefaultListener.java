@@ -2,7 +2,7 @@ package test.redis.listener;
 
 import blue.core.message.Topic;
 import blue.core.util.JsonUtil;
-import blue.internal.core.message.ConsumerListener;
+import blue.redis.RedisConsumerListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import test.redis.model.User;
@@ -11,7 +11,7 @@ import test.redis.model.User;
  * @author Jin Zheng
  * @since 2019-11-03
  */
-public class DefaultListener implements ConsumerListener<Topic, User>
+public class DefaultListener implements RedisConsumerListener<User>
 {
 	private static Logger logger = LoggerFactory.getLogger(DefaultListener.class);
 

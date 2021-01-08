@@ -20,9 +20,9 @@
 	
 	<redis:producer id="redisProducer" ref-redisson="redisson" ref-producer-listener="producerListener" />
 	
-	<redis:listener-container id="mqttListenerContainer" ref-redisson="redisson" ref-task-executor="taskExecutor">
+	<redis:consumer id="mqttListenerContainer" ref-redisson="redisson" ref-task-executor="taskExecutor">
 		<redis:listener topic="test" ref-listener="redisListener" />
-	</redis:listener-container>
+	</redis:consumer>
 	
 	<bean id="producerListener" class="test.redis.listener.DefaultProducerListener" />
 	<bean id="redisListener" class="test.redis.listener.DefaultListener" />

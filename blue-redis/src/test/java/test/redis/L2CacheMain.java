@@ -1,6 +1,6 @@
 package test.redis;
 
-import blue.redis.cache.L2Cache;
+import blue.redis.L2Cache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;

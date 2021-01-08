@@ -2,7 +2,7 @@ package blue.internal.redis.config;
 
 import blue.core.common.ListenerContainerParser;
 import blue.internal.core.message.ConsumerListenerConfig;
-import blue.internal.redis.consumer.RedisListenerContainer;
+import blue.internal.redis.consumer.DefaultRedisConsumer;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.w3c.dom.Element;
@@ -14,11 +14,11 @@ import org.w3c.dom.NodeList;
  * @author Jin Zheng
  * @since 1.0 2019-04-10
  */
-public class RedisListenerContrainerParser extends ListenerContainerParser
+public class RedisConsumerParser extends ListenerContainerParser
 {
-	public RedisListenerContrainerParser()
+	public RedisConsumerParser()
 	{
-		this.clazz = RedisListenerContainer.class;
+		this.clazz = DefaultRedisConsumer.class;
 	}
 
 	@Override
@@ -30,6 +30,7 @@ public class RedisListenerContrainerParser extends ListenerContainerParser
 			this.parseListenerConfig(configList, builder.getRawBeanDefinition(), ConsumerListenerConfig.class);
 		}
 
+		this.parse(element, builder, "name", "id");
 		this.parseRef(element, builder, "redisson", "ref-redisson");
 		this.parseRef(element, builder, "exceptionHandler", "ref-exception-handler");
 		this.parseRef(element, builder, "taskExecutor", "ref-task-executor");

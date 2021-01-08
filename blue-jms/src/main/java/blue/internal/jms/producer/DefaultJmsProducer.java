@@ -2,13 +2,11 @@ package blue.internal.jms.producer;
 
 import blue.core.util.AssertUtil;
 import blue.internal.core.message.AbstractProducer;
-import blue.internal.core.message.LoggerProducerListener;
 import blue.internal.core.message.ProducerListener;
 import blue.jms.JmsProducer;
 import blue.jms.JmsTopic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.task.TaskExecutor;
 
 import java.util.ArrayList;
@@ -18,13 +16,12 @@ import java.util.List;
  * @author Jin Zheng
  * @since 1.0 2019-08-02
  */
-public class DefaultJmsProducer extends AbstractProducer<JmsTopic> implements JmsProducer, InitializingBean
+public class DefaultJmsProducer extends AbstractProducer<JmsTopic> implements JmsProducer
 {
 	private static Logger logger = LoggerFactory.getLogger(DefaultJmsProducer.class);
 
 	private JmsClient jmsClient;
 	private TaskExecutor taskExecutor;
-	private ProducerListener<JmsTopic, Object> listener;
 
 	public DefaultJmsProducer()
 	{
@@ -67,20 +64,10 @@ public class DefaultJmsProducer extends AbstractProducer<JmsTopic> implements Jm
 	}
 
 	@Override
-	public void setProducerListener(ProducerListener<JmsTopic, Object> listener)
-	{
-		this.listener = listener;
-	}
-
-	@Override
 	public void afterPropertiesSet() throws Exception
 	{
 		AssertUtil.notNull(jmsClient, "JmsClient");
-		if (this.listener == null)
-		{
-			this.listener = new LoggerProducerListener<>();
-			logger.info("JMS '{}' Default ProducerListener is empty, use LoggerProducerListener", name);
-		}
+		super.afterPropertiesSet();
 	}
 
 	public void setJmsClient(JmsClient jmsClient)

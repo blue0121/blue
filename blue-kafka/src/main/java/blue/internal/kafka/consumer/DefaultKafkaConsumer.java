@@ -56,7 +56,6 @@ public class DefaultKafkaConsumer extends AbstractConsumer<KafkaTopic> implement
 				Thread thread = new Thread(consumer);
 				thread.start();
 			}
-			logger.info("Subscription: {}", config.toString());
 		}
 	}
 
@@ -69,7 +68,7 @@ public class DefaultKafkaConsumer extends AbstractConsumer<KafkaTopic> implement
 		{
 			var config = new KafkaListenerConfig();
 			config.setTopic(topic.getTopic());
-			config.setGroup(topic.getClass().getSimpleName());
+			config.setMultiThread(taskExecutor != null);
 			config.setListener(listener);
 			config.afterPropertiesSet();
 			configList.add(config);

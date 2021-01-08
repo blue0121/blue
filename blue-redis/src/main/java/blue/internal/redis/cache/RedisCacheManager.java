@@ -1,7 +1,7 @@
 package blue.internal.redis.cache;
 
 import blue.core.util.AssertUtil;
-import blue.redis.cache.L2Cache;
+import blue.redis.L2Cache;
 import org.redisson.api.RedissonClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

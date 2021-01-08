@@ -1,4 +1,4 @@
-package blue.redis.cache;
+package blue.redis;
 
 import blue.internal.redis.cache.DefaultCacheConfig;
 

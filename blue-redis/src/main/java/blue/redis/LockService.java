@@ -1,4 +1,4 @@
-package blue.redis.lock;
+package blue.redis;
 
 import blue.core.util.WaitUtil;
 

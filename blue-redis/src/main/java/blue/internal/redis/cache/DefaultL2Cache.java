@@ -2,8 +2,8 @@ package blue.internal.redis.cache;
 
 import blue.core.util.AssertUtil;
 import blue.core.util.StringUtil;
-import blue.redis.cache.CacheConfig;
-import blue.redis.cache.L2Cache;
+import blue.redis.CacheConfig;
+import blue.redis.L2Cache;
 import com.github.benmanes.caffeine.cache.AsyncCacheLoader;
 import com.github.benmanes.caffeine.cache.AsyncLoadingCache;
 import com.github.benmanes.caffeine.cache.Caffeine;

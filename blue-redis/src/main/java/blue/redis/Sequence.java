@@ -1,4 +1,4 @@
-package blue.redis.sequence;
+package blue.redis;
 
 /**
  * @author Jin Zheng

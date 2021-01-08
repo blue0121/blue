@@ -1,8 +1,8 @@
 package test.redis;
 
 import blue.core.message.Topic;
-import blue.redis.producer.RedisProducer;
-import blue.redis.sequence.Sequence;
+import blue.redis.RedisProducer;
+import blue.redis.Sequence;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;

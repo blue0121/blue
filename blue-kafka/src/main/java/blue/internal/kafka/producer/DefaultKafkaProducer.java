@@ -3,7 +3,6 @@ package blue.internal.kafka.producer;
 import blue.core.util.AssertUtil;
 import blue.core.util.WaitUtil;
 import blue.internal.core.message.AbstractProducer;
-import blue.internal.core.message.LoggerProducerListener;
 import blue.internal.core.message.ProducerListener;
 import blue.internal.kafka.codec.FastjsonSerializer;
 import blue.kafka.KafkaProducer;
@@ -18,7 +17,6 @@ import org.apache.kafka.common.serialization.StringSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
-import org.springframework.beans.factory.InitializingBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,13 +29,12 @@ import java.util.concurrent.CountDownLatch;
  * @since 1.0 2019-11-12
  */
 public class DefaultKafkaProducer extends AbstractProducer<KafkaTopic>
-		implements KafkaProducer, InitializingBean, DisposableBean
+		implements KafkaProducer, DisposableBean
 {
 	private static Logger logger = LoggerFactory.getLogger(DefaultKafkaProducer.class);
 
 	private org.apache.kafka.clients.producer.Producer<String, Object> producer;
 	private Properties config;
-	private ProducerListener<KafkaTopic, Object> defaultListener;
 
 	public DefaultKafkaProducer()
 	{
@@ -51,7 +48,7 @@ public class DefaultKafkaProducer extends AbstractProducer<KafkaTopic>
 		for (Object message : messageList)
 		{
 			ProducerRecord<String, Object> record = this.createProducerRecord(topic.getTopic(), topic.getKey(), message);
-			Callback callback = new SyncCallback(latch, defaultListener, topic, message);
+			Callback callback = new SyncCallback(latch, listener, topic, message);
 			producer.send(record, callback);
 		}
 		WaitUtil.await(latch);
@@ -106,7 +103,7 @@ public class DefaultKafkaProducer extends AbstractProducer<KafkaTopic>
 		List<ProducerListener<KafkaTopic, Object>> listenerList = new ArrayList<>();
 		if (listener == null)
 		{
-			listener = defaultListener;
+			listener = this.listener;
 		}
 
 		Callback callback = new AsyncCallback(listener, record.topic(), record.partition(), record.key(), record.value());
@@ -119,12 +116,6 @@ public class DefaultKafkaProducer extends AbstractProducer<KafkaTopic>
 		AssertUtil.notNull(value, "value");
 		ProducerRecord<String, Object> record = new ProducerRecord<>(topic, key, value);
 		return record;
-	}
-
-	@Override
-	public void setProducerListener(ProducerListener<KafkaTopic, Object> listener)
-	{
-		this.defaultListener = listener;
 	}
 
 	@Override
@@ -151,11 +142,7 @@ public class DefaultKafkaProducer extends AbstractProducer<KafkaTopic>
 		}
 		producer = new org.apache.kafka.clients.producer.KafkaProducer<>(config);
 
-		if (defaultListener == null)
-		{
-			defaultListener = new LoggerProducerListener<>();
-			logger.info("Kafka '{}' Default ProducerListener is empty, use LoggerProducerListener", name);
-		}
+		super.afterPropertiesSet();
 	}
 
 	public void setConfig(Properties config)

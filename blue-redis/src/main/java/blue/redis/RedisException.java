@@ -1,4 +1,4 @@
-package blue.redis.exception;
+package blue.redis;
 
 import blue.core.message.MessageException;
 

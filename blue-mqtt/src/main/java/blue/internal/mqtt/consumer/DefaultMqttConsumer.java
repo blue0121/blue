@@ -40,6 +40,7 @@ public class DefaultMqttConsumer extends AbstractConsumer<MqttTopic> implements 
 			var config = new MqttListenerConfig();
 			config.setTopic(topic.getTopic());
 			config.setQos(topic.getQos() == null ? defaultQos.getType() : topic.getQos().getType());
+			config.setMultiThread(taskExecutor != null);
 			config.setListener(listener);
 			config.afterPropertiesSet();
 			configList.add(config);

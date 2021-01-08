@@ -2,7 +2,7 @@ package test.redis.listener;
 
 import blue.core.message.Topic;
 import blue.core.util.JsonUtil;
-import blue.internal.core.message.ProducerListener;
+import blue.redis.RedisProducerListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
  * @author Jin Zheng
  * @since 2019-11-03
  */
-public class DefaultProducerListener implements ProducerListener<Topic, Object>
+public class DefaultProducerListener implements RedisProducerListener<Object>
 {
 	private static Logger logger = LoggerFactory.getLogger(DefaultProducerListener.class);
 

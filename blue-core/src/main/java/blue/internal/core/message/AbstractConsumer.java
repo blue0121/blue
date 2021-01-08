@@ -41,14 +41,14 @@ public abstract class AbstractConsumer<T extends Topic> implements Consumer<T>, 
 	{
 		if (exceptionHandler == null)
 		{
-			logger.info("Consumer '{}' default ExceptionHandler is empty, use LoggerExceptionHandler", name);
+			logger.info("Consumer '{}' default ExceptionHandler is null, use LoggerExceptionHandler", name);
 			exceptionHandler = new LoggerExceptionHandler<>();
 		}
-
-		if (this.isMultiThread() && taskExecutor == null)
-			throw new MessageException("TaskExecutor config is null");
-
 		this.checkHandler(configList);
+		if (this.isMultiThread() && taskExecutor == null)
+		{
+			throw new MessageException("TaskExecutor config is null");
+		}
 	}
 
 	protected void checkHandler(List<ConsumerListenerConfig> configList)

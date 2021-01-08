@@ -22,6 +22,7 @@ public class RedisProducerParser extends SimpleBeanDefinitionParser
 	@Override
 	protected void doParseInternal(Element element, ParserContext parserContext, BeanDefinitionBuilder builder)
 	{
+		this.parse(element, builder, "name", "id");
 		this.parseRef(element, builder, "redisson", "ref-redisson");
 		this.parseRef(element, builder, "producerListener", "ref-producer-listener");
 	}

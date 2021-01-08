@@ -1,4 +1,4 @@
-package blue.redis.producer;
+package blue.redis;
 
 import blue.core.message.Topic;
 import blue.internal.core.message.Producer;

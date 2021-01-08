@@ -3,7 +3,6 @@ package blue.internal.mqtt.producer;
 import blue.core.util.AssertUtil;
 import blue.core.util.WaitUtil;
 import blue.internal.core.message.AbstractProducer;
-import blue.internal.core.message.LoggerProducerListener;
 import blue.internal.core.message.ProducerListener;
 import blue.mqtt.MqttException;
 import blue.mqtt.MqttProducer;
@@ -11,7 +10,6 @@ import blue.mqtt.MqttQos;
 import blue.mqtt.MqttTopic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +20,7 @@ import java.util.concurrent.atomic.LongAdder;
  * @author Jin Zheng
  * @since 2019-06-30
  */
-public class DefaultMqttProducer extends AbstractProducer<MqttTopic> implements MqttProducer, InitializingBean
+public class DefaultMqttProducer extends AbstractProducer<MqttTopic> implements MqttProducer
 {
 	private static Logger logger = LoggerFactory.getLogger(DefaultMqttProducer.class);
 
@@ -31,7 +29,6 @@ public class DefaultMqttProducer extends AbstractProducer<MqttTopic> implements 
 	private MqttClient mqttClient;
 	private MqttQos defaultQos;
 	private int batch = 1;
-	private ProducerListener<MqttTopic, Object> listener;
 
 	public DefaultMqttProducer()
 	{
@@ -68,12 +65,6 @@ public class DefaultMqttProducer extends AbstractProducer<MqttTopic> implements 
 	}
 
 	@Override
-	public void setProducerListener(ProducerListener<MqttTopic, Object> listener)
-	{
-		this.listener = listener;
-	}
-
-	@Override
 	public void afterPropertiesSet() throws Exception
 	{
 		AssertUtil.notNull(mqttClient, "MqttClient");
@@ -93,11 +84,7 @@ public class DefaultMqttProducer extends AbstractProducer<MqttTopic> implements 
 			}
 		}
 
-		if (this.listener == null)
-		{
-			this.listener = new LoggerProducerListener<>();
-			logger.info("JMS '{}' Default ProducerListener is empty, use LoggerProducerListener", name);
-		}
+		super.afterPropertiesSet();
 	}
 
 	private void initBatchMqttClient(int index) throws Exception

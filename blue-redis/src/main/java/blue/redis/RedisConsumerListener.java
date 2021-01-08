@@ -1,0 +1,12 @@
+package blue.redis;
+
+import blue.core.message.Topic;
+import blue.internal.core.message.ConsumerListener;
+
+/**
+ * @author Jin Zheng
+ * @since 1.0 2021-01-08
+ */
+public interface RedisConsumerListener<T> extends ConsumerListener<Topic, T>
+{
+}

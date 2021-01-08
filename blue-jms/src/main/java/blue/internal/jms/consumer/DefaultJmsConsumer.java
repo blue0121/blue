@@ -48,6 +48,7 @@ public class DefaultJmsConsumer extends AbstractConsumer<JmsTopic> implements In
 			JmsListenerConfig config = new JmsListenerConfig();
 			config.setTopic(topic.getTopic());
 			config.setType(topic.getType());
+			config.setMultiThread(taskExecutor != null);
 			config.setListener(listener);
 			config.afterPropertiesSet();
 			configList.add(config);

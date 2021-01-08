@@ -33,7 +33,7 @@
 			<xsd:attribute name="ref-listener" type="xsd:string" use="required" />
 			<xsd:attribute name="count" type="xsd:positiveInteger" default="1" />
 			<xsd:attribute name="group" type="xsd:string" use="optional" />
-			<xsd:attribute name="duration" type="xsd:positiveInteger" default="2000" />
+			<xsd:attribute name="duration" type="xsd:positiveInteger" default="1000" />
 			<xsd:attribute name="multi-thread" type="xsd:boolean" default="true" />
 			<xsd:attribute name="ref-task-executor" type="xsd:string" use="optional" />
 			<xsd:attribute name="ref-exception-handler" type="xsd:string" use="optional" />

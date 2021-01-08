@@ -1,6 +1,6 @@
 package blue.internal.redis.cache;
 
-import blue.redis.cache.CacheConfig;
+import blue.redis.CacheConfig;
 
 /**
  * @author Jin Zheng

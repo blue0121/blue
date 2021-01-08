@@ -1,8 +1,8 @@
 package blue.internal.redis.lock;
 
 import blue.core.util.AssertUtil;
-import blue.redis.lock.LockCallback;
-import blue.redis.lock.LockService;
+import blue.redis.LockCallback;
+import blue.redis.LockService;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 

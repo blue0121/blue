@@ -35,7 +35,7 @@ public class ConsumerListenerConfig implements InitializingBean
 		AssertUtil.notNull(listener, "ConsumerListener");
 
 		if (!multiThread && taskExecutor != null)
-			throw new MessageException(topic + " is not multi-thread，not need TaskExecutor consumer");
+			throw new MessageException(topic + " is multi-thread，TaskExecutor is not null");
 
 		ParameterizedType type = (ParameterizedType) listener.getClass().getGenericInterfaces()[0];
 		clazz = (Class<?>) type.getActualTypeArguments()[0];

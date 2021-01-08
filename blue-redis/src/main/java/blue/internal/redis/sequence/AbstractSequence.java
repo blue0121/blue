@@ -1,7 +1,7 @@
 package blue.internal.redis.sequence;
 
 import blue.core.util.AssertUtil;
-import blue.redis.sequence.Sequence;
+import blue.redis.Sequence;
 import org.redisson.api.RAtomicLong;
 import org.redisson.api.RedissonClient;
 import org.slf4j.Logger;
