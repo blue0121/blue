@@ -1,5 +1,6 @@
 package test.redis.service;
 
+import blue.redis.RedisLock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.CacheEvict;
@@ -52,6 +53,12 @@ public class UserService
 	{
 		userMap.remove(id);
 		logger.info("remove user, id: {}", id);
+	}
+
+	@RedisLock("user~lock")
+	public void testLock()
+	{
+		logger.info(">>>> Redis lock test");
 	}
 
 }

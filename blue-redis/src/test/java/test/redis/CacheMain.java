@@ -19,6 +19,8 @@ public class CacheMain
 		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("spring/cache.xml");
 		UserService service = ctx.getBean(UserService.class);
 
+		service.testLock();
+
 		save(service);
 		get(service);
 		remove(service);

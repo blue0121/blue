@@ -97,6 +97,13 @@
 			<version>${mockito.version}</version>
 			<scope>test</scope>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${spring.version}</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -115,6 +122,8 @@
 				<configuration>
 					<argLine>
 						--illegal-access=warn
+						--add-exports blue.redis/test.redis.service=spring.beans
+						--add-opens blue.redis/test.redis.service=spring.core
 					</argLine>
 				</configuration>
 			</plugin>

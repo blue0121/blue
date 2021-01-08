@@ -5,6 +5,7 @@ module blue.redis
 	requires fastjson;
 	requires io.netty.all;
 	requires redisson;
+	requires org.aspectj.weaver;
 	requires com.github.benmanes.caffeine;
 
 	exports blue.redis;
@@ -13,7 +14,7 @@ module blue.redis
 	exports blue.internal.redis.codec to spring.beans,redisson;
 	exports blue.internal.redis.config to spring.beans;
 	exports blue.internal.redis.consumer to spring.beans;
-	exports blue.internal.redis.lock to spring.beans;
+	exports blue.internal.redis.lock to spring.beans,spring.aop;
 	exports blue.internal.redis.producer to spring.beans;
 	exports blue.internal.redis.sequence to spring.beans;
 

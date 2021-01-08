@@ -43,7 +43,7 @@
 		</xsd:complexType>
 	</xsd:element>
 	
-	<xsd:element name="lock-service">
+	<xsd:element name="lock-advice">
 		<xsd:complexType>
 			<xsd:attribute name="id" type="xsd:ID" use="required" />
 			<xsd:attribute name="ref-redisson" type="xsd:string" use="required" />
