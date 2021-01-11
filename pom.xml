@@ -11,7 +11,7 @@
 	<modules>
 		<module>blue-core</module>
 		<module>blue-http</module>
-		<module>blue-http-extension</module>
+		<module>blue-http-ext</module>
 		<module>blue-jdbc</module>
 		<module>blue-monitor</module>
 		<module>blue-test</module>
