@@ -2,16 +2,13 @@ package blue.internal.mqtt.producer;
 
 import blue.core.id.IdGenerator;
 import blue.core.util.AssertUtil;
-import blue.core.util.JsonUtil;
 import blue.core.util.RandomUtil;
-import blue.core.util.WaitUtil;
 import blue.internal.core.message.ProducerListener;
 import blue.internal.mqtt.consumer.MqttListenerConfig;
+import blue.mqtt.MqttException;
 import blue.mqtt.MqttTopic;
 import org.fusesource.hawtbuf.UTF8Buffer;
 import org.fusesource.hawtdispatch.Dispatch;
-import org.fusesource.mqtt.client.Callback;
-import org.fusesource.mqtt.client.CallbackConnection;
 import org.fusesource.mqtt.client.MQTT;
 import org.fusesource.mqtt.client.Topic;
 import org.slf4j.Logger;
@@ -21,10 +18,8 @@ import org.springframework.beans.factory.InitializingBean;
 
 import javax.net.ssl.SSLContext;
 import java.net.URISyntaxException;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
 
 /**
  * @author Jin Zheng
@@ -35,13 +30,14 @@ public class MqttClient implements InitializingBean, DisposableBean
 	private static Logger logger = LoggerFactory.getLogger(MqttClient.class);
 	public static final String RANDOM = "$RANDOM";
 
-	private CallbackConnection connection;
+	private MqttConnectionContainer container;
 	private DefaultMqttListener listener;
 	private String name;
 	private String broker;
 	private String username;
 	private String password;
 	private String clientId;
+	private int count;
 	private int timeout;
 	private int keepAliveInterval;
 	private int reconnectDelay;
@@ -64,10 +60,7 @@ public class MqttClient implements InitializingBean, DisposableBean
 			this.listener.addMqttListenerConfig(config);
 			topics[i] = new Topic(config.getTopic(), config.getQos().toQoS());
 		}
-		CountDownLatch latch = new CountDownLatch(1);
-		connection.subscribe(topics, new SyncCallback<>(latch));
-		WaitUtil.await(latch);
-		logger.info("MQTT '{}' subscribe: {}", name, Arrays.toString(topics));
+		this.container.subscribe(topics);
 	}
 
 	public void unsubscribe(Collection<String> topicList)
@@ -82,77 +75,17 @@ public class MqttClient implements InitializingBean, DisposableBean
 			buffers[i] = new UTF8Buffer(topic);
 			i++;
 		}
-		CountDownLatch latch = new CountDownLatch(1);
-		connection.unsubscribe(buffers, new SyncCallback<>(latch));
-		WaitUtil.await(latch);
-		logger.info("MQTT '{}' unsubscribe: {}", name, topicList);
+		this.container.unsubscribe(buffers);
 	}
 
 	public void publish(MqttTopic topic, Object message, ProducerListener<MqttTopic, Object> listener)
 	{
-		byte[] payload = JsonUtil.toBytes(message);
-		connection.getDispatchQueue().execute(() ->
-		{
-			connection.publish(topic.getTopic(), payload, topic.getQos().toQoS(), false, new Callback<Void>()
-			{
-				@Override
-				public void onSuccess(Void value)
-				{
-					if (listener != null)
-					{
-						listener.onSuccess(topic, message);
-					}
-				}
-
-				@Override
-				public void onFailure(Throwable cause)
-				{
-					if (listener != null)
-					{
-						listener.onFailure(topic, message, cause);
-					}
-				}
-			});
-		});
+		this.container.publish(topic, message, listener);
 	}
 
 	public void disconnect()
 	{
-		if (connection != null)
-		{
-			CountDownLatch latch = new CountDownLatch(1);
-			connection.disconnect(new Callback<Void>()
-			{
-				@Override
-				public void onSuccess(Void value)
-				{
-					latch.countDown();
-					logger.info("MQTT '{}' disconnected", name);
-				}
-
-				@Override
-				public void onFailure(Throwable value)
-				{
-					connection.kill(new Callback<Void>()
-					{
-						@Override
-						public void onSuccess(Void value)
-						{
-							latch.countDown();
-							logger.info("MQTT '{}' killed", name);
-						}
-
-						@Override
-						public void onFailure(Throwable cause)
-						{
-							latch.countDown();
-							logger.error("MQTT kill error, ", cause);
-						}
-					});
-				}
-			});
-			WaitUtil.await(latch);
-		}
+		this.container.disconnect();
 	}
 
 	public void connect()
@@ -190,17 +123,15 @@ public class MqttClient implements InitializingBean, DisposableBean
 		}
 		mqtt.setDispatchQueue(Dispatch.createQueue());
 
-		CountDownLatch latch = new CountDownLatch(1);
-		this.connection = mqtt.callbackConnection();
-		connection.listener(listener);
-		connection.connect(new SyncCallback<>(latch));
-		WaitUtil.await(latch);
-		logger.info("MQTT '{}' connected: {}", name, broker);
+		this.container = new MqttConnectionContainer(name, count);
+		this.container.connect(mqtt, clientId, listener);
 	}
 
 	private void check()
 	{
 		AssertUtil.notEmpty(broker, "Broker");
+		if (count < 1 || count > 200)
+			throw new MqttException("MQTT count must be between 1 and 200");
 
 		if (sslContext != null)
 		{
@@ -221,7 +152,6 @@ public class MqttClient implements InitializingBean, DisposableBean
 			String random = RandomUtil.rand(RandomUtil.RandomType.UPPER_LOWER_CASE_NUMBER, 10);
 			clientId = clientId.replace(RANDOM, random);
 		}
-		logger.info("MQTT '{}' ClientId: {}", name, clientId);
 	}
 
 	public String getName()
@@ -272,6 +202,16 @@ public class MqttClient implements InitializingBean, DisposableBean
 	public void setClientId(String clientId)
 	{
 		this.clientId = clientId;
+	}
+
+	public int getCount()
+	{
+		return count;
+	}
+
+	public void setCount(int count)
+	{
+		this.count = count;
 	}
 
 	public int getTimeout()
