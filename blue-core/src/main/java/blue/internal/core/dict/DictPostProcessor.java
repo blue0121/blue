@@ -1,5 +1,6 @@
 package blue.internal.core.dict;
 
+import blue.core.file.ClassHandler;
 import blue.core.file.ClassScanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,8 +43,8 @@ public class DictPostProcessor implements InitializingBean
 		}
 		logger.info("扫描包：{}", packageList);
 
-		ClassScanner scanner = new ClassScanner();
-		scanner.setClassHandler(new DictClassHandler());
-		scanner.scan(true, packageList);
+		ClassHandler classHandler = new DictClassHandler();
+		ClassScanner scanner = ClassScanner.create(classHandler);
+		scanner.scan(packageList);
 	}
 }

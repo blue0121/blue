@@ -1,4 +1,4 @@
-package blue.core.file;
+package blue.internal.core.file;
 
 import java.net.URL;
 

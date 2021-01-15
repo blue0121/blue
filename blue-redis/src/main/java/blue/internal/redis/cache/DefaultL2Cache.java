@@ -170,7 +170,7 @@ public class DefaultL2Cache implements L2Cache,
 		AssertUtil.notEmpty(nameList, "nameList");
 		AssertUtil.notEmpty(valueList, "valueList");
 		AssertUtil.positive(ttl, "TTL");
-		AssertUtil.notEqual(nameList.size(), valueList.size(), "nameList.size() != valueList.size()");
+		AssertUtil.equal(nameList.size(), valueList.size(), "nameList.size() != valueList.size()");
 
 		List<String> keyList = new ArrayList<>();
 		RBatch batch = this.createBatch();

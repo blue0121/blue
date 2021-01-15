@@ -67,9 +67,21 @@ public class AssertUtil
 			throw new NullPointerException(name + " is empty.");
 	}
 
-	public static void notEqual(long n1, long n2, String text)
+	public static void equal(long n1, long n2, String text)
 	{
 		if (n1 != n2)
+			throw new IllegalArgumentException(text);
+	}
+
+	public static void isTrue(boolean exp, String text)
+	{
+		if (!exp)
+			throw new IllegalArgumentException(text);
+	}
+
+	public static void isFalse(boolean exp, String text)
+	{
+		if (exp)
 			throw new IllegalArgumentException(text);
 	}
 

@@ -1,5 +1,6 @@
 package blue.internal.jdbc.core;
 
+import blue.core.file.ClassHandler;
 import blue.core.file.ClassScanner;
 import blue.core.id.MachineIdProvider;
 import blue.core.id.SnowflakeId;
@@ -498,9 +499,9 @@ public class JdbcObjectTemplate implements JdbcOperation, InitializingBean
 		this.dialect = DetectDialect.dialect(dataSource);
 
 		logger.info("扫描包：{}", packageList);
-		ClassScanner scanner = new ClassScanner();
-		scanner.setClassHandler(new EntityClassHandler());
-		scanner.scan(true, packageList);
+		ClassHandler classHandler = new EntityClassHandler();
+		ClassScanner scanner = ClassScanner.create(classHandler);
+		scanner.scan(packageList);
 		this.factory = SqlHandlerFactory.init(dialect);
 		factory.init(escape);
 		CheckTable checkTable = new CheckTable(dataSource);
