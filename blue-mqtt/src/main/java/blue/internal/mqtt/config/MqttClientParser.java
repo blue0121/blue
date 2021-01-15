@@ -29,7 +29,7 @@ public class MqttClientParser extends SimpleBeanDefinitionParser
 		this.parse(element, builder, "clientId", "client-id");
 		this.parse(element, builder, "count", "count");
 		this.parse(element, builder, "timeout", "timeout");
-		this.parse(element, builder, "keepAliveInterval", "keep-alive-interval");
+		this.parse(element, builder, "keepAlive", "keep-alive");
 		this.parse(element, builder, "reconnectDelay", "reconnect-delay");
 		this.parseRef(element, builder, "sslContext", "ref-ssl-context");
 	}

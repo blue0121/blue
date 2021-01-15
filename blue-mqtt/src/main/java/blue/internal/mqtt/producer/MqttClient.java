@@ -39,7 +39,7 @@ public class MqttClient implements InitializingBean, DisposableBean
 	private String clientId;
 	private int count;
 	private int timeout;
-	private int keepAliveInterval;
+	private int keepAlive;
 	private int reconnectDelay;
 	private SSLContext sslContext;
 
@@ -108,9 +108,9 @@ public class MqttClient implements InitializingBean, DisposableBean
 		{
 			mqtt.setPassword(password);
 		}
-		if (keepAliveInterval > 0)
+		if (keepAlive > 0)
 		{
-			mqtt.setKeepAlive((short) keepAliveInterval);
+			mqtt.setKeepAlive((short) keepAlive);
 		}
 		if (reconnectDelay > 0)
 		{
@@ -224,14 +224,14 @@ public class MqttClient implements InitializingBean, DisposableBean
 		this.timeout = timeout;
 	}
 
-	public int getKeepAliveInterval()
+	public int getKeepAlive()
 	{
-		return keepAliveInterval;
+		return keepAlive;
 	}
 
-	public void setKeepAliveInterval(int keepAliveInterval)
+	public void setKeepAlive(int keepAlive)
 	{
-		this.keepAliveInterval = keepAliveInterval;
+		this.keepAlive = keepAlive;
 	}
 
 	public int getReconnectDelay()

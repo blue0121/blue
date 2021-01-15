@@ -15,7 +15,7 @@
 			<xsd:attribute name="client-id" type="xsd:string" use="optional" />
 			<xsd:attribute name="count" type="xsd:positiveInteger" default="1" />
 			<xsd:attribute name="timeout" type="xsd:positiveInteger" default="30" />
-			<xsd:attribute name="keep-alive-interval" type="xsd:positiveInteger" default="60" />
+			<xsd:attribute name="keep-alive" type="xsd:positiveInteger" default="60" />
 			<xsd:attribute name="reconnect-delay" type="xsd:positiveInteger" default="10000" />
 			<xsd:attribute name="ref-ssl-context" type="xsd:string" use="optional" />
 		</xsd:complexType>
