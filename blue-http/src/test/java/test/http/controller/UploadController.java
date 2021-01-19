@@ -2,6 +2,7 @@ package test.http.controller;
 
 import blue.http.annotation.Http;
 import blue.http.annotation.HttpMethod;
+import blue.http.annotation.Multipart;
 import blue.http.message.Request;
 import blue.http.message.UploadFile;
 import org.springframework.stereotype.Controller;
@@ -46,6 +47,12 @@ public class UploadController
 		{
 			e.printStackTrace();
 		}
+	}
+
+	@Http(url = "/index2")
+	public void index2(@Multipart("file") UploadFile uploadFile)
+	{
+		System.out.println(uploadFile);
 	}
 
 }

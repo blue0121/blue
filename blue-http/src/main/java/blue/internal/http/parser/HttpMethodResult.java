@@ -2,9 +2,11 @@ package blue.internal.http.parser;
 
 import blue.http.annotation.Charset;
 import blue.http.annotation.ContentType;
-import blue.http.annotation.HttpUrlConfig;
+import blue.internal.http.annotation.DefaultHttpUrlConfig;
+import blue.internal.http.annotation.HttpUrlParamConfig;
 
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -18,13 +20,15 @@ public class HttpMethodResult
 	private Map<String, String> pathMap;
 	private Object target;
 	private Method method;
+	private List<HttpUrlParamConfig> paramList;
 
-	public HttpMethodResult(HttpUrlConfig config, Map<String, String> pathMap)
+	public HttpMethodResult(DefaultHttpUrlConfig config, Map<String, String> pathMap)
 	{
 		this.charset = config.getCharset();
 		this.contentType = config.getContentType();
 		this.target = config.getTarget();
 		this.method = config.getMethod();
+		this.paramList = config.getParamList();
 		if (pathMap == null)
 		{
 			this.pathMap = Map.of();
@@ -58,5 +62,10 @@ public class HttpMethodResult
 	public Method getMethod()
 	{
 		return method;
+	}
+
+	public List<HttpUrlParamConfig> getParamList()
+	{
+		return paramList;
 	}
 }

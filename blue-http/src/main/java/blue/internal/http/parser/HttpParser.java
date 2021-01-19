@@ -6,11 +6,10 @@ import blue.http.annotation.ContentType;
 import blue.http.annotation.Http;
 import blue.http.annotation.HttpMethod;
 import blue.http.exception.HttpServerException;
-import blue.http.message.Request;
-import blue.http.message.UploadFile;
 import blue.internal.http.annotation.DefaultHttpUrlConfig;
 import blue.internal.http.annotation.HttpConfigCache;
 import blue.internal.http.annotation.HttpUrlKey;
+import blue.internal.http.annotation.HttpUrlParamConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,8 +29,6 @@ public class HttpParser
 	public static final String SPLIT = "/";
 	private static Logger logger = LoggerFactory.getLogger(HttpParser.class);
 
-	private Set<Class<?>> paramSet = new HashSet<>();
-	private String paramString;
 	private Set<Class<?>> clazzSet = new HashSet<>();
 
 	private HttpConfigCache configCache = HttpConfigCache.getInstance();
@@ -41,10 +38,6 @@ public class HttpParser
 
 	private HttpParser()
 	{
-		paramSet.add(String.class);
-		paramSet.add(Request.class);
-		paramSet.add(UploadFile.class);
-		paramString = paramSet.toString();
 	}
 
 	public static HttpParser getInstance()
@@ -65,16 +58,6 @@ public class HttpParser
 		{
 			if (method.getModifiers() != Modifier.PUBLIC)
 				continue;
-
-			if (method.getParameterCount() > 1)
-				throw new HttpServerException(method.getName() + " 最多只能有一个参数");
-
-			if (method.getParameterCount() > 0)
-			{
-				Class<?> paramClazz = method.getParameterTypes()[0];
-				if (!paramSet.contains(paramClazz))
-					throw new HttpServerException(method.getName() + " 的参数只能是：" + paramString);
-			}
 
 			this.parseMethod(target, method, annoHttp);
 		}
@@ -111,6 +94,7 @@ public class HttpParser
 		{
 			httpMethodSet.addAll(methodSet);
 		}
+		List<HttpUrlParamConfig> paramConfigList = HttpParamParser.parse(method);
 		for (HttpMethod httpMethod : httpMethodSet)
 		{
 			DefaultHttpUrlConfig config = new DefaultHttpUrlConfig();
@@ -121,6 +105,7 @@ public class HttpParser
 			config.setContentType(contentType);
 			config.setTarget(target);
 			config.setMethod(method);
+			config.setParamList(paramConfigList);
 			HttpUrlKey key = config.buildKey();
 
 			if (configCache.contains(key))

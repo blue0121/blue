@@ -1,7 +1,12 @@
 package test.http.controller;
 
+import blue.http.annotation.BodyJson;
 import blue.http.annotation.Http;
+import blue.http.annotation.HttpMethod;
+import blue.http.annotation.Validated;
+import blue.validation.group.SaveModel;
 import org.springframework.stereotype.Controller;
+import test.http.model.User;
 
 import javax.validation.ValidationException;
 
@@ -24,6 +29,12 @@ public class EchoController
 			throw new ValidationException("text is empty");
 
 		return text;
+	}
+
+	@Http(url = "/validate", method = HttpMethod.POST)
+	public void validate(@BodyJson(jsonPath = "$.user") @Validated(SaveModel.class) User user)
+	{
+		System.out.println("OK");
 	}
 
 }

@@ -8,6 +8,7 @@ import org.springframework.util.PathMatcher;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -19,8 +20,8 @@ public class HttpConfigCache
 	public static final String BRACE_START = "{";
 	public static final String BRACE_END = "}";
 
-	private Map<HttpUrlKey, HttpUrlConfig> cache = new HashMap<>();
-	private Map<HttpUrlKey, HttpUrlConfig> pathCache = new HashMap<>();
+	private Map<HttpUrlKey, DefaultHttpUrlConfig> cache = new HashMap<>();
+	private Map<HttpUrlKey, DefaultHttpUrlConfig> pathCache = new HashMap<>();
 
 	private PathMatcher pathMatcher = new AntPathMatcher();
 
@@ -35,7 +36,7 @@ public class HttpConfigCache
 		return instance;
 	}
 
-	public void put(HttpUrlKey key, HttpUrlConfig config)
+	public void put(HttpUrlKey key, DefaultHttpUrlConfig config)
 	{
 		cache.put(key, config);
 		if (config.getUrl().contains(BRACE_START) && config.getUrl().contains(BRACE_END))
@@ -56,16 +57,16 @@ public class HttpConfigCache
 
 	public HttpMethodResult getConfig(HttpUrlKey key)
 	{
-		HttpUrlConfig config = cache.get(key);
+		DefaultHttpUrlConfig config = cache.get(key);
 		if (config != null)
 			return new HttpMethodResult(config, null);
 
-		for (Map.Entry<HttpUrlKey, HttpUrlConfig> entry : pathCache.entrySet())
+		for (var entry : pathCache.entrySet())
 		{
 			String url = entry.getKey().getUrl();
 			if (pathMatcher.match(url, key.getUrl()))
 			{
-				Map<String, String> map = pathMatcher.extractUriTemplateVariables(url, key.getUrl());
+				var map = pathMatcher.extractUriTemplateVariables(url, key.getUrl());
 				return new HttpMethodResult(entry.getValue(), map);
 			}
 		}
@@ -74,7 +75,7 @@ public class HttpConfigCache
 
 	public Collection<HttpUrlConfig> all()
 	{
-		return cache.values();
+		return List.copyOf(cache.values());
 	}
 
 }

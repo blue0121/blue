@@ -6,6 +6,7 @@ import blue.http.annotation.HttpMethod;
 import blue.http.annotation.HttpUrlConfig;
 
 import java.lang.reflect.Method;
+import java.util.List;
 
 /**
  * @author Jin Zheng
@@ -20,6 +21,7 @@ public class DefaultHttpUrlConfig implements HttpUrlConfig
 	private ContentType contentType;
 	private Object target;
 	private Method method;
+	private List<HttpUrlParamConfig> paramList;
 
 	public DefaultHttpUrlConfig()
 	{
@@ -63,6 +65,16 @@ public class DefaultHttpUrlConfig implements HttpUrlConfig
 	public void setTarget(Object target)
 	{
 		this.target = target;
+	}
+
+	public List<HttpUrlParamConfig> getParamList()
+	{
+		return paramList;
+	}
+
+	public void setParamList(List<HttpUrlParamConfig> paramList)
+	{
+		this.paramList = List.copyOf(paramList);
 	}
 
 	@Override
