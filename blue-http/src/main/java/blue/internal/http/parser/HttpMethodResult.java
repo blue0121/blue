@@ -3,7 +3,7 @@ package blue.internal.http.parser;
 import blue.http.annotation.Charset;
 import blue.http.annotation.ContentType;
 import blue.internal.http.annotation.DefaultHttpUrlConfig;
-import blue.internal.http.annotation.HttpUrlParamConfig;
+import blue.internal.http.annotation.RequestParamConfig;
 
 import java.lang.reflect.Method;
 import java.util.List;
@@ -20,7 +20,7 @@ public class HttpMethodResult
 	private Map<String, String> pathMap;
 	private Object target;
 	private Method method;
-	private List<HttpUrlParamConfig> paramList;
+	private List<RequestParamConfig> paramList;
 
 	public HttpMethodResult(DefaultHttpUrlConfig config, Map<String, String> pathMap)
 	{
@@ -64,7 +64,7 @@ public class HttpMethodResult
 		return method;
 	}
 
-	public List<HttpUrlParamConfig> getParamList()
+	public List<RequestParamConfig> getParamList()
 	{
 		return paramList;
 	}

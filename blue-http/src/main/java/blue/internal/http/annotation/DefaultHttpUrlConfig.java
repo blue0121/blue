@@ -21,7 +21,7 @@ public class DefaultHttpUrlConfig implements HttpUrlConfig
 	private ContentType contentType;
 	private Object target;
 	private Method method;
-	private List<HttpUrlParamConfig> paramList;
+	private List<RequestParamConfig> paramList;
 
 	public DefaultHttpUrlConfig()
 	{
@@ -67,12 +67,12 @@ public class DefaultHttpUrlConfig implements HttpUrlConfig
 		this.target = target;
 	}
 
-	public List<HttpUrlParamConfig> getParamList()
+	public List<RequestParamConfig> getParamList()
 	{
 		return paramList;
 	}
 
-	public void setParamList(List<HttpUrlParamConfig> paramList)
+	public void setParamList(List<RequestParamConfig> paramList)
 	{
 		this.paramList = List.copyOf(paramList);
 	}

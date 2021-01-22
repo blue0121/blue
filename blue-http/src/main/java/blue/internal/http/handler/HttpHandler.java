@@ -2,6 +2,7 @@ package blue.internal.http.handler;
 
 import blue.http.message.Request;
 import blue.http.message.Response;
+import blue.internal.http.annotation.RequestParamConfig;
 import blue.internal.http.handler.parameter.ParameterDispatcher;
 import blue.internal.http.message.DefaultResponse;
 import blue.internal.http.parser.HttpMethodResult;
@@ -10,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
 
 /**
  * @author Jin Zheng
@@ -68,11 +70,13 @@ public class HttpHandler implements Handler<Request, Response>
 		Method method = result.getMethod();
 		Object object = result.getTarget();
 
-		Class<?>[] paramClasses = method.getParameterTypes();
-		Object[] params = new Object[paramClasses.length];
-		for (int i = 0; i < paramClasses.length; i++)
+		List<RequestParamConfig> configList = result.getParamList();
+		Object[] params = new Object[configList.size()];
+		int i = 0;
+		for (var config : configList)
 		{
-			params[i] = parameterDispatcher.handleParameter(paramClasses[i], request);
+			params[i] = parameterDispatcher.handleParam(config, request);
+			i++;
 		}
 
 		try

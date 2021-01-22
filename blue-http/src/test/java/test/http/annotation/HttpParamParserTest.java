@@ -7,6 +7,7 @@ import blue.http.message.UploadFile;
 import blue.internal.http.annotation.HttpConfigCache;
 import blue.internal.http.annotation.HttpUrlKey;
 import blue.internal.http.annotation.HttpUrlParamConfig;
+import blue.internal.http.annotation.RequestParamConfig;
 import blue.internal.http.parser.HttpMethodResult;
 import blue.validation.group.SaveModel;
 import org.junit.jupiter.api.Assertions;
@@ -34,12 +35,12 @@ public class HttpParamParserTest extends BaseTest
 		HttpUrlKey key = new HttpUrlKey("/upload/index2", HttpMethod.POST);
 		HttpMethodResult result = parserCache.getConfig(key);
 		Assertions.assertNotNull(result);
-		List<HttpUrlParamConfig> paramList = result.getParamList();
+		List<RequestParamConfig> paramList = result.getParamList();
 		Assertions.assertEquals(1, paramList.size());
-		HttpUrlParamConfig uploadParam = paramList.get(0);
+		RequestParamConfig uploadParam = paramList.get(0);
 		Assertions.assertEquals(Multipart.class, uploadParam.getParamAnnotation().annotationType());
 		Assertions.assertEquals(UploadFile.class, uploadParam.getParamClazz());
-		Assertions.assertEquals("file", uploadParam.getValue());
+		Assertions.assertEquals("file", uploadParam.getParamAnnotation());
 		Assertions.assertTrue(uploadParam.isRequired());
 		Assertions.assertFalse(uploadParam.isValidated());
 	}

@@ -29,13 +29,16 @@ public class ErrorCode
 	public static final ErrorCode OUT_OF_MAX_UPLOAD_SIZE = new ErrorCode(400_003, "上传文件超出限制");
 	public static final ErrorCode INVALID_UPLOAD_FILE = new ErrorCode(400_004, "无效文件上传");
 	public static final ErrorCode EXISTS = new ErrorCode(400_004, "{0} 已经存在");
+	public static final ErrorCode REQUIRED = new ErrorCode(400_004, "{0} 不能为空");
 
 	// 401
 	public static final ErrorCode LOGIN_FAILURE = new ErrorCode(401_000, "登录失败");
 	public static final ErrorCode INVALID_TOKEN = new ErrorCode(401_001, "无效令牌");
 	public static final ErrorCode INVALID_SESSION = new ErrorCode(401_002, "无效会话");
 	public static final ErrorCode INVALID_CAPTCHA = new ErrorCode(401_003, "无效验证码");
-	public static final ErrorCode NOT_ACCESS = new ErrorCode(401_004, "无访问权限");
+
+	// 403
+	public static final ErrorCode NOT_ACCESS = new ErrorCode(403_000, "无访问权限");
 
 	// 404
 	public static final ErrorCode NOT_FOUND = new ErrorCode(404_000, "找不到URL");

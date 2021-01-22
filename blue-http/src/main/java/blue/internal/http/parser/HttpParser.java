@@ -9,7 +9,7 @@ import blue.http.exception.HttpServerException;
 import blue.internal.http.annotation.DefaultHttpUrlConfig;
 import blue.internal.http.annotation.HttpConfigCache;
 import blue.internal.http.annotation.HttpUrlKey;
-import blue.internal.http.annotation.HttpUrlParamConfig;
+import blue.internal.http.annotation.RequestParamConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -94,7 +94,7 @@ public class HttpParser
 		{
 			httpMethodSet.addAll(methodSet);
 		}
-		List<HttpUrlParamConfig> paramConfigList = HttpParamParser.parse(method);
+		List<RequestParamConfig> paramConfigList = HttpParamParser.parse(method);
 		for (HttpMethod httpMethod : httpMethodSet)
 		{
 			DefaultHttpUrlConfig config = new DefaultHttpUrlConfig();
