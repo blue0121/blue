@@ -1,6 +1,5 @@
 package blue.internal.http.handler.parameter;
 
-import blue.core.util.JsonUtil;
 import blue.http.message.Request;
 import blue.internal.http.annotation.RequestParamConfig;
 
@@ -17,12 +16,11 @@ public class BodyContentParamHandler implements ParamHandler<Request>
 	@Override
 	public Object handle(RequestParamConfig config, Request request)
 	{
-		String content = request.getContent();
-		if (content == null || content.isEmpty())
+		String body = request.getContent();
+		if (body == null || body.isEmpty())
 			return null;
 
-		Object target = JsonUtil.fromString(content, config.getParamClazz());
-		this.valid(config, target);
+		Object target = this.convert(config, body);
 		return target;
 	}
 }

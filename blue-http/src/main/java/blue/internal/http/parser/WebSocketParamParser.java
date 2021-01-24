@@ -1,11 +1,5 @@
 package blue.internal.http.parser;
 
-import blue.http.annotation.BodyContent;
-import blue.http.annotation.BodyJson;
-import blue.http.annotation.BodyParam;
-import blue.http.annotation.Multipart;
-import blue.http.annotation.PathVariable;
-import blue.http.annotation.QueryParam;
 import blue.http.annotation.Validated;
 import blue.internal.http.annotation.RequestParamConfig;
 
@@ -18,12 +12,11 @@ import java.util.Set;
  * @author Jin Zheng
  * @since 1.0 2021-01-19
  */
-public class HttpParamParser
+public class WebSocketParamParser
 {
-	private static final Set<Class<?>> paramAnnotationSet = Set.of(BodyContent.class, BodyJson.class, BodyParam.class,
-			Multipart.class, PathVariable.class, QueryParam.class);
+	private static final Set<Class<?>> paramAnnotationSet = Set.of();
 
-	private HttpParamParser()
+	private WebSocketParamParser()
 	{
 	}
 

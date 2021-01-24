@@ -6,6 +6,7 @@ import blue.http.exception.HttpServerException;
 import blue.http.exception.WebSocketServerException;
 import blue.http.message.WebSocketRequest;
 import blue.internal.http.annotation.DefaultWebSocketUrlConfig;
+import blue.internal.http.annotation.RequestParamConfig;
 import blue.internal.http.annotation.WebSocketConfigCache;
 import blue.internal.http.annotation.WebSocketUrlKey;
 import org.slf4j.Logger;
@@ -95,11 +96,13 @@ public class WebSocketParser
 		}
 		String url = UrlUtil.concat(urlList.toArray(new String[0]));
 
+		List<RequestParamConfig> paramConfigList = HttpParamParser.parse(method);
 		DefaultWebSocketUrlConfig config = new DefaultWebSocketUrlConfig();
 		config.setName(name.isEmpty() ? url : name);
 		config.setUrl(url);
 		config.setVersion(version);
 		config.setMethod(method);
+		config.setParamList(paramConfigList);
 		WebSocketUrlKey key = config.buildKey();
 
 		if (configCache.contains(key))

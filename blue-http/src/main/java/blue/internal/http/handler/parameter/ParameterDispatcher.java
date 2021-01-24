@@ -2,6 +2,10 @@ package blue.internal.http.handler.parameter;
 
 import blue.http.annotation.BodyContent;
 import blue.http.annotation.BodyJson;
+import blue.http.annotation.BodyParam;
+import blue.http.annotation.Multipart;
+import blue.http.annotation.PathVariable;
+import blue.http.annotation.QueryParam;
 import blue.http.message.Request;
 import blue.http.message.UploadFile;
 import blue.http.message.WebSocketRequest;
@@ -26,13 +30,15 @@ public class ParameterDispatcher
 	private final Map<Class<?>, ParamHandler> annotationWebSocketMap = new HashMap<>();
 	private final Map<Class<?>, ParamHandler> typeWebSocketMap = new HashMap<>();
 
-	private Map<Class<?>, ParameterHandler<?>[]> handlerMap = new HashMap<>();
-
 	public ParameterDispatcher()
 	{
 		// http
 		annotationHttpMap.put(BodyContent.class, new BodyContentParamHandler());
 		annotationHttpMap.put(BodyJson.class, new BodyJsonParamHandler());
+		annotationHttpMap.put(BodyParam.class, new BodyParamParamHandler());
+		annotationHttpMap.put(Multipart.class, new MultipartParamHandler());
+		annotationHttpMap.put(PathVariable.class, new PathVariableParamHandler());
+		annotationHttpMap.put(QueryParam.class, new QueryParamParamHandler());
 
 		typeHttpMap.put(String.class, new StringParamHandler());
 		typeHttpMap.put(UploadFile.class, new UploadFileParamHandler());
@@ -41,25 +47,6 @@ public class ParameterDispatcher
 		// WebSocket
 
 		typeWebSocketMap.put(WebSocketRequest.class, new WebSocketRequestParamHandler());
-	}
-
-	@SuppressWarnings("unchecked")
-	public Object handleParameter(Class<?> clazz, Object request)
-	{
-		ParameterHandler<Object>[] handlers = (ParameterHandler<Object>[]) handlerMap.get(clazz);
-		if (handlers == null || handlers.length == 0)
-		{
-			logger.warn("ParameterHandler is null, parameter class: {}", clazz.getName());
-			return request;
-		}
-		for (ParameterHandler<Object> handler : handlers)
-		{
-			if (handler.accepted(request))
-			{
-				return handler.handleParameter(request);
-			}
-		}
-		return null;
 	}
 
 	public Object handleParam(RequestParamConfig config, Request request)
@@ -79,8 +66,9 @@ public class ParameterDispatcher
 		Annotation annotation = config.getParamAnnotation();
 		if (annotation != null)
 		{
-			ParamHandler handler = annotationMap.get(annotation.getClass());
-			this.check(handler, annotation.getClass());
+			ParamHandler handler = annotationMap.get(annotation.annotationType());
+			this.check(handler, annotation.annotationType());
+			System.out.println(config.getParamAnnotation());
 			return handler.handle(config, request);
 		}
 		ParamHandler handler = typeMap.get(config.getParamClazz());

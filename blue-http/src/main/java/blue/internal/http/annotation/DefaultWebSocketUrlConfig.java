@@ -3,6 +3,7 @@ package blue.internal.http.annotation;
 import blue.http.annotation.WebSocketUrlConfig;
 
 import java.lang.reflect.Method;
+import java.util.List;
 
 /**
  * @author Jin Zheng
@@ -15,6 +16,7 @@ public class DefaultWebSocketUrlConfig implements WebSocketUrlConfig
 	private int version;
 	private Object target;
 	private Method method;
+	private List<RequestParamConfig> paramList;
 
 	public DefaultWebSocketUrlConfig()
 	{
@@ -48,6 +50,16 @@ public class DefaultWebSocketUrlConfig implements WebSocketUrlConfig
 	public void setTarget(Object target)
 	{
 		this.target = target;
+	}
+
+	public List<RequestParamConfig> getParamList()
+	{
+		return paramList;
+	}
+
+	public void setParamList(List<RequestParamConfig> paramList)
+	{
+		this.paramList = List.copyOf(paramList);
 	}
 
 	@Override

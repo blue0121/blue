@@ -1,7 +1,6 @@
 package blue.internal.http.handler.parameter;
 
 import blue.core.common.ErrorCode;
-import blue.core.util.JsonUtil;
 import blue.http.annotation.BodyJson;
 import blue.http.message.Request;
 import blue.internal.http.annotation.RequestParamConfig;
@@ -32,7 +31,10 @@ public class BodyJsonParamHandler implements ParamHandler<Request>
 			return null;
 		}
 		if (annotation.jsonPath().isEmpty())
-			return JsonUtil.fromString(body, config.getParamClazz());
+		{
+			Object target = this.convert(config, body);
+			return target;
+		}
 
 		JSONObject object = JSON.parseObject(body);
 		Object target = JSONPath.eval(object, annotation.jsonPath());
@@ -42,6 +44,6 @@ public class BodyJsonParamHandler implements ParamHandler<Request>
 			this.valid(config, subTarget);
 			return subTarget;
 		}
-		return target;
+		return this.convert(config, target);
 	}
 }

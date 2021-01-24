@@ -2,6 +2,8 @@ package test.http.controller;
 
 import blue.http.annotation.Http;
 import blue.http.annotation.HttpMethod;
+import blue.http.annotation.PathVariable;
+import blue.http.annotation.QueryParam;
 import org.springframework.stereotype.Controller;
 
 /**
@@ -25,6 +27,20 @@ public class HelloController
 	public String hello2(String name)
 	{
 		return "hello2, " + name;
+	}
+
+	@Http(url = "/hello3/{name}", method = HttpMethod.GET)
+	public String hello3(@PathVariable("name") String name)
+	{
+		System.out.println(name);
+		return "hello3, " + name;
+	}
+
+	@Http(url = "/hello4", method = HttpMethod.GET)
+	public String hello4(@QueryParam("name") String name)
+	{
+		System.out.println(name);
+		return "hello4, " + name;
 	}
 
 }

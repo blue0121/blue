@@ -5,6 +5,7 @@ import blue.internal.http.parser.WebSocketMethodResult;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -13,7 +14,7 @@ import java.util.Map;
  */
 public class WebSocketConfigCache
 {
-	private Map<WebSocketUrlKey, WebSocketUrlConfig> cache = new HashMap<>();
+	private Map<WebSocketUrlKey, DefaultWebSocketUrlConfig> cache = new HashMap<>();
 
 	private static WebSocketConfigCache instance = new WebSocketConfigCache();
 
@@ -26,7 +27,7 @@ public class WebSocketConfigCache
 		return instance;
 	}
 
-	public void put(WebSocketUrlKey key,WebSocketUrlConfig config)
+	public void put(WebSocketUrlKey key, DefaultWebSocketUrlConfig config)
 	{
 		cache.put(key, config);
 	}
@@ -38,7 +39,7 @@ public class WebSocketConfigCache
 
 	public WebSocketMethodResult getConfig(WebSocketUrlKey key)
 	{
-		WebSocketUrlConfig config = cache.get(key);
+		DefaultWebSocketUrlConfig config = cache.get(key);
 		if (config == null)
 			return null;
 
@@ -48,7 +49,7 @@ public class WebSocketConfigCache
 
 	public Collection<WebSocketUrlConfig> all()
 	{
-		return cache.values();
+		return List.copyOf(cache.values());
 	}
 
 }

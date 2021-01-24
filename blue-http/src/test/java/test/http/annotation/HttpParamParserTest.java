@@ -6,7 +6,6 @@ import blue.http.annotation.Multipart;
 import blue.http.message.UploadFile;
 import blue.internal.http.annotation.HttpConfigCache;
 import blue.internal.http.annotation.HttpUrlKey;
-import blue.internal.http.annotation.HttpUrlParamConfig;
 import blue.internal.http.annotation.RequestParamConfig;
 import blue.internal.http.parser.HttpMethodResult;
 import blue.validation.group.SaveModel;
@@ -40,9 +39,11 @@ public class HttpParamParserTest extends BaseTest
 		RequestParamConfig uploadParam = paramList.get(0);
 		Assertions.assertEquals(Multipart.class, uploadParam.getParamAnnotation().annotationType());
 		Assertions.assertEquals(UploadFile.class, uploadParam.getParamClazz());
-		Assertions.assertEquals("file", uploadParam.getParamAnnotation());
-		Assertions.assertTrue(uploadParam.isRequired());
-		Assertions.assertFalse(uploadParam.isValidated());
+
+		Multipart annotation = (Multipart) uploadParam.getParamAnnotation();
+		Assertions.assertEquals("file", annotation.value());
+		Assertions.assertTrue(annotation.required());
+		Assertions.assertNull(uploadParam.getValidAnnotation());
 	}
 
 	@Test
@@ -51,15 +52,18 @@ public class HttpParamParserTest extends BaseTest
 		HttpUrlKey key = new HttpUrlKey("/echo/validate", HttpMethod.POST);
 		HttpMethodResult result = parserCache.getConfig(key);
 		Assertions.assertNotNull(result);
-		List<HttpUrlParamConfig> paramList = result.getParamList();
+		List<RequestParamConfig> paramList = result.getParamList();
 		Assertions.assertEquals(1, paramList.size());
-		HttpUrlParamConfig uploadParam = paramList.get(0);
+		RequestParamConfig uploadParam = paramList.get(0);
 		Assertions.assertEquals(BodyJson.class, uploadParam.getParamAnnotation().annotationType());
 		Assertions.assertEquals(User.class, uploadParam.getParamClazz());
-		Assertions.assertEquals("$.user", uploadParam.getValue());
-		Assertions.assertTrue(uploadParam.isRequired());
-		Assertions.assertTrue(uploadParam.isValidated());
-		Assertions.assertArrayEquals(new Class<?>[] {SaveModel.class}, uploadParam.getValidatedGroups());
+
+		BodyJson annotation = (BodyJson) uploadParam.getParamAnnotation();
+		Assertions.assertEquals("$.user", annotation.jsonPath());
+		Assertions.assertTrue(annotation.required());
+
+		Assertions.assertNotNull(uploadParam.getValidAnnotation());
+		Assertions.assertArrayEquals(new Class<?>[] {SaveModel.class}, uploadParam.getValidAnnotation().value());
 	}
 
 }
