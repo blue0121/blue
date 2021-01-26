@@ -1,10 +1,5 @@
 package blue.internal.http.annotation;
 
-import blue.http.annotation.Validated;
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Parameter;
-
 /**
  * @author Jin Zheng
  * @since 1.0 2021-01-22
@@ -12,10 +7,12 @@ import java.lang.reflect.Parameter;
 public class RequestParamConfig
 {
 	private String name;
-	private Parameter param;
 	private Class<?> paramClazz;
-	private Annotation paramAnnotation;
-	private Validated validAnnotation;
+	private Class<?> paramAnnotationClazz;
+	private String paramAnnotationValue;
+	private boolean paramAnnotationRequired;
+	private boolean validated = false;
+	private Class<?>[] validatedGroups;
 
 	public RequestParamConfig()
 	{
@@ -23,12 +20,7 @@ public class RequestParamConfig
 
 	public boolean hasParamAnnotation()
 	{
-		return paramAnnotation != null;
-	}
-
-	public boolean hasValidAnnotation()
-	{
-		return validAnnotation != null;
+		return paramAnnotationClazz != null;
 	}
 
 	public String getName()
@@ -41,16 +33,6 @@ public class RequestParamConfig
 		this.name = name;
 	}
 
-	public Parameter getParam()
-	{
-		return param;
-	}
-
-	public void setParam(Parameter param)
-	{
-		this.param = param;
-	}
-
 	public Class<?> getParamClazz()
 	{
 		return paramClazz;
@@ -61,23 +43,53 @@ public class RequestParamConfig
 		this.paramClazz = paramClazz;
 	}
 
-	public Annotation getParamAnnotation()
+	public Class<?> getParamAnnotationClazz()
 	{
-		return paramAnnotation;
+		return paramAnnotationClazz;
 	}
 
-	public void setParamAnnotation(Annotation paramAnnotation)
+	public void setParamAnnotationClazz(Class<?> paramAnnotationClazz)
 	{
-		this.paramAnnotation = paramAnnotation;
+		this.paramAnnotationClazz = paramAnnotationClazz;
 	}
 
-	public Validated getValidAnnotation()
+	public String getParamAnnotationValue()
 	{
-		return validAnnotation;
+		return paramAnnotationValue;
 	}
 
-	public void setValidAnnotation(Validated validAnnotation)
+	public void setParamAnnotationValue(String paramAnnotationValue)
 	{
-		this.validAnnotation = validAnnotation;
+		this.paramAnnotationValue = paramAnnotationValue;
+	}
+
+	public boolean isParamAnnotationRequired()
+	{
+		return paramAnnotationRequired;
+	}
+
+	public void setParamAnnotationRequired(boolean paramAnnotationRequired)
+	{
+		this.paramAnnotationRequired = paramAnnotationRequired;
+	}
+
+	public boolean isValidated()
+	{
+		return validated;
+	}
+
+	public void setValidated(boolean validated)
+	{
+		this.validated = validated;
+	}
+
+	public Class<?>[] getValidatedGroups()
+	{
+		return validatedGroups;
+	}
+
+	public void setValidatedGroups(Class<?>[] validatedGroups)
+	{
+		this.validatedGroups = validatedGroups;
 	}
 }

@@ -35,7 +35,6 @@ public class HttpParamParser
 			RequestParamConfig config = new RequestParamConfig();
 			configList.add(config);
 			config.setName(param.getName());
-			config.setParam(param);
 			config.setParamClazz(param.getType());
 			for (var annotation : param.getAnnotations())
 			{
