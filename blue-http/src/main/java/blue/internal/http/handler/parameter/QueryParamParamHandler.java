@@ -1,7 +1,6 @@
 package blue.internal.http.handler.parameter;
 
 import blue.core.common.ErrorCode;
-import blue.http.annotation.BodyParam;
 import blue.http.message.Request;
 import blue.internal.http.annotation.RequestParamConfig;
 
@@ -18,11 +17,10 @@ public class QueryParamParamHandler implements ParamHandler<Request>
 	@Override
 	public Object handle(RequestParamConfig config, Request request)
 	{
-		BodyParam annotation = (BodyParam) config.getParamAnnotation();
-		String param = request.getQueryString(annotation.value());
+		String param = request.getQueryString(config.getParamAnnotationValue());
 		if (param == null || param.isEmpty())
 		{
-			if (annotation.required())
+			if (config.isParamAnnotationRequired())
 				throw ErrorCode.REQUIRED.newException(config.getName());
 
 			return null;

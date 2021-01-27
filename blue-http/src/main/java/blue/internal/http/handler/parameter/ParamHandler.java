@@ -31,9 +31,9 @@ public interface ParamHandler<T>
 		if (target == null || config == null)
 			return;
 
-		if (config.hasValidAnnotation())
+		if (config.isValidated())
 		{
-			ValidationUtil.valid(target, config.getValidAnnotation().value());
+			ValidationUtil.valid(target, config.getValidatedGroups());
 		}
 	}
 

@@ -1,7 +1,5 @@
 package blue.internal.http.util;
 
-import blue.core.common.ErrorCodeException;
-import blue.http.exception.HttpServerException;
 import blue.http.message.Request;
 import blue.http.message.UploadFile;
 import org.slf4j.Logger;
@@ -34,16 +32,7 @@ public class HttpLogUtil
 		log(request, "Error", content);
 		if (cause != null)
 		{
-			if (cause.getClass() == HttpServerException.class || cause.getClass() == ErrorCodeException.class)
-			{
-				StackTraceElement[] elements = cause.getStackTrace();
-				StackTraceElement element = elements.length > 0 ? elements[0] : null;
-				logger.error("EXCEPTION ({}): {}, at {}", cause.getClass().getSimpleName(), cause.getMessage(), element);
-			}
-			else
-			{
-				logger.error("EXCEPTION: ", cause);
-			}
+			logger.error("EXCEPTION: {}", cause.getMessage(), cause);
 		}
 	}
 

@@ -13,7 +13,6 @@ import blue.internal.http.annotation.RequestParamConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -63,12 +62,10 @@ public class ParameterDispatcher
 	private Object handleParam(RequestParamConfig config, Object request,
 	                           Map<Class<?>, ParamHandler> annotationMap, Map<Class<?>, ParamHandler> typeMap)
 	{
-		Annotation annotation = config.getParamAnnotation();
-		if (annotation != null)
+		if (config.hasParamAnnotation())
 		{
-			ParamHandler handler = annotationMap.get(annotation.annotationType());
-			this.check(handler, annotation.annotationType());
-			System.out.println(config.getParamAnnotation());
+			ParamHandler handler = annotationMap.get(config.getParamAnnotationClazz());
+			this.check(handler, config.getParamAnnotationClazz());
 			return handler.handle(config, request);
 		}
 		ParamHandler handler = typeMap.get(config.getParamClazz());

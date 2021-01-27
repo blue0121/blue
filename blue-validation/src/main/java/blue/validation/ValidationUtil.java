@@ -30,8 +30,6 @@ public class ValidationUtil
 	public static void valid(Object object, Class<?>...groups) throws ValidationException
 	{
 		Assert.notNull(object, "待验证对象不能为空");
-		if (groups.length == 0)
-			return;
 
 		init();
 		

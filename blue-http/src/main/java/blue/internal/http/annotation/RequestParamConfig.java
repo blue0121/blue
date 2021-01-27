@@ -10,7 +10,7 @@ public class RequestParamConfig
 	private Class<?> paramClazz;
 	private Class<?> paramAnnotationClazz;
 	private String paramAnnotationValue;
-	private boolean paramAnnotationRequired;
+	private boolean paramAnnotationRequired = false;
 	private boolean validated = false;
 	private Class<?>[] validatedGroups;
 

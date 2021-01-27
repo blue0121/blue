@@ -9,6 +9,7 @@ import blue.internal.http.annotation.DefaultWebSocketUrlConfig;
 import blue.internal.http.annotation.RequestParamConfig;
 import blue.internal.http.annotation.WebSocketConfigCache;
 import blue.internal.http.annotation.WebSocketUrlKey;
+import blue.internal.http.parser.parameter.ParamParserFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -96,7 +97,7 @@ public class WebSocketParser
 		}
 		String url = UrlUtil.concat(urlList.toArray(new String[0]));
 
-		List<RequestParamConfig> paramConfigList = HttpParamParser.parse(method);
+		List<RequestParamConfig> paramConfigList = ParamParserFactory.getInstance().parse(method);
 		DefaultWebSocketUrlConfig config = new DefaultWebSocketUrlConfig();
 		config.setName(name.isEmpty() ? url : name);
 		config.setUrl(url);

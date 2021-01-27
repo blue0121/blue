@@ -57,7 +57,7 @@ public class Singleton
 	{
 		AssertUtil.notEmpty(key, "Key");
 		AssertUtil.notNull(object, "Object");
-		POOL.put(key, object);
+		POOL.putIfAbsent(key, object);
 	}
 
 	public static void put(Object object)

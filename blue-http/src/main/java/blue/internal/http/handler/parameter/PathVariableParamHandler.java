@@ -1,7 +1,6 @@
 package blue.internal.http.handler.parameter;
 
 import blue.core.common.ErrorCode;
-import blue.http.annotation.PathVariable;
 import blue.http.message.Request;
 import blue.internal.http.annotation.RequestParamConfig;
 
@@ -18,8 +17,7 @@ public class PathVariableParamHandler implements ParamHandler<Request>
 	@Override
 	public Object handle(RequestParamConfig config, Request request)
 	{
-		PathVariable annotation = (PathVariable) config.getParamAnnotation();
-		String param = request.getPathVariable(annotation.value());
+		String param = request.getPathVariable(config.getParamAnnotationValue());
 		if (param == null || param.isEmpty())
 			throw ErrorCode.REQUIRED.newException(config.getName());
 

@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -82,16 +81,15 @@ public class HttpHandler implements Handler<Request, Response>
 			}
 			catch (Exception e)
 			{
-				e.printStackTrace();
+				response.setCause(e);
+				return;
 			}
 			i++;
 		}
 
-		System.out.println(Arrays.toString(params));
 		try
 		{
 			Object rs = method.invoke(object, params);
-			System.out.println(rs);
 			response.setResult(rs);
 		}
 		catch (Throwable e)

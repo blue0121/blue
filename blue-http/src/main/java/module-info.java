@@ -16,6 +16,7 @@ module blue.http
 	exports blue.internal.http.config to spring.beans;
 	exports blue.internal.http.filter to spring.beans;
 	exports blue.internal.http.parser to spring.beans;
+	exports blue.internal.http.parser.parameter to blue.core;
 	exports blue.internal.http.net to spring.beans;
 
 	opens blue.internal.http.message to fastjson;
