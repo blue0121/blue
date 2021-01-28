@@ -10,9 +10,14 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 
 /**
@@ -25,12 +30,23 @@ public class DefaultJavaBean implements JavaBean
 
 	private final Object target;
 	private final Class<?> targetClass;
+	private final List<Class<?>> superClassList = new ArrayList<>();
+	private final List<Class<?>> interfaceList = new ArrayList<>();
+	private final List<Class<?>> superList = new ArrayList<>();
+	private final Map<Class<?>, Map<Class<?>, Annotation>> annotationMapMap = new HashMap<>();
+	private final Map<Class<?>, List<Annotation>> annotationListMap = new HashMap<>();
 	private final Map<String, BeanField> beanFieldMap = new HashMap<>();
+
+	public DefaultJavaBean(Class<?> targetClass)
+	{
+		this(null, targetClass);
+	}
 
 	public DefaultJavaBean(Object target, Class<?> targetClass)
 	{
 		this.target = target;
 		this.targetClass = targetClass;
+		this.parseClass();
 		this.parse();
 	}
 
@@ -46,10 +62,57 @@ public class DefaultJavaBean implements JavaBean
 		return target;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T extends Annotation> T getDeclaredAnnotation(Class<T> annotationClass)
+	{
+		Map<Class<?>, Annotation> annotationMap = annotationMapMap.get(targetClass);
+		if (annotationMap == null || annotationMap.isEmpty())
+			return null;
+
+		return (T) annotationMap.get(annotationClass);
+	}
+
+	@SuppressWarnings("unchecked")
 	@Override
 	public <T extends Annotation> T getAnnotation(Class<T> annotationClass)
 	{
-		return targetClass.getAnnotation(annotationClass);
+		for (var clazz : superList)
+		{
+			Map<Class<?>, Annotation> map = annotationMapMap.get(clazz);
+			Annotation annotation = map.get(annotationClass);
+			if (annotation != null)
+				return (T) annotation;
+		}
+		return null;
+	}
+
+	@Override
+	public List<Annotation> getDeclaredAnnotations()
+	{
+		List<Annotation> annotationList = annotationListMap.get(targetClass);
+		if (annotationList == null)
+			return List.of();
+
+		return annotationList;
+	}
+
+	@Override
+	public List<Annotation> getAnnotations()
+	{
+		Map<Class<?>, Annotation> annotationMap = new HashMap<>();
+		for (var clazz : superList)
+		{
+			Map<Class<?>, Annotation> map = annotationMapMap.get(clazz);
+			for (var entry : map.entrySet())
+			{
+				if (!annotationMap.containsKey(entry.getKey()))
+				{
+					annotationMap.put(entry.getKey(), entry.getValue());
+				}
+			}
+		}
+		return List.copyOf(annotationMap.values());
 	}
 
 	@Override
@@ -62,6 +125,44 @@ public class DefaultJavaBean implements JavaBean
 	public BeanField getField(String fieldName)
 	{
 		return beanFieldMap.get(fieldName);
+	}
+
+	private void parseClass()
+	{
+		Queue<Class<?>> queue = new LinkedList<>();
+		List<Class<?>> clazzList = new ArrayList<>();
+		queue.offer(targetClass.getSuperclass());
+		this.parseAnnotation(targetClass);
+		Class<?> clazz = null;
+		while ((clazz = queue.poll()) != null)
+		{
+			if (clazz == Object.class)
+				continue;
+
+			superClassList.add(clazz);
+			superList.add(clazz);
+			clazzList.add(clazz);
+			this.parseAnnotation(clazz);
+			queue.offer(clazz.getSuperclass());
+		}
+		for (var cls : clazzList)
+		{
+			for (var inter : cls.getInterfaces())
+			{
+				interfaceList.add(inter);
+				superList.add(inter);
+				this.parseAnnotation(inter);
+			}
+		}
+	}
+
+	private void parseAnnotation(Class<?> clazz)
+	{
+		List<Annotation> annotationList = Arrays.asList(clazz.getDeclaredAnnotations());
+		annotationListMap.put(clazz, List.copyOf(annotationList));
+		Map<Class<?>, Annotation> annotationMap = new HashMap<>();
+		annotationList.forEach(e -> annotationMap.put(e.annotationType(), e));
+		annotationMapMap.put(clazz, Map.copyOf(annotationMap));
 	}
 
 	private void parse()

@@ -2,14 +2,13 @@ package blue.core.reflect;
 
 import blue.internal.core.reflect.DefaultJavaBean;
 
-import java.lang.annotation.Annotation;
 import java.util.Map;
 
 /**
  * @author Jin Zheng
  * @since 1.0 2020-07-24
  */
-public interface JavaBean
+public interface JavaBean extends AnnotationOperation
 {
 	/**
 	 * create JavaBean object
@@ -33,14 +32,6 @@ public interface JavaBean
 	 * @return
 	 */
 	Object getTarget();
-
-	/**
-	 * class annotation
-	 * @param annotationClass
-	 * @param <T>
-	 * @return
-	 */
-	<T extends Annotation> T getAnnotation(Class<T> annotationClass);
 
 	/**
 	 * get all BeanField

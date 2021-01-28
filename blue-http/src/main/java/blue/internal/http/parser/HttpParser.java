@@ -13,6 +13,7 @@ import blue.internal.http.annotation.RequestParamConfig;
 import blue.internal.http.parser.parameter.ParamParserFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.annotation.AnnotationUtils;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -51,7 +52,7 @@ public class HttpParser
 		if (clazzSet.contains(clazz))
 			return;
 
-		Http annoHttp = clazz.getAnnotation(Http.class);
+		Http annoHttp = AnnotationUtils.findAnnotation(clazz, Http.class);
 		if (annoHttp == null)
 			throw new HttpServerException(clazz.getName() + " 缺少 @Http 注解");
 
@@ -78,7 +79,7 @@ public class HttpParser
 		ContentType contentType = annoHttp.contentType();
 		String name = annoHttp.name();
 
-		Http annoMethod = method.getAnnotation(Http.class);
+		Http annoMethod = AnnotationUtils.findAnnotation(method, Http.class);
 		if (annoMethod != null) // 方法配置覆盖类配置
 		{
 			urlList.add(SPLIT);

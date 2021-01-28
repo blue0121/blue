@@ -38,6 +38,7 @@ public interface BeanField
 	 * 1. invoke setter method<br/>
 	 * 2. field.setAccessible(true) & field.set(target, value)
 	 * @param value
+	 * @return
 	 */
 	boolean setFieldValue(Object value);
 

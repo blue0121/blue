@@ -12,6 +12,7 @@ import blue.internal.http.annotation.WebSocketUrlKey;
 import blue.internal.http.parser.parameter.ParamParserFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.annotation.AnnotationUtils;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -52,7 +53,7 @@ public class WebSocketParser
 		if (clazzSet.contains(clazz))
 			return;
 
-		WebSocket annoWebSocket = clazz.getAnnotation(WebSocket.class);
+		WebSocket annoWebSocket = AnnotationUtils.findAnnotation(clazz, WebSocket.class);
 		if (annoWebSocket == null)
 			throw new WebSocketServerException(clazz.getName() + " 缺少 @WebSocket 注解");
 
