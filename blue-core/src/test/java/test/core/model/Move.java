@@ -6,5 +6,6 @@ package test.core.model;
  */
 public interface Move
 {
+	@MoveAction
 	void move();
 }

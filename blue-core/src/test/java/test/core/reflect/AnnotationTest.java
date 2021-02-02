@@ -1,10 +1,13 @@
 package test.core.reflect;
 
+import blue.core.reflect.BeanMethod;
 import blue.core.reflect.JavaBean;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import test.core.model.Cat;
 import test.core.model.MoveAction;
+
+import java.util.List;
 
 /**
  * @author Jin Zheng
@@ -25,6 +28,26 @@ public class AnnotationTest
 		Assertions.assertNull(catBean.getDeclaredAnnotation(MoveAction.class));
 		Assertions.assertEquals(1, catBean.getAnnotations().size());
 		Assertions.assertEquals(0, catBean.getDeclaredAnnotations().size());
+
+	}
+
+	@Test
+	public void test2()
+	{
+		JavaBean catBean = JavaBean.parse(Cat.class);
+		List<BeanMethod> methodList = catBean.getAllMethods();
+		for (BeanMethod beanMethod : methodList)
+		{
+			System.out.println(beanMethod.getMethodName());
+		}
+		Assertions.assertEquals(1, methodList.size());
+		BeanMethod method = methodList.get(0);
+		Assertions.assertEquals("move", method.getMethodName());
+		Assertions.assertNull(method.getRepresentField());
+		Assertions.assertFalse(method.isGetter());
+		Assertions.assertFalse(method.isSetter());
+		Assertions.assertNull(method.getDeclaredAnnotation(MoveAction.class));
+		Assertions.assertNotNull(method.getAnnotation(MoveAction.class));
 	}
 
 }

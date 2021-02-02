@@ -2,6 +2,7 @@ package blue.core.reflect;
 
 import blue.internal.core.reflect.DefaultJavaBean;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -11,7 +12,7 @@ import java.util.Map;
 public interface JavaBean extends AnnotationOperation
 {
 	/**
-	 * create JavaBean object
+	 * create JavaBean reflection object
 	 * @param target
 	 * @param targetClass
 	 * @return
@@ -19,6 +20,16 @@ public interface JavaBean extends AnnotationOperation
 	static JavaBean parse(Object target, Class<?> targetClass)
 	{
 		return new DefaultJavaBean(target, targetClass);
+	}
+
+	/**
+	 * create JavaBean reflection object
+	 * @param targetClass
+	 * @return
+	 */
+	static JavaBean parse(Class<?> targetClass)
+	{
+		return new DefaultJavaBean(targetClass);
 	}
 
 	/**
@@ -32,6 +43,13 @@ public interface JavaBean extends AnnotationOperation
 	 * @return
 	 */
 	Object getTarget();
+
+	/**
+	 * get all methods
+	 *
+	 * @return
+	 */
+	List<BeanMethod> getAllMethods();
 
 	/**
 	 * get all BeanField

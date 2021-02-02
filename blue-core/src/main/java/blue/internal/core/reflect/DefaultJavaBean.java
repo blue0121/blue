@@ -1,6 +1,7 @@
 package blue.internal.core.reflect;
 
 import blue.core.reflect.BeanField;
+import blue.core.reflect.BeanMethod;
 import blue.core.reflect.JavaBean;
 import blue.core.util.ReflectionUtil;
 import org.slf4j.Logger;
@@ -27,14 +28,23 @@ import java.util.Set;
 public class DefaultJavaBean implements JavaBean
 {
 	private static Logger logger = LoggerFactory.getLogger(DefaultJavaBean.class);
+	private static final Set<String> METHOD_SET = Set.of("wait", "equals", "toString", "hashCode", "getClass",
+			"notify", "notifyAll");
 
 	private final Object target;
 	private final Class<?> targetClass;
-	private final List<Class<?>> superClassList = new ArrayList<>();
-	private final List<Class<?>> interfaceList = new ArrayList<>();
-	private final List<Class<?>> superList = new ArrayList<>();
-	private final Map<Class<?>, Map<Class<?>, Annotation>> annotationMapMap = new HashMap<>();
-	private final Map<Class<?>, List<Annotation>> annotationListMap = new HashMap<>();
+
+	private List<Class<?>> superClassList;
+	private List<Class<?>> interfaceList;
+
+	private Map<Class<?>, Annotation> annotationMap;
+	private List<Annotation> annotationList;
+
+	private Map<String, BeanMethod> getterMap;
+	private Map<String, BeanMethod> setterMap;
+	private List<BeanMethod> allMethodList;
+	private List<BeanMethod> otherMethodList;
+
 	private final Map<String, BeanField> beanFieldMap = new HashMap<>();
 
 	public DefaultJavaBean(Class<?> targetClass)
@@ -47,6 +57,12 @@ public class DefaultJavaBean implements JavaBean
 		this.target = target;
 		this.targetClass = targetClass;
 		this.parseClass();
+		if (logger.isDebugEnabled())
+		{
+			logger.debug("super classes: {}, interfaces: {}, annotations: {}",
+					superClassList, interfaceList, annotationList);
+		}
+		this.parseMethod();
 		this.parse();
 	}
 
@@ -62,57 +78,37 @@ public class DefaultJavaBean implements JavaBean
 		return target;
 	}
 
+	@Override
+	public List<BeanMethod> getAllMethods()
+	{
+		return allMethodList;
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T extends Annotation> T getDeclaredAnnotation(Class<T> annotationClass)
 	{
-		Map<Class<?>, Annotation> annotationMap = annotationMapMap.get(targetClass);
-		if (annotationMap == null || annotationMap.isEmpty())
-			return null;
-
-		return (T) annotationMap.get(annotationClass);
+		return targetClass.getDeclaredAnnotation(annotationClass);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T extends Annotation> T getAnnotation(Class<T> annotationClass)
 	{
-		for (var clazz : superList)
-		{
-			Map<Class<?>, Annotation> map = annotationMapMap.get(clazz);
-			Annotation annotation = map.get(annotationClass);
-			if (annotation != null)
-				return (T) annotation;
-		}
-		return null;
+		return (T) annotationMap.get(annotationClass);
 	}
 
 	@Override
 	public List<Annotation> getDeclaredAnnotations()
 	{
-		List<Annotation> annotationList = annotationListMap.get(targetClass);
-		if (annotationList == null)
-			return List.of();
-
-		return annotationList;
+		Annotation[] annotations = targetClass.getDeclaredAnnotations();
+		return Arrays.asList(annotations);
 	}
 
 	@Override
 	public List<Annotation> getAnnotations()
 	{
-		Map<Class<?>, Annotation> annotationMap = new HashMap<>();
-		for (var clazz : superList)
-		{
-			Map<Class<?>, Annotation> map = annotationMapMap.get(clazz);
-			for (var entry : map.entrySet())
-			{
-				if (!annotationMap.containsKey(entry.getKey()))
-				{
-					annotationMap.put(entry.getKey(), entry.getValue());
-				}
-			}
-		}
-		return List.copyOf(annotationMap.values());
+		return annotationList;
 	}
 
 	@Override
@@ -129,40 +125,93 @@ public class DefaultJavaBean implements JavaBean
 
 	private void parseClass()
 	{
+		List<Class<?>> superList = new ArrayList<>();
+		List<Class<?>> interList = new ArrayList<>();
+		Map<Class<?>, Annotation> annoMap = new HashMap<>();
+		List<Annotation> annoList = new ArrayList<>();
+		this.parseSuperClass(targetClass, superList, interList, annoMap, annoList);
+		for (var cls : superList)
+		{
+			for (var inter : cls.getInterfaces())
+			{
+				this.parseSuperClass(inter, superList, interList, annoMap, annoList);
+			}
+		}
+		this.superClassList = List.copyOf(superList);
+		this.interfaceList = List.copyOf(interList);
+		this.annotationMap = Map.copyOf(annoMap);
+		this.annotationList = List.copyOf(annoList);
+	}
+
+	private void parseSuperClass(Class<?> cls, List<Class<?>> superList, List<Class<?>> interList,
+	                             Map<Class<?>, Annotation> annoMap, List<Annotation> annoList)
+	{
 		Queue<Class<?>> queue = new LinkedList<>();
-		List<Class<?>> clazzList = new ArrayList<>();
-		queue.offer(targetClass.getSuperclass());
-		this.parseAnnotation(targetClass);
+		queue.offer(cls);
 		Class<?> clazz = null;
 		while ((clazz = queue.poll()) != null)
 		{
 			if (clazz == Object.class)
 				continue;
 
-			superClassList.add(clazz);
-			superList.add(clazz);
-			clazzList.add(clazz);
-			this.parseAnnotation(clazz);
-			queue.offer(clazz.getSuperclass());
-		}
-		for (var cls : clazzList)
-		{
-			for (var inter : cls.getInterfaces())
+			if (clazz.isInterface())
 			{
-				interfaceList.add(inter);
-				superList.add(inter);
-				this.parseAnnotation(inter);
+				interList.add(clazz);
 			}
+			else
+			{
+				superList.add(clazz);
+			}
+			this.parseAnnotation(clazz, annoMap, annoList);
+			queue.offer(clazz.getSuperclass());
 		}
 	}
 
-	private void parseAnnotation(Class<?> clazz)
+	private void parseAnnotation(Class<?> clazz, Map<Class<?>, Annotation> annoMap, List<Annotation> annoList)
 	{
-		List<Annotation> annotationList = Arrays.asList(clazz.getDeclaredAnnotations());
-		annotationListMap.put(clazz, List.copyOf(annotationList));
-		Map<Class<?>, Annotation> annotationMap = new HashMap<>();
-		annotationList.forEach(e -> annotationMap.put(e.annotationType(), e));
-		annotationMapMap.put(clazz, Map.copyOf(annotationMap));
+		Annotation[] annotations = clazz.getDeclaredAnnotations();
+		for (var annotation : annotations)
+		{
+			if (annoMap.containsKey(annotation.annotationType()))
+				continue;
+
+			annoMap.put(annotation.annotationType(), annotation);
+			annoList.add(annotation);
+		}
+	}
+
+	private void parseMethod()
+	{
+		Map<String, BeanMethod> getter = new HashMap<>();
+		Map<String, BeanMethod> setter = new HashMap<>();
+		List<BeanMethod> all = new ArrayList<>();
+		List<BeanMethod> other = new ArrayList<>();
+		Method[] methods = targetClass.getMethods();
+		for (var method : methods)
+		{
+			int mod = method.getModifiers();
+			if (Modifier.isStatic(mod) || METHOD_SET.contains(method.getName()))
+				continue;
+
+			BeanMethod beanMethod = new DefaultBeanMethod(target, method, superClassList, interfaceList);
+			all.add(beanMethod);
+			if (beanMethod.isGetter())
+			{
+				getter.put(beanMethod.getRepresentField(), beanMethod);
+			}
+			else if (beanMethod.isSetter())
+			{
+				setter.put(beanMethod.getRepresentField(), beanMethod);
+			}
+			else
+			{
+				other.add(beanMethod);
+			}
+		}
+		this.getterMap = Map.copyOf(getter);
+		this.setterMap = Map.copyOf(setter);
+		this.allMethodList = List.copyOf(all);
+		this.otherMethodList = List.copyOf(other);
 	}
 
 	private void parse()
