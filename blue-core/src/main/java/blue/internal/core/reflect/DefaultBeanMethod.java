@@ -151,7 +151,7 @@ public class DefaultBeanMethod implements BeanMethod
 	}
 
 	@Override
-	public String getMethodName()
+	public String getName()
 	{
 		return method.getName();
 	}

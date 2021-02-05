@@ -9,7 +9,7 @@ import java.util.Map;
  * @author Jin Zheng
  * @since 1.0 2020-07-24
  */
-public interface JavaBean extends AnnotationOperation
+public interface JavaBean extends AnnotationOperation, ColumnNameOperation
 {
 	/**
 	 * create JavaBean reflection object

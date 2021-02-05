@@ -1,25 +1,11 @@
 package blue.core.reflect;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-
 /**
  * @author Jin Zheng
  * @since 1.0 2020-07-24
  */
-public interface BeanField
+public interface BeanField extends AnnotationOperation, ColumnNameOperation
 {
-	/**
-	 * field name
-	 * @return
-	 */
-	String getFieldName();
-
-	/**
-	 * column name of database table
-	 * @return
-	 */
-	String getColumnName();
 
 	/**
 	 * target object
@@ -46,21 +32,12 @@ public interface BeanField
 	 * getter method
 	 * @return
 	 */
-	Method getGetterMethod();
+	BeanMethod getGetterMethod();
 
 	/**
 	 * setter method
 	 * @return
 	 */
-	Method getSetterMethod();
-
-	/**
-	 * 1. setter method annotation
-	 * 2. field annotation
-	 * @param annotationClass
-	 * @param <T>
-	 * @return
-	 */
-	<T extends Annotation> T getAnnotation(Class<T> annotationClass);
+	BeanMethod getSetterMethod();
 
 }

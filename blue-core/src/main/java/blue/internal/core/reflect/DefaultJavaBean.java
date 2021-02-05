@@ -3,7 +3,6 @@ package blue.internal.core.reflect;
 import blue.core.reflect.BeanField;
 import blue.core.reflect.BeanMethod;
 import blue.core.reflect.JavaBean;
-import blue.core.util.ReflectionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,7 +13,6 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -45,7 +43,7 @@ public class DefaultJavaBean implements JavaBean
 	private List<BeanMethod> allMethodList;
 	private List<BeanMethod> otherMethodList;
 
-	private final Map<String, BeanField> beanFieldMap = new HashMap<>();
+	private Map<String, BeanField> fieldMap;
 
 	public DefaultJavaBean(Class<?> targetClass)
 	{
@@ -63,7 +61,13 @@ public class DefaultJavaBean implements JavaBean
 					superClassList, interfaceList, annotationList);
 		}
 		this.parseMethod();
-		this.parse();
+		this.parseField();
+	}
+
+	@Override
+	public String getName()
+	{
+		return targetClass.getSimpleName();
 	}
 
 	@Override
@@ -114,13 +118,13 @@ public class DefaultJavaBean implements JavaBean
 	@Override
 	public Map<String, BeanField> getAllFields()
 	{
-		return Map.copyOf(beanFieldMap);
+		return fieldMap;
 	}
 
 	@Override
 	public BeanField getField(String fieldName)
 	{
-		return beanFieldMap.get(fieldName);
+		return fieldMap.get(fieldName);
 	}
 
 	private void parseClass()
@@ -214,63 +218,52 @@ public class DefaultJavaBean implements JavaBean
 		this.otherMethodList = List.copyOf(other);
 	}
 
-	private void parse()
+	private void parseField()
 	{
-		Set<String> fieldNameSet = new HashSet<>();
-		Map<String, Field> fieldMap = new HashMap<>();
-		Map<String, Method> getterMap = new HashMap<>();
-		Map<String, Method> setterMap = new HashMap<>();
-		Class<?> clazz = this.getTargetClass();
-		Field[] fields = clazz.getDeclaredFields();
-		for (Field field : fields)
+		Map<String, BeanField> beanFieldMap = new HashMap<>();
+		Map<String, Field> map = new HashMap<>();
+		this.filterField(this.targetClass.getDeclaredFields(), map);
+		this.filterField(this.targetClass.getFields(), map);
+		for (var entry : map.entrySet())
+		{
+			BeanMethod getter = getterMap.get(entry.getKey());
+			BeanMethod setter = setterMap.get(entry.getKey());
+			BeanField field = new DefaultBeanField(entry.getKey(), target, entry.getValue(), getter, setter);
+			beanFieldMap.put(entry.getKey(), field);
+		}
+		for (var entry : getterMap.entrySet())
+		{
+			if (beanFieldMap.containsKey(entry.getKey()))
+				continue;
+
+			BeanMethod setter = setterMap.get(entry.getKey());
+			BeanField field = new DefaultBeanField(entry.getKey(), target, null, entry.getValue(), setter);
+			beanFieldMap.put(entry.getKey(), field);
+		}
+		for (var entry : setterMap.entrySet())
+		{
+			if (beanFieldMap.containsKey(entry.getKey()))
+				continue;
+
+			BeanMethod getter = getterMap.get(entry.getKey());
+			BeanField field = new DefaultBeanField(entry.getKey(), target, null, getter, entry.getValue());
+			beanFieldMap.put(entry.getKey(), field);
+		}
+
+		this.fieldMap = Map.copyOf(beanFieldMap);
+	}
+
+	private void filterField(Field[] fields, Map<String, Field> map)
+	{
+		for (var field : fields)
 		{
 			int mod = field.getModifiers();
 			if (Modifier.isFinal(mod) || Modifier.isStatic(mod))
 				continue;
-
-			fieldMap.put(field.getName(), field);
-			fieldNameSet.add(field.getName());
-		}
-
-		Method[] methods = clazz.getMethods();
-		for (Method method : methods)
-		{
-			String methodName = method.getName();
-			String fieldName = ReflectionUtil.field(methodName);
-			if (fieldName == null || fieldName.isEmpty())
+			if (map.containsKey(field.getName()))
 				continue;
 
-			if (methodName.startsWith("set") && method.getParameterTypes().length == 1)
-			{
-				setterMap.put(fieldName, method);
-				fieldNameSet.add(fieldName);
-				continue;
-			}
-			if (methodName.equals("getClass") || method.getParameterTypes().length != 0)
-			{
-				continue;
-			}
-			Class<?> returnClazz = method.getReturnType();
-			if (methodName.startsWith("is") && (returnClazz == Boolean.class || returnClazz == boolean.class))
-			{
-				getterMap.put(fieldName, method);
-				fieldNameSet.add(fieldName);
-			}
-			else if (methodName.startsWith("get"))
-			{
-				getterMap.put(fieldName, method);
-				fieldNameSet.add(fieldName);
-			}
-		}
-		for (String fieldName : fieldNameSet)
-		{
-			BeanField beanField = new DefaultBeanField(fieldName, target, fieldMap.get(fieldName),
-					getterMap.get(fieldName), setterMap.get(fieldName));
-			beanFieldMap.put(fieldName, beanField);
-		}
-		if (logger.isDebugEnabled() && !fieldNameSet.isEmpty())
-		{
-			logger.debug("{} fields: {}", clazz.getSimpleName(), fieldNameSet);
+			map.put(field.getName(), field);
 		}
 	}
 

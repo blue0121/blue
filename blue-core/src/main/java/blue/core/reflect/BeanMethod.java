@@ -6,14 +6,8 @@ import java.util.List;
  * @author Jin Zheng
  * @since 1.0 2021-01-27
  */
-public interface BeanMethod extends AnnotationOperation
+public interface BeanMethod extends AnnotationOperation, NameOperation
 {
-	/**
-	 * method name
-	 *
-	 * @return
-	 */
-	String getMethodName();
 
 	/**
 	 * parameter class list

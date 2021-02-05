@@ -38,11 +38,11 @@ public class AnnotationTest
 		List<BeanMethod> methodList = catBean.getAllMethods();
 		for (BeanMethod beanMethod : methodList)
 		{
-			System.out.println(beanMethod.getMethodName());
+			System.out.println(beanMethod.getName());
 		}
 		Assertions.assertEquals(1, methodList.size());
 		BeanMethod method = methodList.get(0);
-		Assertions.assertEquals("move", method.getMethodName());
+		Assertions.assertEquals("move", method.getName());
 		Assertions.assertNull(method.getRepresentField());
 		Assertions.assertFalse(method.isGetter());
 		Assertions.assertFalse(method.isSetter());
