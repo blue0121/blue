@@ -1,11 +1,13 @@
 package blue.internal.core.reflect;
 
 import blue.core.reflect.BeanMethod;
+import blue.core.reflect.MethodParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -28,7 +30,9 @@ public class DefaultBeanMethod implements BeanMethod
 	private final Method method;
 	private final List<Class<?>> superClassList;
 	private final List<Class<?>> interfaceList;
-	private final List<Class<?>> paramClassList = new ArrayList<>();
+
+	private List<Class<?>> paramClassList;
+	private List<Method> superMethodList;
 
 	private boolean setter = false;
 	private boolean getter = false;
@@ -36,6 +40,7 @@ public class DefaultBeanMethod implements BeanMethod
 
 	private Map<Class<?>, Annotation> annotationMap;
 	private List<Annotation> annotationList;
+	private List<MethodParam> methodParamList;
 
 	public DefaultBeanMethod(Object target, Method method,
 	                         List<Class<?>> superClassList, List<Class<?>> interfaceList)
@@ -46,20 +51,24 @@ public class DefaultBeanMethod implements BeanMethod
 		this.interfaceList = interfaceList;
 		this.parse();
 		this.parseAnnotation();
+		this.parseParam();
 		if (logger.isDebugEnabled())
 		{
 			logger.debug("method: {}, setter: {}, getter: {}, representField: {}, annotation: {}",
-					method.getName(), setter, getter, representField, annotationList);
+					this.getName(), setter, getter, representField, annotationList);
 		}
 	}
 
 	private void parse()
 	{
 		var paramClasses = method.getParameterTypes();
+		List<Class<?>> paramList = new ArrayList<>();
 		for (var paramClass : paramClasses)
 		{
-			paramClassList.add(paramClass);
+			paramList.add(paramClass);
 		}
+		this.paramClassList = List.copyOf(paramList);
+
 		String field = this.fieldName();
 		if (field != null)
 		{
@@ -78,9 +87,10 @@ public class DefaultBeanMethod implements BeanMethod
 
 	private void parseAnnotation()
 	{
+		List<Method> methodList = new ArrayList<>();
 		Map<Class<?>, Annotation> annoMap = new HashMap<>();
 		List<Annotation> annoList = new ArrayList<>();
-		this.parseAnnotation(method, annoMap, annoList);
+		this.parseAnnotation(method, methodList, annoMap, annoList);
 
 		for (var clazz : superClassList)
 		{
@@ -88,7 +98,7 @@ public class DefaultBeanMethod implements BeanMethod
 			if (dest == null)
 				continue;
 
-			this.parseAnnotation(dest, annoMap, annoList);
+			this.parseAnnotation(dest, methodList, annoMap, annoList);
 		}
 		for (var inter : interfaceList)
 		{
@@ -96,18 +106,24 @@ public class DefaultBeanMethod implements BeanMethod
 			if (dest == null)
 				continue;
 
-			this.parseAnnotation(dest, annoMap, annoList);
+			this.parseAnnotation(dest, methodList, annoMap, annoList);
 		}
 
+		this.superMethodList = List.copyOf(methodList);
 		this.annotationMap = Map.copyOf(annoMap);
 		this.annotationList = List.copyOf(annoList);
 	}
 
-	private void parseAnnotation(Method method, Map<Class<?>, Annotation> annoMap, List<Annotation> annoList)
+	private void parseAnnotation(Method method, List<Method> methodList,
+	                             Map<Class<?>, Annotation> annoMap, List<Annotation> annoList)
 	{
+		methodList.add(method);
 		Annotation[] annos = method.getDeclaredAnnotations();
 		for (var anno : annos)
 		{
+			if (annoMap.containsKey(anno.annotationType()))
+				continue;
+
 			annoMap.put(anno.annotationType(), anno);
 			annoList.add(anno);
 		}
@@ -122,6 +138,24 @@ public class DefaultBeanMethod implements BeanMethod
 				return method;
 		}
 		return null;
+	}
+
+	private void parseParam()
+	{
+		int count = method.getParameterCount();
+		List<MethodParam> paramList = new ArrayList<>();
+		for (int i = 0; i < count; i++)
+		{
+			List<Parameter> list = new ArrayList<>();
+			for (var superMethod : superMethodList)
+			{
+				var params = superMethod.getParameters();
+				list.add(params[i]);
+			}
+			MethodParam param = new DefaultMethodParam(list);
+			paramList.add(param);
+		}
+		this.methodParamList = List.copyOf(paramList);
 	}
 
 	@Override
@@ -159,7 +193,13 @@ public class DefaultBeanMethod implements BeanMethod
 	@Override
 	public List<Class<?>> getParamClassList()
 	{
-		return List.copyOf(paramClassList);
+		return paramClassList;
+	}
+
+	@Override
+	public List<MethodParam> getParamList()
+	{
+		return methodParamList;
 	}
 
 	@Override

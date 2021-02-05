@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
  * @author Jin Zheng
  * @since 1.0 2021-01-27
  */
-@Target({ElementType.FIELD, ElementType.METHOD, ElementType.TYPE})
+@Target({ElementType.FIELD, ElementType.METHOD, ElementType.TYPE, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface MoveAction

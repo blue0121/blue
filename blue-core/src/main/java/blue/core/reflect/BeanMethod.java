@@ -17,6 +17,12 @@ public interface BeanMethod extends AnnotationOperation, NameOperation
 	List<Class<?>> getParamClassList();
 
 	/**
+	 * method parameter list
+	 * @return
+	 */
+	List<MethodParam> getParamList();
+
+	/**
 	 * return class
 	 *
 	 * @return

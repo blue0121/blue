@@ -57,8 +57,8 @@ public class DefaultJavaBean implements JavaBean
 		this.parseClass();
 		if (logger.isDebugEnabled())
 		{
-			logger.debug("super classes: {}, interfaces: {}, annotations: {}",
-					superClassList, interfaceList, annotationList);
+			logger.debug("class: {}, super classes: {}, interfaces: {}, annotations: {}",
+					this.getName(), superClassList, interfaceList, annotationList);
 		}
 		this.parseMethod();
 		this.parseField();
