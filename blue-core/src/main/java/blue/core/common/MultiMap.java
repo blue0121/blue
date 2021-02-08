@@ -1,8 +1,10 @@
 package blue.core.common;
 
 import blue.internal.core.common.HashMultiMap;
+import blue.internal.core.common.ImmutableMultiMap;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -47,6 +49,12 @@ public interface MultiMap<K, V>
 	boolean containsKey(K key);
 
 	/**
+	 * entry set view
+	 * @return
+	 */
+	Set<Map.Entry<K, Set<V>>> entrySet();
+
+	/**
 	 * get by key
 	 * @param key
 	 * @return
@@ -86,5 +94,17 @@ public interface MultiMap<K, V>
 	 * @return
 	 */
 	int size();
+
+	/**
+	 * copy to unmodifiable MultiMap
+	 * @param map
+	 * @param <K>
+	 * @param <V>
+	 * @return
+	 */
+	static <K, V> MultiMap<K, V> copyOf(MultiMap<K, V> map)
+	{
+		return new ImmutableMultiMap<>(map);
+	}
 
 }
