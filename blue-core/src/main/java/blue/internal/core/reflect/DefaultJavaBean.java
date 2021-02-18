@@ -1,5 +1,6 @@
 package blue.internal.core.reflect;
 
+import blue.core.common.MultiMap;
 import blue.core.reflect.BeanField;
 import blue.core.reflect.BeanMethod;
 import blue.core.reflect.JavaBean;
@@ -39,7 +40,7 @@ public class DefaultJavaBean implements JavaBean
 	private List<Annotation> annotationList;
 
 	private Map<String, BeanMethod> getterMap;
-	private Map<String, BeanMethod> setterMap;
+	private MultiMap<String, BeanMethod> setterMap;
 	private List<BeanMethod> allMethodList;
 	private List<BeanMethod> otherMethodList;
 
@@ -187,7 +188,7 @@ public class DefaultJavaBean implements JavaBean
 	private void parseMethod()
 	{
 		Map<String, BeanMethod> getter = new HashMap<>();
-		Map<String, BeanMethod> setter = new HashMap<>();
+		MultiMap<String, BeanMethod> setter = MultiMap.create();
 		List<BeanMethod> all = new ArrayList<>();
 		List<BeanMethod> other = new ArrayList<>();
 		Method[] methods = targetClass.getMethods();
@@ -213,7 +214,7 @@ public class DefaultJavaBean implements JavaBean
 			}
 		}
 		this.getterMap = Map.copyOf(getter);
-		this.setterMap = Map.copyOf(setter);
+		this.setterMap = MultiMap.copyOf(setter);
 		this.allMethodList = List.copyOf(all);
 		this.otherMethodList = List.copyOf(other);
 	}
@@ -227,7 +228,8 @@ public class DefaultJavaBean implements JavaBean
 		for (var entry : map.entrySet())
 		{
 			BeanMethod getter = getterMap.get(entry.getKey());
-			BeanMethod setter = setterMap.get(entry.getKey());
+			Set<BeanMethod> setterSet = setterMap.get(entry.getKey());
+			BeanMethod setter = this.getSetterMethod(getter, setterSet);
 			BeanField field = new DefaultBeanField(entry.getKey(), target, entry.getValue(), getter, setter);
 			beanFieldMap.put(entry.getKey(), field);
 		}
@@ -236,21 +238,47 @@ public class DefaultJavaBean implements JavaBean
 			if (beanFieldMap.containsKey(entry.getKey()))
 				continue;
 
-			BeanMethod setter = setterMap.get(entry.getKey());
+			Set<BeanMethod> setterSet = setterMap.get(entry.getKey());
+			BeanMethod setter = this.getSetterMethod(entry.getValue(), setterSet);
 			BeanField field = new DefaultBeanField(entry.getKey(), target, null, entry.getValue(), setter);
 			beanFieldMap.put(entry.getKey(), field);
 		}
 		for (var entry : setterMap.entrySet())
 		{
-			if (beanFieldMap.containsKey(entry.getKey()))
+			if (entry.getValue().size() != 1 || beanFieldMap.containsKey(entry.getKey()))
 				continue;
 
+			BeanMethod setter = entry.getValue().iterator().next();
 			BeanMethod getter = getterMap.get(entry.getKey());
-			BeanField field = new DefaultBeanField(entry.getKey(), target, null, getter, entry.getValue());
+			BeanField field = new DefaultBeanField(entry.getKey(), target, null, getter, setter);
 			beanFieldMap.put(entry.getKey(), field);
 		}
 
 		this.fieldMap = Map.copyOf(beanFieldMap);
+	}
+
+	private BeanMethod getSetterMethod(BeanMethod getter, Set<BeanMethod> setterSet)
+	{
+		if (setterSet == null || setterSet.isEmpty())
+			return null;
+
+		if (getter == null)
+		{
+			if (setterSet.size() != 1)
+				return null;
+
+			return setterSet.iterator().next();
+		}
+		Class<?> returnClass = getter.getReturnClass();
+		for (var setter : setterSet)
+		{
+			if (setter.getParamClassList() == null || setter.getParamClassList().size() != 1)
+				continue;
+
+			if (returnClass == setter.getParamClassList().get(0))
+				return setter;
+		}
+		return null;
 	}
 
 	private void filterField(Field[] fields, Map<String, Field> map)

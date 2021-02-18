@@ -1,9 +1,10 @@
 package blue.internal.core.common;
 
+import blue.core.common.ConcurrentSet;
+
 import java.util.AbstractSet;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -11,7 +12,7 @@ import java.util.concurrent.ConcurrentMap;
  * @author Jin Zheng
  * @since 1.0 2021-02-08
  */
-public class ConcurrentHashSet<E> extends AbstractSet<E> implements Set<E>
+public class ConcurrentHashSet<E> extends AbstractSet<E> implements ConcurrentSet<E>
 {
 	private static final Object PRESENT = new Object();
 
