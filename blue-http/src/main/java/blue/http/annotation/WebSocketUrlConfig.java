@@ -1,8 +1,9 @@
 package blue.http.annotation;
 
+import blue.core.reflect.BeanMethod;
+import blue.core.reflect.JavaBean;
 import blue.internal.http.annotation.WebSocketConfigCache;
 
-import java.lang.reflect.Method;
 import java.util.List;
 
 /**
@@ -42,11 +43,11 @@ public interface WebSocketUrlConfig
 	 * method
 	 * @return
 	 */
-	Method getMethod();
+	BeanMethod getMethod();
 
 	/**
 	 * class instance
 	 * @return
 	 */
-	Object getTarget();
+	JavaBean getJavaBean();
 }

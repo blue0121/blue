@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
@@ -215,7 +216,8 @@ public class DefaultBeanMethod implements BeanMethod
 	}
 
 	@Override
-	public Object invoke(Object... params)
+	public Object invoke(Object...params) throws IllegalAccessException,
+			IllegalArgumentException, InvocationTargetException
 	{
 		if (target == null)
 		{
@@ -223,10 +225,16 @@ public class DefaultBeanMethod implements BeanMethod
 			return null;
 		}
 
+		return method.invoke(target, params);
+	}
+
+	@Override
+	public Object invokeQuietly(Object...params)
+	{
 		Object value = null;
 		try
 		{
-			value = method.invoke(target, params);
+			value = this.invoke(params);
 		}
 		catch (Exception e)
 		{

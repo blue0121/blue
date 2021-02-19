@@ -1,11 +1,12 @@
 package blue.internal.http.parser;
 
+import blue.core.reflect.BeanMethod;
+import blue.core.reflect.JavaBean;
 import blue.http.annotation.Charset;
 import blue.http.annotation.ContentType;
 import blue.internal.http.annotation.DefaultHttpUrlConfig;
 import blue.internal.http.annotation.RequestParamConfig;
 
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 
@@ -18,15 +19,15 @@ public class HttpMethodResult
 	private Charset charset;
 	private ContentType contentType;
 	private Map<String, String> pathMap;
-	private Object target;
-	private Method method;
+	private JavaBean javaBean;
+	private BeanMethod method;
 	private List<RequestParamConfig> paramList;
 
 	public HttpMethodResult(DefaultHttpUrlConfig config, Map<String, String> pathMap)
 	{
 		this.charset = config.getCharset();
 		this.contentType = config.getContentType();
-		this.target = config.getTarget();
+		this.javaBean = config.getJavaBean();
 		this.method = config.getMethod();
 		this.paramList = config.getParamList();
 		if (pathMap == null)
@@ -54,12 +55,12 @@ public class HttpMethodResult
 		return pathMap;
 	}
 
-	public Object getTarget()
+	public JavaBean getJavaBean()
 	{
-		return target;
+		return javaBean;
 	}
 
-	public Method getMethod()
+	public BeanMethod getMethod()
 	{
 		return method;
 	}

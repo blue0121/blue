@@ -16,6 +16,7 @@ public class DefaultTestController implements TestController
 	@Override
 	public String test(String name)
 	{
+		System.out.printf("name: %s\n", name);
 		return "test, " + name;
 	}
 }

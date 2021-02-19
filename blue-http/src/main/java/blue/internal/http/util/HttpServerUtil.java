@@ -1,11 +1,11 @@
 package blue.internal.http.util;
 
+import blue.core.file.FilePath;
 import blue.core.util.StringUtil;
 import blue.http.annotation.ContentType;
 import blue.http.annotation.HttpMethod;
 import blue.http.message.Response;
 import blue.internal.http.annotation.HttpConfigCache;
-import blue.internal.http.parser.HttpParser;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
@@ -193,7 +193,7 @@ public class HttpServerUtil
 		for (Map.Entry<String, String> entry : message.getCookie().entrySet())
 		{
 			Cookie cookie = new DefaultCookie(entry.getKey(), entry.getValue());
-			cookie.setPath(HttpParser.SPLIT);
+			cookie.setPath(FilePath.SLASH);
 			cookie.setMaxAge(COOKIE_AGE);
 			cookie.setHttpOnly(false);
 			String strCookie = encoder.encode(cookie);

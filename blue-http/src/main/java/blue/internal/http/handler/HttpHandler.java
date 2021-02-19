@@ -1,5 +1,6 @@
 package blue.internal.http.handler;
 
+import blue.core.reflect.BeanMethod;
 import blue.http.message.Request;
 import blue.http.message.Response;
 import blue.internal.http.annotation.RequestParamConfig;
@@ -10,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.List;
 
 /**
@@ -67,9 +67,6 @@ public class HttpHandler implements Handler<Request, Response>
 
 	private void invoke(Request request, DefaultResponse response, HttpMethodResult result)
 	{
-		Method method = result.getMethod();
-		Object object = result.getTarget();
-
 		List<RequestParamConfig> configList = result.getParamList();
 		Object[] params = new Object[configList.size()];
 		int i = 0;
@@ -87,9 +84,10 @@ public class HttpHandler implements Handler<Request, Response>
 			i++;
 		}
 
+		BeanMethod method = result.getMethod();
 		try
 		{
-			Object rs = method.invoke(object, params);
+			Object rs = method.invoke(params);
 			response.setResult(rs);
 		}
 		catch (Throwable e)

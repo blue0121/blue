@@ -46,7 +46,7 @@ public class HandlerMappingFactoryTest extends BaseTest
 		HttpMethodResult result = (HttpMethodResult) chain.getHandler();
 		Assertions.assertEquals(Charset.UTF_8, result.getCharset());
 		Assertions.assertEquals(ContentType.AUTO, result.getContentType());
-		Assertions.assertEquals(EchoController.class, result.getMethod().getDeclaringClass());
+		Assertions.assertEquals(EchoController.class, result.getJavaBean().getTargetClass());
 		Assertions.assertEquals("echo", result.getMethod().getName());
 	}
 
@@ -61,7 +61,7 @@ public class HandlerMappingFactoryTest extends BaseTest
 		HttpMethodResult result = (HttpMethodResult) chain.getHandler();
 		Assertions.assertEquals(Charset.UTF_8, result.getCharset());
 		Assertions.assertEquals(ContentType.AUTO, result.getContentType());
-		Assertions.assertEquals(HelloController.class, result.getMethod().getDeclaringClass());
+		Assertions.assertEquals(HelloController.class, result.getJavaBean().getTargetClass());
 		Assertions.assertEquals("hello2", result.getMethod().getName());
 	}
 

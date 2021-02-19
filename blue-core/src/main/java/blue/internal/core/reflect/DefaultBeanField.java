@@ -64,7 +64,7 @@ public class DefaultBeanField implements BeanField
 			return null;
 		}
 
-		Object value = getterMethod != null ? getterMethod.invoke() : null;
+		Object value = getterMethod != null ? getterMethod.invokeQuietly() : null;
 		if (value == null && field != null)
 		{
 			try
@@ -95,7 +95,7 @@ public class DefaultBeanField implements BeanField
 		boolean flag = false;
 		if (setterMethod != null)
 		{
-			setterMethod.invoke(value);
+			setterMethod.invokeQuietly(value);
 			flag = true;
 		}
 		else if (field != null)

@@ -11,6 +11,8 @@ import java.io.FileFilter;
  */
 public interface ClassHandler extends FileFilter
 {
+	String SUFFIX_CLASS = ".class";
+
 	/**
 	 * 处理类
 	 * 
@@ -30,6 +32,6 @@ public interface ClassHandler extends FileFilter
 		if (path.isDirectory())
 			return true;
 
-		return path.isFile() && path.getName().endsWith(".class");
+		return path.isFile() && path.getName().endsWith(SUFFIX_CLASS);
 	}
 }

@@ -1,11 +1,12 @@
 package blue.internal.http.annotation;
 
+import blue.core.reflect.BeanMethod;
+import blue.core.reflect.JavaBean;
 import blue.http.annotation.Charset;
 import blue.http.annotation.ContentType;
 import blue.http.annotation.HttpMethod;
 import blue.http.annotation.HttpUrlConfig;
 
-import java.lang.reflect.Method;
 import java.util.List;
 
 /**
@@ -19,8 +20,8 @@ public class DefaultHttpUrlConfig implements HttpUrlConfig
 	private HttpMethod httpMethod;
 	private Charset charset;
 	private ContentType contentType;
-	private Object target;
-	private Method method;
+	private JavaBean javaBean;
+	private BeanMethod method;
 	private List<RequestParamConfig> paramList;
 
 	public DefaultHttpUrlConfig()
@@ -57,14 +58,14 @@ public class DefaultHttpUrlConfig implements HttpUrlConfig
 		this.contentType = contentType;
 	}
 
-	public void setMethod(Method method)
+	public void setJavaBean(JavaBean javaBean)
 	{
-		this.method = method;
+		this.javaBean = javaBean;
 	}
 
-	public void setTarget(Object target)
+	public void setMethod(BeanMethod method)
 	{
-		this.target = target;
+		this.method = method;
 	}
 
 	public List<RequestParamConfig> getParamList()
@@ -108,14 +109,14 @@ public class DefaultHttpUrlConfig implements HttpUrlConfig
 	}
 
 	@Override
-	public Method getMethod()
+	public BeanMethod getMethod()
 	{
 		return method;
 	}
 
 	@Override
-	public Object getTarget()
+	public JavaBean getJavaBean()
 	{
-		return target;
+		return javaBean;
 	}
 }

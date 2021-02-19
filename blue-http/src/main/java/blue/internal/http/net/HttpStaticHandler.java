@@ -1,9 +1,9 @@
 package blue.internal.http.net;
 
+import blue.core.file.FilePath;
 import blue.http.annotation.ContentType;
 import blue.http.message.Download;
 import blue.internal.http.config.HttpConfig;
-import blue.internal.http.parser.HttpParser;
 import blue.internal.http.util.HttpServerUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -179,7 +179,7 @@ public class HttpStaticHandler
 		String path = null;
 		for (Map.Entry<String, String> entry : pathMap.entrySet())
 		{
-			if (!HttpParser.SPLIT.equals(entry.getKey()) && url.startsWith(entry.getKey()))
+			if (!FilePath.SLASH.equals(entry.getKey()) && url.startsWith(entry.getKey()))
 			{
 				root = entry.getKey();
 				path = entry.getValue();
@@ -188,8 +188,8 @@ public class HttpStaticHandler
 		}
 		if (root == null)
 		{
-			path = pathMap.get(HttpParser.SPLIT);
-			root = HttpParser.SPLIT;
+			path = pathMap.get(FilePath.SLASH);
+			root = FilePath.SLASH;
 		}
 		if (path == null || path.isEmpty())
 			return null;

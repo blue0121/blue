@@ -1,8 +1,8 @@
 package blue.internal.http.config;
 
+import blue.core.file.FilePath;
 import blue.core.util.NumberUtil;
 import blue.internal.http.annotation.FilterCache;
-import blue.internal.http.parser.HttpParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -71,13 +71,13 @@ public class HttpConfig implements InitializingBean
 		if (path == null || path.isEmpty())
 			return;
 
-		if (path.startsWith(HttpParser.SPLIT))
+		if (path.startsWith(FilePath.SLASH))
 		{
 			this.path = path;
 		}
 		else
 		{
-			this.path = HttpParser.SPLIT + path;
+			this.path = FilePath.SLASH + path;
 		}
 	}
 

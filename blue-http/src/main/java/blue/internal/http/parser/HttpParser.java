@@ -1,6 +1,8 @@
 package blue.internal.http.parser;
 
-import blue.core.util.UrlUtil;
+import blue.core.file.FilePath;
+import blue.core.reflect.BeanMethod;
+import blue.core.reflect.JavaBean;
 import blue.http.annotation.Charset;
 import blue.http.annotation.ContentType;
 import blue.http.annotation.Http;
@@ -10,93 +12,65 @@ import blue.internal.http.annotation.DefaultHttpUrlConfig;
 import blue.internal.http.annotation.HttpConfigCache;
 import blue.internal.http.annotation.HttpUrlKey;
 import blue.internal.http.annotation.RequestParamConfig;
-import blue.internal.http.parser.parameter.ParamParserFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.annotation.AnnotationUtils;
 
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 /**
  * @author Jin Zheng
- * @since 2019-12-29
+ * @since 1.0 2021-02-19
  */
-public class HttpParser
+public class HttpParser extends AbstractParser
 {
-	public static final String SPLIT = "/";
 	private static Logger logger = LoggerFactory.getLogger(HttpParser.class);
 
-	private Set<Class<?>> clazzSet = new HashSet<>();
+	private static final Set<HttpMethod> METHOD_SET = HttpMethod.all();
 
 	private HttpConfigCache configCache = HttpConfigCache.getInstance();
-	private Set<HttpMethod> methodSet = HttpMethod.all();
+	private Http annotationHttp;
 
-	private static HttpParser instance = new HttpParser();
-
-	private HttpParser()
+	public HttpParser(JavaBean bean, Http annotationHttp)
 	{
+		super(bean);
+		this.annotationHttp = annotationHttp;
 	}
 
-	public static HttpParser getInstance()
+	@Override
+	protected void parseMethod(BeanMethod method)
 	{
-		return instance;
-	}
-
-	public void parse(Object target, Class<?> clazz)
-	{
-		if (clazzSet.contains(clazz))
-			return;
-
-		Http annoHttp = AnnotationUtils.findAnnotation(clazz, Http.class);
-		if (annoHttp == null)
-			throw new HttpServerException(clazz.getName() + " 缺少 @Http 注解");
-
-		for (Method method : clazz.getDeclaredMethods())
-		{
-			if (method.getModifiers() != Modifier.PUBLIC)
-				continue;
-
-			this.parseMethod(target, method, annoHttp);
-		}
-
-		clazzSet.add(clazz);
-	}
-
-	private void parseMethod(Object target, Method method, Http annoHttp)
-	{
-		List<String> urlList = new ArrayList<>();
-		urlList.add(SPLIT);
-		urlList.add(annoHttp.url());
 		Set<HttpMethod> httpMethodSet = new HashSet<>();
-		this.addHttpMethod(httpMethodSet, annoHttp.method());
+		this.addHttpMethod(httpMethodSet, annotationHttp.method());
 
-		Charset charset = annoHttp.charset();
-		ContentType contentType = annoHttp.contentType();
-		String name = annoHttp.name();
-
-		Http annoMethod = AnnotationUtils.findAnnotation(method, Http.class);
-		if (annoMethod != null) // 方法配置覆盖类配置
+		Charset charset = annotationHttp.charset();
+		ContentType contentType = annotationHttp.contentType();
+		String name = annotationHttp.name();
+		FilePath uriPath = this.rootPath.copy();
+		Http annotationMethod = method.getAnnotation(Http.class);
+		if (annotationMethod != null)
 		{
-			urlList.add(SPLIT);
-			urlList.add(annoMethod.url());
-			charset = annoMethod.charset();
-			contentType = annoMethod.contentType();
-			name = annoMethod.name();
+			uriPath.concat(FilePath.SLASH, annotationMethod.url());
+			charset = annotationMethod.charset();
+			contentType = annotationMethod.contentType();
+			name = annotationMethod.name();
 			httpMethodSet.clear();
-			this.addHttpMethod(httpMethodSet, annoMethod.method());
+			this.addHttpMethod(httpMethodSet, annotationMethod.method());
 		}
-		String url = UrlUtil.concat(urlList.toArray(new String[0]));
-
-		if (httpMethodSet.isEmpty()) // 没有关联httpMethod
+		if (httpMethodSet.isEmpty())
 		{
-			httpMethodSet.addAll(methodSet);
+			if (annotationHttp.method().length == 0)
+			{
+				httpMethodSet.addAll(METHOD_SET);
+			}
+			else
+			{
+				this.addHttpMethod(httpMethodSet, annotationHttp.method());
+			}
 		}
-		List<RequestParamConfig> paramConfigList = ParamParserFactory.getInstance().parse(method);
+		List<RequestParamConfig> paramConfigList = PARAM_PARSER_FACTORY.parse(method);
+		String url = uriPath.trim();
 		for (HttpMethod httpMethod : httpMethodSet)
 		{
 			DefaultHttpUrlConfig config = new DefaultHttpUrlConfig();
@@ -105,7 +79,7 @@ public class HttpParser
 			config.setHttpMethod(httpMethod);
 			config.setCharset(charset);
 			config.setContentType(contentType);
-			config.setTarget(target);
+			config.setJavaBean(bean);
 			config.setMethod(method);
 			config.setParamList(paramConfigList);
 			HttpUrlKey key = config.buildKey();
@@ -115,8 +89,14 @@ public class HttpParser
 
 			configCache.put(key, config);
 			logger.info("Found Http: {} [{}] [{}] [{}]，{}.{}()", config.getUrl(), httpMethod.name(),
-					charset.name(), contentType, method.getDeclaringClass().getSimpleName(), method.getName());
+					charset.name(), contentType, bean.getTargetClass().getSimpleName(), method.getName());
 		}
+	}
+
+	@Override
+	protected String getRootPath()
+	{
+		return annotationHttp.url();
 	}
 
 	private void addHttpMethod(Set<HttpMethod> httpMethodSet, HttpMethod[] httpMethods)
@@ -126,11 +106,11 @@ public class HttpParser
 
 		for (HttpMethod httpMethod : httpMethods)
 		{
-			if (!methodSet.contains(httpMethod))
+			if (!METHOD_SET.contains(httpMethod))
 				throw new HttpServerException("不支持 " + httpMethod.name());
 
 			httpMethodSet.add(httpMethod);
 		}
 	}
-
 }
+

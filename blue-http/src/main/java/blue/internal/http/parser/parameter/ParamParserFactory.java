@@ -1,6 +1,7 @@
 package blue.internal.http.parser.parameter;
 
 import blue.core.common.Singleton;
+import blue.core.reflect.BeanMethod;
 import blue.http.annotation.BodyContent;
 import blue.http.annotation.BodyJson;
 import blue.http.annotation.BodyParam;
@@ -13,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -49,15 +49,15 @@ public class ParamParserFactory
 		return Singleton.get(ParamParserFactory.class);
 	}
 
-	public List<RequestParamConfig> parse(Method method)
+	public List<RequestParamConfig> parse(BeanMethod method)
 	{
 		List<RequestParamConfig> configList = new ArrayList<>();
-		for (var param : method.getParameters())
+		for (var param : method.getParamList())
 		{
 			RequestParamConfig config = new RequestParamConfig();
 			configList.add(config);
 			config.setName(param.getName());
-			config.setParamClazz(param.getType());
+			config.setParamClazz(param.getParamClass());
 			for (var annotation : param.getAnnotations())
 			{
 				if (annotation instanceof Validated)

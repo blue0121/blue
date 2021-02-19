@@ -1,8 +1,9 @@
 package blue.http.annotation;
 
+import blue.core.reflect.BeanMethod;
+import blue.core.reflect.JavaBean;
 import blue.internal.http.annotation.HttpConfigCache;
 
-import java.lang.reflect.Method;
 import java.util.List;
 
 /**
@@ -54,11 +55,11 @@ public interface HttpUrlConfig
 	 * method
 	 * @return
 	 */
-	Method getMethod();
+	BeanMethod getMethod();
 
 	/**
 	 * class instance
 	 * @return
 	 */
-	Object getTarget();
+	JavaBean getJavaBean();
 }

@@ -1,5 +1,6 @@
 package blue.core.reflect;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 /**
@@ -37,12 +38,22 @@ public interface BeanMethod extends AnnotationOperation, NameOperation
 	int getModifiers();
 
 	/**
-	 * invoke method with target object
-	 *
+	 * invoke method with target object, and throw exception
+	 * @param params
+	 * @return
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws InvocationTargetException
+	 */
+	Object invoke(Object...params) throws IllegalAccessException,
+			IllegalArgumentException, InvocationTargetException;
+
+	/**
+	 * invoke method with target object, when exception return null
 	 * @param params
 	 * @return
 	 */
-	Object invoke(Object...params);
+	Object invokeQuietly(Object...params);
 
 	/**
 	 * represent field

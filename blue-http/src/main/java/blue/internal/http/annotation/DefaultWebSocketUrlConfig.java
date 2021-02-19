@@ -1,8 +1,9 @@
 package blue.internal.http.annotation;
 
+import blue.core.reflect.BeanMethod;
+import blue.core.reflect.JavaBean;
 import blue.http.annotation.WebSocketUrlConfig;
 
-import java.lang.reflect.Method;
 import java.util.List;
 
 /**
@@ -14,8 +15,8 @@ public class DefaultWebSocketUrlConfig implements WebSocketUrlConfig
 	private String name;
 	private String url;
 	private int version;
-	private Object target;
-	private Method method;
+	private JavaBean javaBean;
+	private BeanMethod method;
 	private List<RequestParamConfig> paramList;
 
 	public DefaultWebSocketUrlConfig()
@@ -42,14 +43,14 @@ public class DefaultWebSocketUrlConfig implements WebSocketUrlConfig
 		this.version = version;
 	}
 
-	public void setMethod(Method method)
+	public void setJavaBean(JavaBean javaBean)
 	{
-		this.method = method;
+		this.javaBean = javaBean;
 	}
 
-	public void setTarget(Object target)
+	public void setMethod(BeanMethod method)
 	{
-		this.target = target;
+		this.method = method;
 	}
 
 	public List<RequestParamConfig> getParamList()
@@ -81,14 +82,14 @@ public class DefaultWebSocketUrlConfig implements WebSocketUrlConfig
 	}
 
 	@Override
-	public Method getMethod()
+	public BeanMethod getMethod()
 	{
 		return method;
 	}
 
 	@Override
-	public Object getTarget()
+	public JavaBean getJavaBean()
 	{
-		return target;
+		return javaBean;
 	}
 }

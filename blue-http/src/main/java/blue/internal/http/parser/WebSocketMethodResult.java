@@ -1,9 +1,10 @@
 package blue.internal.http.parser;
 
+import blue.core.reflect.BeanMethod;
+import blue.core.reflect.JavaBean;
 import blue.internal.http.annotation.DefaultWebSocketUrlConfig;
 import blue.internal.http.annotation.RequestParamConfig;
 
-import java.lang.reflect.Method;
 import java.util.List;
 
 /**
@@ -12,23 +13,23 @@ import java.util.List;
  */
 public class WebSocketMethodResult
 {
-	private Object target;
-	private Method method;
+	private JavaBean javaBean;
+	private BeanMethod method;
 	private List<RequestParamConfig> paramList;
 
 	public WebSocketMethodResult(DefaultWebSocketUrlConfig config)
 	{
-		this.target = config.getTarget();
+		this.javaBean = config.getJavaBean();
 		this.method = config.getMethod();
 		this.paramList = config.getParamList();
 	}
 
-	public Object getTarget()
+	public JavaBean getJavaBean()
 	{
-		return target;
+		return javaBean;
 	}
 
-	public Method getMethod()
+	public BeanMethod getMethod()
 	{
 		return method;
 	}
