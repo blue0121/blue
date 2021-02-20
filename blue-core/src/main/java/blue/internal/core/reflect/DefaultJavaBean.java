@@ -74,7 +74,7 @@ public class DefaultJavaBean extends DefaultAnnotationOperation implements JavaB
 		this.parseField();
 		this.constructorCache = Caffeine.newBuilder()
 				.expireAfterAccess(Duration.ofHours(1))
-				.maximumSize(10_000)
+				.maximumSize(1_000)
 				.build();
 	}
 
