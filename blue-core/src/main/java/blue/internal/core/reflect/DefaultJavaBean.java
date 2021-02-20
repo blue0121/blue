@@ -1,16 +1,22 @@
 package blue.internal.core.reflect;
 
 import blue.core.common.MultiMap;
+import blue.core.reflect.BeanConstructor;
 import blue.core.reflect.BeanField;
 import blue.core.reflect.BeanMethod;
 import blue.core.reflect.JavaBean;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -24,7 +30,7 @@ import java.util.Set;
  * @author Jin Zheng
  * @since 1.0 2020-07-24
  */
-public class DefaultJavaBean implements JavaBean
+public class DefaultJavaBean extends DefaultAnnotationOperation implements JavaBean
 {
 	private static Logger logger = LoggerFactory.getLogger(DefaultJavaBean.class);
 	private static final Set<String> METHOD_SET = Set.of("wait", "equals", "toString", "hashCode", "getClass",
@@ -36,8 +42,9 @@ public class DefaultJavaBean implements JavaBean
 	private List<Class<?>> superClassList;
 	private List<Class<?>> interfaceList;
 
-	private Map<Class<?>, Annotation> annotationMap;
-	private List<Annotation> annotationList;
+	private Map<ParamClassKey, BeanConstructor> constructorMap;
+	private List<BeanConstructor> constructorList;
+	private final Cache<ParamClassKey, BeanConstructor> constructorCache;
 
 	private Map<String, BeanMethod> getterMap;
 	private MultiMap<String, BeanMethod> setterMap;
@@ -53,16 +60,22 @@ public class DefaultJavaBean implements JavaBean
 
 	public DefaultJavaBean(Object target, Class<?> targetClass)
 	{
+		super(targetClass);
 		this.target = target;
 		this.targetClass = targetClass;
 		this.parseClass();
 		if (logger.isDebugEnabled())
 		{
 			logger.debug("class: {}, super classes: {}, interfaces: {}, annotations: {}",
-					this.getName(), superClassList, interfaceList, annotationList);
+					this.getName(), superClassList, interfaceList, this.getAnnotations());
 		}
+		this.parseConstructor();
 		this.parseMethod();
 		this.parseField();
+		this.constructorCache = Caffeine.newBuilder()
+				.expireAfterAccess(Duration.ofHours(1))
+				.maximumSize(10_000)
+				.build();
 	}
 
 	@Override
@@ -84,36 +97,64 @@ public class DefaultJavaBean implements JavaBean
 	}
 
 	@Override
+	public List<BeanConstructor> getAllConstructors()
+	{
+		return constructorList;
+	}
+
+	@Override
+	public BeanConstructor getConstructor(Class<?>... classes)
+	{
+		ParamClassKey key = new ParamClassKey(classes);
+		BeanConstructor constructor = constructorMap.get(key);
+		if (constructor != null)
+			return constructor;
+
+		constructor = constructorCache.getIfPresent(key);
+		if (constructor != null)
+			return constructor;
+
+		try
+		{
+			Constructor<?> cons = targetClass.getConstructor(classes);
+			constructor = new DefaultBeanConstructor(cons, superClassList);
+			constructorCache.put(key, constructor);
+		}
+		catch (NoSuchMethodException e)
+		{
+			logger.warn("There is no constructor, class: {}, param classes: {}",
+					targetClass.getName(), Arrays.toString(classes));
+		}
+		return constructor;
+	}
+
+	@Override
+	public Object newInstance(Object...params) throws InstantiationException, IllegalAccessException,
+			IllegalArgumentException, InvocationTargetException
+	{
+		Class<?>[] classes = this.getParamClasses(params);
+		BeanConstructor constructor = this.getConstructor(classes);
+		if (constructor == null)
+			return null;
+
+		return constructor.newInstance(params);
+	}
+
+	@Override
+	public Object newInstanceQuietly(Object...params)
+	{
+		Class<?>[] classes = this.getParamClasses(params);
+		BeanConstructor constructor = this.getConstructor(classes);
+		if (constructor == null)
+			return null;
+
+		return constructor.newInstanceQuietly(params);
+	}
+
+	@Override
 	public List<BeanMethod> getAllMethods()
 	{
 		return allMethodList;
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public <T extends Annotation> T getDeclaredAnnotation(Class<T> annotationClass)
-	{
-		return targetClass.getDeclaredAnnotation(annotationClass);
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public <T extends Annotation> T getAnnotation(Class<T> annotationClass)
-	{
-		return (T) annotationMap.get(annotationClass);
-	}
-
-	@Override
-	public List<Annotation> getDeclaredAnnotations()
-	{
-		Annotation[] annotations = targetClass.getDeclaredAnnotations();
-		return Arrays.asList(annotations);
-	}
-
-	@Override
-	public List<Annotation> getAnnotations()
-	{
-		return annotationList;
 	}
 
 	@Override
@@ -132,24 +173,22 @@ public class DefaultJavaBean implements JavaBean
 	{
 		List<Class<?>> superList = new ArrayList<>();
 		List<Class<?>> interList = new ArrayList<>();
-		Map<Class<?>, Annotation> annoMap = new HashMap<>();
-		List<Annotation> annoList = new ArrayList<>();
-		this.parseSuperClass(targetClass, superList, interList, annoMap, annoList);
+		Map<Class<?>, Annotation> annotationMap = new HashMap<>();
+		this.parseSuperClass(targetClass, superList, interList, annotationMap);
 		for (var cls : superList)
 		{
 			for (var inter : cls.getInterfaces())
 			{
-				this.parseSuperClass(inter, superList, interList, annoMap, annoList);
+				this.parseSuperClass(inter, superList, interList, annotationMap);
 			}
 		}
 		this.superClassList = List.copyOf(superList);
 		this.interfaceList = List.copyOf(interList);
-		this.annotationMap = Map.copyOf(annoMap);
-		this.annotationList = List.copyOf(annoList);
+		this.initAnnotationMap(annotationMap);
 	}
 
 	private void parseSuperClass(Class<?> cls, List<Class<?>> superList, List<Class<?>> interList,
-	                             Map<Class<?>, Annotation> annoMap, List<Annotation> annoList)
+	                             Map<Class<?>, Annotation> annotationMap)
 	{
 		Queue<Class<?>> queue = new LinkedList<>();
 		queue.offer(cls);
@@ -167,22 +206,35 @@ public class DefaultJavaBean implements JavaBean
 			{
 				superList.add(clazz);
 			}
-			this.parseAnnotation(clazz, annoMap, annoList);
+			this.parseAnnotation(clazz, annotationMap);
 			queue.offer(clazz.getSuperclass());
 		}
 	}
 
-	private void parseAnnotation(Class<?> clazz, Map<Class<?>, Annotation> annoMap, List<Annotation> annoList)
+	private void parseAnnotation(Class<?> clazz, Map<Class<?>, Annotation> annotationMap)
 	{
 		Annotation[] annotations = clazz.getDeclaredAnnotations();
 		for (var annotation : annotations)
 		{
-			if (annoMap.containsKey(annotation.annotationType()))
+			if (annotationMap.containsKey(annotation.annotationType()))
 				continue;
 
-			annoMap.put(annotation.annotationType(), annotation);
-			annoList.add(annotation);
+			annotationMap.put(annotation.annotationType(), annotation);
 		}
+	}
+
+	private void parseConstructor()
+	{
+		Map<ParamClassKey, BeanConstructor> consMap = new HashMap<>();
+		Constructor<?>[] constructors = targetClass.getConstructors();
+		for (var constructor : constructors)
+		{
+			BeanConstructor beanConstructor = new DefaultBeanConstructor(constructor, superClassList);
+			ParamClassKey key = new ParamClassKey(constructor.getParameterTypes());
+			consMap.put(key, beanConstructor);
+		}
+		this.constructorMap = Map.copyOf(consMap);
+		this.constructorList = List.copyOf(consMap.values());
 	}
 
 	private void parseMethod()
@@ -293,6 +345,19 @@ public class DefaultJavaBean implements JavaBean
 
 			map.put(field.getName(), field);
 		}
+	}
+
+	private Class<?>[] getParamClasses(Object...params)
+	{
+		if (params.length == 0)
+			return new Class<?>[0];
+
+		Class<?>[] classes = new Class<?>[params.length];
+		for (int i = 0; i < params.length; i++)
+		{
+			classes[i] = params[i].getClass();
+		}
+		return classes;
 	}
 
 }

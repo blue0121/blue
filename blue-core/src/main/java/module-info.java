@@ -12,6 +12,7 @@ module blue.core
 	requires transitive org.apache.logging.log4j;
 	requires snappy.java;
 	requires fastjson;
+	requires com.github.benmanes.caffeine;
 
 	exports blue.core.common;
 	exports blue.core.convert;

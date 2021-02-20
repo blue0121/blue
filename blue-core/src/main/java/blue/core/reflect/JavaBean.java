@@ -2,6 +2,7 @@ package blue.core.reflect;
 
 import blue.internal.core.reflect.DefaultJavaBean;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
 
@@ -43,6 +44,39 @@ public interface JavaBean extends AnnotationOperation, ColumnNameOperation
 	 * @return
 	 */
 	Object getTarget();
+
+	/**
+	 * get all constructors
+	 *
+	 * @return
+	 */
+	List<BeanConstructor> getAllConstructors();
+
+	/**
+	 * get constructor by parameter class type
+	 * @param classes
+	 * @return
+	 */
+	BeanConstructor getConstructor(Class<?>...classes);
+
+	/**
+	 * new instance for this class, and throw exception
+	 * @param params
+	 * @return
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws InvocationTargetException
+	 */
+	Object newInstance(Object...params) throws InstantiationException, IllegalAccessException,
+			IllegalArgumentException, InvocationTargetException;
+
+	/**
+	 * new instance for this class, when exception return null
+	 * @param params
+	 * @return
+	 */
+	Object newInstanceQuietly(Object...params);
 
 	/**
 	 * get all methods

@@ -1,63 +1,52 @@
 package blue.core.common;
 
-import java.util.LinkedList;
+import blue.internal.core.common.DefaultStack;
 
 /**
  * 栈
- * 
- * @author zhengj
- * @since 2013-6-18 1.0
+ *
+ * @author Jin Zheng
+ * @since 1.0 2021-01-22
  */
-public class Stack<T>
+public interface Stack<T>
 {
-	private final LinkedList<T> list;
-	
-	public Stack()
+	/**
+	 * 创建栈
+	 *
+	 * @param <T>
+	 * @return
+	 */
+	static <T> Stack<T> create()
 	{
-		list = new LinkedList<T>();
+		return new DefaultStack<>();
 	}
-	
+
 	/**
 	 * 出栈，空栈则返回 null
 	 * 
 	 * @return 出栈，空栈则返回 null
 	 */
-	public T pop()
-	{
-		if (list.isEmpty())
-			return null;
-		else
-			return list.pop();
-	}
+	T pop();
 	
 	/**
 	 * 入栈
 	 * 
 	 * @param o 入栈元素
 	 */
-	public void push(T o)
-	{
-		list.push(o);
-	}
+	void push(T o);
 	
 	/**
 	 * 返回栈顶元素，空栈则返回 null
 	 * 
 	 * @return 栈顶元素，空栈则返回 null
 	 */
-	public T peek()
-	{
-		return list.peek();
-	}
+	T peek();
 	
 	/**
 	 * 返回栈元素的个数
 	 * 
 	 * @return 栈元素的个数
 	 */
-	public int size()
-	{
-		return list.size();
-	}
+	int size();
 	
 }

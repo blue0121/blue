@@ -1,27 +1,13 @@
 package blue.core.reflect;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 
 /**
  * @author Jin Zheng
  * @since 1.0 2021-01-27
  */
-public interface BeanMethod extends AnnotationOperation, NameOperation
+public interface BeanMethod extends ExecutableOperation
 {
-
-	/**
-	 * parameter class list
-	 *
-	 * @return
-	 */
-	List<Class<?>> getParamClassList();
-
-	/**
-	 * method parameter list
-	 * @return
-	 */
-	List<MethodParam> getParamList();
 
 	/**
 	 * return class
@@ -29,13 +15,6 @@ public interface BeanMethod extends AnnotationOperation, NameOperation
 	 * @return
 	 */
 	Class<?> getReturnClass();
-
-	/**
-	 * modifier
-	 *
-	 * @return
-	 */
-	int getModifiers();
 
 	/**
 	 * invoke method with target object, and throw exception

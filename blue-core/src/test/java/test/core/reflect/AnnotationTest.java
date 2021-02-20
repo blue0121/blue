@@ -1,5 +1,6 @@
 package test.core.reflect;
 
+import blue.core.reflect.BeanConstructor;
 import blue.core.reflect.BeanMethod;
 import blue.core.reflect.JavaBean;
 import org.junit.jupiter.api.Assertions;
@@ -48,6 +49,18 @@ public class AnnotationTest
 		Assertions.assertFalse(method.isSetter());
 		Assertions.assertNull(method.getDeclaredAnnotation(MoveAction.class));
 		Assertions.assertNotNull(method.getAnnotation(MoveAction.class));
+	}
+
+	@Test
+	public void test3()
+	{
+		JavaBean catBean = JavaBean.parse(Cat.class);
+		List<BeanConstructor> constructorList = catBean.getAllConstructors();
+		Assertions.assertEquals(1, constructorList.size());
+		Assertions.assertNull(catBean.getConstructor(Integer.class));
+
+		Cat cat = (Cat) catBean.newInstanceQuietly();
+		Assertions.assertNotNull(cat);
 	}
 
 }
