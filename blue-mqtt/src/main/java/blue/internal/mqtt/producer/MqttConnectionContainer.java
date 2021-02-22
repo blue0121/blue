@@ -1,6 +1,5 @@
 package blue.internal.mqtt.producer;
 
-import blue.core.common.SimpleEntry;
 import blue.core.util.JsonUtil;
 import blue.core.util.WaitUtil;
 import blue.internal.core.message.ProducerListener;
@@ -17,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -28,7 +28,7 @@ public class MqttConnectionContainer
 {
 	private static Logger logger = LoggerFactory.getLogger(MqttConnectionContainer.class);
 
-	private final List<SimpleEntry<String, CallbackConnection>> connectionList = new ArrayList<>();
+	private final List<Map.Entry<String, CallbackConnection>> connectionList = new ArrayList<>();
 	private final String name;
 	private final int count;
 	private final AtomicLong counter = new AtomicLong(1);
@@ -53,7 +53,7 @@ public class MqttConnectionContainer
 			mqtt.setClientId(id);
 			CallbackConnection connection = mqtt.callbackConnection();
 			connection.listener(listener);
-			connectionList.add(new SimpleEntry<>(id, connection));
+			connectionList.add(Map.entry(id, connection));
 			connection.connect(new SyncCallback<>(latch));
 			logger.info("MQTT '{}' connect: {}, clientId: {}", name, mqtt.getHost(), id);
 		}
