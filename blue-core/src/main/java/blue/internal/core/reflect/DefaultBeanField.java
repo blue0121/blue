@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +15,7 @@ import java.util.Map;
  * @author Jin Zheng
  * @since 1.0 2020-07-24
  */
-public class DefaultBeanField implements BeanField
+public class DefaultBeanField extends DefaultAnnotationOperation implements BeanField
 {
 	private static Logger logger = LoggerFactory.getLogger(DefaultBeanField.class);
 
@@ -26,21 +25,69 @@ public class DefaultBeanField implements BeanField
 	private final BeanMethod getterMethod;
 	private final BeanMethod setterMethod;
 
+	private Map<Class<?>, Annotation> getterAnnotationMap;
+	private List<Annotation> getterAnnotationList;
+	private Map<Class<?>, Annotation> setterAnnotationMap;
+	private List<Annotation> setterAnnotationList;
+
 	public DefaultBeanField(String fieldName, Object target, Field field,
 	                        BeanMethod getterMethod, BeanMethod setterMethod)
 	{
+		super(field);
 		this.fieldName = fieldName;
 		this.target = target;
 		this.field = field;
 		this.getterMethod = getterMethod;
 		this.setterMethod = setterMethod;
+		this.parseAnnotation();
 		if (logger.isDebugEnabled())
 		{
-			logger.debug("field: {}, {}, setter: {}, getter: {}, annotations: {}", fieldName,
-					field != null, setterMethod != null ? setterMethod.getName() : null,
+			logger.debug("field: {}, {}, setter: {}, getter: {}, field annotations: {}," +
+						" getter annotations: {}, setter annotations: {}",
+					fieldName, field != null, setterMethod != null ? setterMethod.getName() : null,
 					getterMethod != null ? getterMethod.getName() : null,
-					this.getAnnotations());
+					this.getAnnotations(), getterAnnotationList, setterAnnotationList);
 		}
+	}
+
+	private void parseAnnotation()
+	{
+		Map<Class<?>, Annotation> annotationMap = new HashMap<>();
+		if (field != null)
+		{
+			Annotation[] annotations = field.getAnnotations();
+			for (Annotation annotation : annotations)
+			{
+				annotationMap.put(annotation.annotationType(), annotation);
+			}
+		}
+		this.initAnnotationMap(annotationMap);
+
+		var getterMap = this.parseAnnotationWithMethod(annotationMap, getterMethod);
+		this.getterAnnotationMap = Map.copyOf(getterMap);
+		this.getterAnnotationList = List.copyOf(getterMap.values());
+
+		var setterMap = this.parseAnnotationWithMethod(annotationMap, setterMethod);
+		this.setterAnnotationMap = Map.copyOf(setterMap);
+		this.setterAnnotationList = List.copyOf(setterMap.values());
+	}
+
+	private Map<Class<?>, Annotation> parseAnnotationWithMethod(Map<Class<?>, Annotation> annotationMap,
+	                                                            BeanMethod method)
+	{
+		Map<Class<?>, Annotation> methodAnnotationMap = new HashMap<>();
+		if (method != null)
+		{
+			method.getAnnotations().forEach(e -> methodAnnotationMap.put(e.annotationType(), e));
+		}
+		for (var entry : annotationMap.entrySet())
+		{
+			if (methodAnnotationMap.containsKey(entry.getKey()))
+				continue;
+
+			methodAnnotationMap.put(entry.getKey(), entry.getValue());
+		}
+		return methodAnnotationMap;
 	}
 
 	@Override
@@ -130,78 +177,30 @@ public class DefaultBeanField implements BeanField
 		return setterMethod;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends Annotation> T getDeclaredAnnotation(Class<T> annotationClass)
+	public <T extends Annotation> T getGetterAnnotation(Class<T> annotationClass)
 	{
-		T annotation = null;
-		if (setterMethod == null)
-		{
-			annotation = setterMethod.getDeclaredAnnotation(annotationClass);
-		}
-		if (annotation == null && field != null)
-		{
-			annotation = field.getDeclaredAnnotation(annotationClass);
-		}
-		return annotation;
+		return (T) getterAnnotationMap.get(annotationClass);
 	}
 
 	@Override
-	public <T extends Annotation> T getAnnotation(Class<T> annotationClass)
+	public List<Annotation> getGetterAnnotations()
 	{
-		T annotation = null;
-		if (setterMethod != null)
-		{
-			annotation = setterMethod.getAnnotation(annotationClass);
-		}
-		if (annotation == null && field != null)
-		{
-			annotation = field.getAnnotation(annotationClass);
-		}
-		return annotation;
+		return getterAnnotationList;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T extends Annotation> T getSetterAnnotation(Class<T> annotationClass)
+	{
+		return (T) setterAnnotationMap.get(annotationClass);
 	}
 
 	@Override
-	public List<Annotation> getDeclaredAnnotations()
+	public List<Annotation> getSetterAnnotations()
 	{
-		Map<Class<?>, Annotation> map = new HashMap<>();
-		if (setterMethod != null)
-		{
-			List<Annotation> list = setterMethod.getDeclaredAnnotations();
-			this.mergeAnnotationList(map, list);
-		}
-		if (field != null)
-		{
-			List<Annotation> list = Arrays.asList(field.getDeclaredAnnotations());
-			this.mergeAnnotationList(map, list);
-		}
-		return List.copyOf(map.values());
+		return setterAnnotationList;
 	}
 
-	private void mergeAnnotationList(Map<Class<?>, Annotation> map, List<Annotation> list)
-	{
-		for (var annotation : list)
-		{
-			if (map.containsKey(annotation.annotationType()))
-				continue;
-
-			map.put(annotation.annotationType(), annotation);
-		}
-	}
-
-	@Override
-	public List<Annotation> getAnnotations()
-	{
-		Map<Class<?>, Annotation> map = new HashMap<>();
-		if (setterMethod != null)
-		{
-			List<Annotation> list = setterMethod.getAnnotations();
-			this.mergeAnnotationList(map, list);
-		}
-		if (field != null)
-		{
-			List<Annotation> list = Arrays.asList(field.getAnnotations());
-			this.mergeAnnotationList(map, list);
-		}
-		return List.copyOf(map.values());
-	}
 }

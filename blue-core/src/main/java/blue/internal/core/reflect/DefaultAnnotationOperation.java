@@ -26,9 +26,13 @@ public abstract class DefaultAnnotationOperation implements AnnotationOperation
 	@Override
 	public final <T extends Annotation> T getDeclaredAnnotation(Class<T> annotationClass)
 	{
+		if (annotatedElement == null)
+			return null;
+
 		return annotatedElement.getDeclaredAnnotation(annotationClass);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public final <T extends Annotation> T getAnnotation(Class<T> annotationClass)
 	{
@@ -38,6 +42,9 @@ public abstract class DefaultAnnotationOperation implements AnnotationOperation
 	@Override
 	public final List<Annotation> getDeclaredAnnotations()
 	{
+		if (annotatedElement == null)
+			return List.of();
+
 		Annotation[] annotations = annotatedElement.getDeclaredAnnotations();
 		return Arrays.asList(annotations);
 	}

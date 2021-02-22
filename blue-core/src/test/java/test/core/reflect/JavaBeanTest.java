@@ -35,13 +35,13 @@ public class JavaBeanTest
 		Assertions.assertEquals("getUsername", field1.getGetterMethod().getName());
 		Assertions.assertEquals("setUsername", field1.getSetterMethod().getName());
 		Assertions.assertEquals("username", field1.getColumnName());
-		Assertions.assertNotNull(field1.getAnnotation(CoreTest.class));
+		Assertions.assertNotNull(field1.getSetterAnnotation(CoreTest.class));
 		BeanField field2 = fieldMap.get("password");
 		Assertions.assertNotNull(field2);
 		Assertions.assertEquals("getPassword", field2.getGetterMethod().getName());
 		Assertions.assertEquals("setPassword", field2.getSetterMethod().getName());
 		Assertions.assertEquals("password", field2.getColumnName());
-		Assertions.assertNotNull(field2.getAnnotation(CoreTest.class));
+		Assertions.assertNotNull(field2.getSetterAnnotation(CoreTest.class));
 		field1.setFieldValue("name");
 		field2.setFieldValue("pass");
 		Assertions.assertEquals("name", model.getUsername());

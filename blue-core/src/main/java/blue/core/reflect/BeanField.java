@@ -1,5 +1,8 @@
 package blue.core.reflect;
 
+import java.lang.annotation.Annotation;
+import java.util.List;
+
 /**
  * @author Jin Zheng
  * @since 1.0 2020-07-24
@@ -39,5 +42,37 @@ public interface BeanField extends AnnotationOperation, ColumnNameOperation
 	 * @return
 	 */
 	BeanMethod getSetterMethod();
+
+	/**
+	 * annotation in this element, Getter Method, Field, with super class and interface
+	 *
+	 * @param annotationClass
+	 * @param <T>
+	 * @return
+	 */
+	<T extends Annotation> T getGetterAnnotation(Class<T> annotationClass);
+
+	/**
+	 * annotations in this element, Getter Method, Field, with super class and interface
+	 *
+	 * @return
+	 */
+	List<Annotation> getGetterAnnotations();
+
+	/**
+	 * annotation in this element, Setter Method, Field, with super class and interface
+	 *
+	 * @param annotationClass
+	 * @param <T>
+	 * @return
+	 */
+	<T extends Annotation> T getSetterAnnotation(Class<T> annotationClass);
+
+	/**
+	 * annotations in this element, Setter Method, Field, with super class and interface
+	 *
+	 * @return
+	 */
+	List<Annotation> getSetterAnnotations();
 
 }
