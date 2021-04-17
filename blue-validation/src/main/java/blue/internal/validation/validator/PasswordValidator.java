@@ -3,9 +3,9 @@ package blue.internal.validation.validator;
 
 import blue.validation.annotation.Password;
 import blue.validation.annotation.PasswordType;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
 import java.util.regex.Pattern;
 
 public class PasswordValidator implements ConstraintValidator<Password, String>

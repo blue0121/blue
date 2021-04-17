@@ -2,7 +2,7 @@ module blue.validation
 {
 	requires blue.core;
 	requires fastjson;
-	requires transitive java.validation;
+	requires transitive jakarta.validation;
 	requires transitive com.fasterxml.classmate;
 
 	exports blue.validation;

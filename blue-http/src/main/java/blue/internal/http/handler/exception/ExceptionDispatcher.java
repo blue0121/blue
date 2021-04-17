@@ -6,9 +6,9 @@ import blue.http.exception.HttpServerException;
 import blue.internal.http.handler.HandlerResponse;
 import com.alibaba.fastjson.JSONException;
 import io.netty.handler.codec.http.HttpResponseStatus;
+import jakarta.validation.ValidationException;
 import org.springframework.beans.BeansException;
 
-import javax.validation.ValidationException;
 import java.util.HashMap;
 import java.util.Map;
 

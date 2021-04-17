@@ -5,10 +5,9 @@ import blue.http.annotation.BodyJson;
 import blue.http.annotation.Http;
 import blue.http.annotation.HttpMethod;
 import blue.http.annotation.Validated;
+import jakarta.validation.ValidationException;
 import org.springframework.stereotype.Controller;
 import test.http.model.User;
-
-import javax.validation.ValidationException;
 
 
 /**

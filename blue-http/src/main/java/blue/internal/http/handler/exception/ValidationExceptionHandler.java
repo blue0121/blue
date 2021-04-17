@@ -3,8 +3,7 @@ package blue.internal.http.handler.exception;
 import blue.core.common.ErrorCode;
 import blue.internal.http.handler.HandlerResponse;
 import io.netty.handler.codec.http.HttpResponseStatus;
-
-import javax.validation.ValidationException;
+import jakarta.validation.ValidationException;
 
 /**
  * @author Jin Zheng

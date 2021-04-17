@@ -2,9 +2,8 @@ package blue.internal.validation.validator;
 
 
 import blue.validation.annotation.StringIn;
-
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
 public class StringInValidator implements ConstraintValidator<StringIn, String>
 {

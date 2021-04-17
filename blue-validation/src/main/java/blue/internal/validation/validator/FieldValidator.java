@@ -1,7 +1,5 @@
 package blue.internal.validation.validator;
 
-
-
 import blue.core.util.ReflectionUtil;
 
 import java.lang.reflect.Method;

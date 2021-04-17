@@ -2,11 +2,10 @@ package test.validation.annotation;
 
 import blue.validation.ValidationUtil;
 import blue.validation.group.UpdateModel;
+import jakarta.validation.ValidationException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import test.validation.model.Group;
-
-import javax.validation.ValidationException;
 
 public class FieldNotEqualTest
 {

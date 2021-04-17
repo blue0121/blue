@@ -11,13 +11,12 @@ import blue.internal.http.handler.HandlerFactory;
 import blue.internal.http.mapping.HandlerMappingFactory;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import jakarta.validation.ValidationException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import test.http.BaseTest;
-
-import javax.validation.ValidationException;
 
 /**
  * @author Jin Zheng

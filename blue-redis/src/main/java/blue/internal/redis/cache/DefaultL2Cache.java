@@ -374,7 +374,7 @@ public class DefaultL2Cache implements L2Cache,
 		return (CompletableFuture<LocalValueWrapper>) future;
 	}
 	@Override
-	public CompletableFuture<Map<String, LocalValueWrapper>> asyncLoadAll(Iterable<? extends String> keys, Executor executor)
+	public CompletableFuture<Map<String, LocalValueWrapper>> asyncLoadAll(Set<? extends String> keys, Executor executor)
 	{
 		List<String> keyList = new ArrayList<>();
 		List<String> nameList = new ArrayList<>();

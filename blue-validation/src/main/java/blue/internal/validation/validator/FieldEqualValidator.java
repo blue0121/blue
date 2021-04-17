@@ -1,10 +1,10 @@
 package blue.internal.validation.validator;
 
 import blue.validation.annotation.FieldEqual;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
+import jakarta.validation.ValidationException;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
-import javax.validation.ValidationException;
 import java.lang.reflect.Method;
 import java.util.Map;
 
