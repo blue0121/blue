@@ -9,6 +9,7 @@
 	<packaging>pom</packaging>
 	<version>4.0.0</version>
 	<modules>
+		<module>blue-base</module>
 		<module>blue-core</module>
 		<module>blue-http</module>
 		<module>blue-http-ext</module>
@@ -20,7 +21,7 @@
 		<module>blue-mqtt</module>
 		<module>blue-jms</module>
 		<module>blue-kafka</module>
-	</modules>
+    </modules>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
