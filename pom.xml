@@ -33,7 +33,6 @@
 		<log4j2.version>2.14.1</log4j2.version>
 		<fastjson.version>1.2.76</fastjson.version>
 		<spring.version>5.3.6</spring.version>
-		<cglib.version>3.3.0</cglib.version>
 		<aspectjweaver.version>1.9.6</aspectjweaver.version>
 		<caffeine.version>3.0.1</caffeine.version>
 		<snappy.version>1.1.8.4</snappy.version>
