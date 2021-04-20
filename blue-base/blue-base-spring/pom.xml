@@ -100,6 +100,7 @@
                         --illegal-access=warn
                         --add-exports blue.base.spring/test.base.spring.dict=spring.beans,blue.base.core
                         --add-exports blue.base.spring/test.base.spring.model=spring.beans
+                        --add-exports blue.base.spring/test.base.spring.http=spring.beans
                     </argLine>
                 </configuration>
             </plugin>

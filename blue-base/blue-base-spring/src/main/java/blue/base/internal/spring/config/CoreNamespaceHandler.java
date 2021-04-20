@@ -10,7 +10,7 @@ import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
  */
 public class CoreNamespaceHandler extends NamespaceHandlerSupport
 {
-	public static final String NS = "http://blue.com/schema/core";
+	public static final String NS = "http://blue.com/schema/base";
 
 	public CoreNamespaceHandler()
 	{
@@ -23,7 +23,7 @@ public class CoreNamespaceHandler extends NamespaceHandlerSupport
 		this.registerBeanDefinitionParser("task-executor", new TaskExecutorParser());
 		this.registerBeanDefinitionParser("task-scheduler", new TaskSchedulerParser());
 		this.registerBeanDefinitionParser("spring-bean", new SpringBeanParser());
-		/*this.registerBeanDefinitionParser("encryption-placeholder", new EncryptionPlaceholderParser());
-		this.registerBeanDefinitionParser("http-invoker", new HttpInvokerParser());*/
+		/*this.registerBeanDefinitionParser("encryption-placeholder", new EncryptionPlaceholderParser());*/
+		this.registerBeanDefinitionParser("http-client", new HttpClientParser());
 	}
 }

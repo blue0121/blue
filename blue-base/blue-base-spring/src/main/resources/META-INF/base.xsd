@@ -60,9 +60,9 @@
 			<xsd:attribute name="id" type="xsd:ID" use="required" />
 			<xsd:attribute name="locations" type="xsd:string" use="optional" />
 		</xsd:complexType>
-	</xsd:element>
+	</xsd:element>-->
 
-	<xsd:element name="http-invoker">
+	<xsd:element name="http-client">
 		<xsd:complexType>
 			<xsd:all minOccurs="0">
 				<xsd:element name="default-headers">
@@ -77,8 +77,8 @@
 			<xsd:attribute name="base-url" type="xsd:string" />
 			<xsd:attribute name="proxy" type="xsd:string" />
 			<xsd:attribute name="timeout" type="xsd:string" default="60000" />
-			<xsd:attribute name="ref-task-executor" type="xsd:string" />
+			<xsd:attribute name="ref-executor" type="xsd:string" />
 		</xsd:complexType>
-	</xsd:element>-->
+	</xsd:element>
 	
 </xsd:schema>

@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:core="http://blue.com/schema/core"
+       xmlns:base="http://blue.com/schema/base"
        xsi:schemaLocation="
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://blue.com/schema/core  http://blue.com/schema/core.xsd">
+		http://blue.com/schema/base  http://blue.com/schema/base.xsd">
 	
-	<core:task-executor id="taskExecutor" />
+	<base:task-executor id="taskExecutor" />
 	
-	<core:http-invoker id="httpInvoker" base-url="http://localhost:10000" timeout="10000"
-	                ref-task-executor="taskExecutor">
-		<core:default-headers>
+	<base:http-client id="httpInvoker" base-url="http://localhost:10000" timeout="10000"
+	                ref-executor="taskExecutor">
+		<base:default-headers>
 			<map>
 				<entry key="Content-Type" value="application/json" />
 			</map>
-		</core:default-headers>
-	</core:http-invoker>
+		</base:default-headers>
+	</base:http-client>
 
 </beans>
