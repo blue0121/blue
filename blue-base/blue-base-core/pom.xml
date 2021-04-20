@@ -96,6 +96,7 @@
                 <configuration>
                     <argLine>
                         --illegal-access=warn
+                        --add-opens blue.base.core/test.base.core.model=fastjson,ALL-UNNAMED
                     </argLine>
                 </configuration>
             </plugin>

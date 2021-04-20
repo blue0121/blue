@@ -9,4 +9,10 @@ module blue.base.core {
 	requires com.github.benmanes.caffeine;
 
 	exports blue.base.core.collection;
+	exports blue.base.core.common;
+	exports blue.base.core.dict;
+	exports blue.base.core.file;
+	exports blue.base.core.util;
+
+	exports blue.base.internal.core.dict to fastjson;
 }

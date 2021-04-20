@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:core="http://blue.com/schema/core"
+       xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://blue.com/schema/core  http://blue.com/schema/core.xsd">
+	
+	<core:encryption-placeholder id="encryptionPlaceholder" locations="classpath:/resource.properties" />
+	
+	<core:spring-bean id="springBean"/>
+	
+	<bean id="user" class="test.core.model.User">
+		<property name="name" value="${name}" />
+		<property name="password" value="${password}" />
+	</bean>
+
+</beans>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:base="http://blue.com/schema/base"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://blue.com/schema/base  http://blue.com/schema/base.xsd">
+	
+	<base:dict-post-processor id="dictPostProcessor" scan-packages="test.base.spring.dict" />
+
+</beans>

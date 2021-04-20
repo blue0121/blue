@@ -2,7 +2,8 @@ package blue.base.internal.core.collection;
 
 import blue.base.core.collection.Stack;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 栈
@@ -11,39 +12,40 @@ import java.util.LinkedList;
  * @since 1.0 2021-01-22
  */
 public class DefaultStack<T> implements Stack<T> {
-	private final LinkedList<T> list;
+	private final List<T> array;
 
 	public DefaultStack() {
-		list = new LinkedList<T>();
+		array = new ArrayList<>();
 	}
 
 	@Override
 	public T pop() {
-		if (list.isEmpty()) {
+		if (array.isEmpty()) {
 			return null;
 		}
-		else {
-			return list.pop();
-		}
+		return array.remove(array.size() - 1);
 	}
 
 	@Override
 	public void push(T o) {
-		list.push(o);
+		array.add(o);
 	}
 
 	@Override
 	public T peek() {
-		return list.peek();
+		if (array.isEmpty()) {
+			return null;
+		}
+		return array.get(array.size() - 1);
 	}
 
 	@Override
 	public int size() {
-		return list.size();
+		return array.size();
 	}
 
 	@Override
 	public boolean isEmpty() {
-		return list.isEmpty();
+		return array.isEmpty();
 	}
 }

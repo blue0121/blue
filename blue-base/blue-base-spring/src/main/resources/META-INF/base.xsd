@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<xsd:schema xmlns="http://blue.com/schema/base"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:beans="http://www.springframework.org/schema/beans"
+            targetNamespace="http://blue.com/schema/base"
+            elementFormDefault="qualified" attributeFormDefault="unqualified">
+	
+	<xsd:import namespace="http://www.springframework.org/schema/beans" />
+	
+	<xsd:element name="dict-post-processor">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="scan-packages" minOccurs="0" maxOccurs="1">
+					<xsd:complexType>
+						<xsd:all>
+							<xsd:element ref="beans:list" />
+						</xsd:all>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+			<xsd:attribute name="id" type="xsd:ID" use="required" />
+			<xsd:attribute name="scan-packages" type="xsd:string" use="optional" />
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="task-executor">
+		<xsd:complexType>
+			<xsd:attribute name="id" type="xsd:ID" use="required" />
+			<xsd:attribute name="core-pool-size" type="xsd:string" default="10" />
+			<xsd:attribute name="max-pool-size" type="xsd:string" default="1000" />
+			<xsd:attribute name="queue-capacity" type="xsd:string" default="10000" />
+			<xsd:attribute name="keep-alive-seconds" type="xsd:string" default="60" />
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="task-scheduler">
+		<xsd:complexType>
+			<xsd:attribute name="id" type="xsd:ID" use="required" />
+			<xsd:attribute name="pool-size" type="xsd:string" default="10" />
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="spring-bean">
+		<xsd:complexType>
+			<xsd:attribute name="id" type="xsd:ID" use="required" />
+		</xsd:complexType>
+	</xsd:element>
+	
+	<!--<xsd:element name="encryption-placeholder">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="locations" minOccurs="0" maxOccurs="1">
+					<xsd:complexType>
+						<xsd:all>
+							<xsd:element ref="beans:list" />
+						</xsd:all>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+			<xsd:attribute name="id" type="xsd:ID" use="required" />
+			<xsd:attribute name="locations" type="xsd:string" use="optional" />
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="http-invoker">
+		<xsd:complexType>
+			<xsd:all minOccurs="0">
+				<xsd:element name="default-headers">
+					<xsd:complexType>
+						<xsd:all>
+							<xsd:element ref="beans:map" />
+						</xsd:all>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:all>
+			<xsd:attribute name="id" type="xsd:ID" use="required" />
+			<xsd:attribute name="base-url" type="xsd:string" />
+			<xsd:attribute name="proxy" type="xsd:string" />
+			<xsd:attribute name="timeout" type="xsd:string" default="60000" />
+			<xsd:attribute name="ref-task-executor" type="xsd:string" />
+		</xsd:complexType>
+	</xsd:element>-->
+	
+</xsd:schema>

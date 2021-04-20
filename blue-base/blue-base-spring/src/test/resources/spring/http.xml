@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:core="http://blue.com/schema/core"
+       xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://blue.com/schema/core  http://blue.com/schema/core.xsd">
+	
+	<core:task-executor id="taskExecutor" />
+	
+	<core:http-invoker id="httpInvoker" base-url="http://localhost:10000" timeout="10000"
+	                ref-task-executor="taskExecutor">
+		<core:default-headers>
+			<map>
+				<entry key="Content-Type" value="application/json" />
+			</map>
+		</core:default-headers>
+	</core:http-invoker>
+
+</beans>
