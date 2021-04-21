@@ -8,6 +8,7 @@ module blue.base.core {
 	requires fastjson;
 	requires com.github.benmanes.caffeine;
 
+	exports blue.base.core.cache;
 	exports blue.base.core.collection;
 	exports blue.base.core.common;
 	exports blue.base.core.dict;
