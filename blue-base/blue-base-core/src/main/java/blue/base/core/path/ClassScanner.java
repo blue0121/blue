@@ -1,7 +1,7 @@
-package blue.base.core.file;
+package blue.base.core.path;
 
 import blue.base.core.util.AssertUtil;
-import blue.base.internal.core.file.DefaultClassScanner;
+import blue.base.internal.core.path.DefaultClassScanner;
 
 import java.util.List;
 

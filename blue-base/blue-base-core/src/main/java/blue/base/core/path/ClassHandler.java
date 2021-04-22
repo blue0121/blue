@@ -1,4 +1,4 @@
-package blue.base.core.file;
+package blue.base.core.path;
 
 import java.io.File;
 import java.io.FileFilter;

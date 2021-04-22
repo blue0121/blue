@@ -1,6 +1,6 @@
-package test.base.core.file;
+package test.base.core.path;
 
-import blue.base.core.file.FilePath;
+import blue.base.core.path.FilePath;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

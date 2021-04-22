@@ -12,10 +12,10 @@ module blue.base.core {
 	exports blue.base.core.collection;
 	exports blue.base.core.common;
 	exports blue.base.core.dict;
-	exports blue.base.core.file;
 	exports blue.base.core.http;
 	exports blue.base.core.id;
 	exports blue.base.core.reflect;
+	exports blue.base.core.path;
 	exports blue.base.core.util;
 
 	exports blue.base.internal.core.dict to fastjson;

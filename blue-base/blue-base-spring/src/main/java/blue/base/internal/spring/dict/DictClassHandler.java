@@ -2,7 +2,7 @@ package blue.base.internal.spring.dict;
 
 import blue.base.core.dict.DictParser;
 import blue.base.core.dict.Dictionary;
-import blue.base.core.file.ClassHandler;
+import blue.base.core.path.ClassHandler;
 
 /**
  * 扫描字典配置

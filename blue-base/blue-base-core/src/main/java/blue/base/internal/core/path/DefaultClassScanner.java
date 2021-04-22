@@ -1,7 +1,7 @@
-package blue.base.internal.core.file;
+package blue.base.internal.core.path;
 
-import blue.base.core.file.ClassHandler;
-import blue.base.core.file.ClassScanner;
+import blue.base.core.path.ClassHandler;
+import blue.base.core.path.ClassScanner;
 import blue.base.core.util.AssertUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

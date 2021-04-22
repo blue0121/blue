@@ -1,6 +1,6 @@
-package blue.base.internal.core.file;
+package blue.base.internal.core.path;
 
-import blue.base.core.file.FilePath;
+import blue.base.core.path.FilePath;
 import blue.base.core.util.AssertUtil;
 
 import java.util.Collection;

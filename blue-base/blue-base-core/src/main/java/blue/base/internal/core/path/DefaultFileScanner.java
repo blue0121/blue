@@ -1,7 +1,7 @@
-package blue.base.internal.core.file;
+package blue.base.internal.core.path;
 
-import blue.base.core.file.FileHandler;
-import blue.base.core.file.FileScanner;
+import blue.base.core.path.FileHandler;
+import blue.base.core.path.FileScanner;
 import blue.base.core.util.AssertUtil;
 
 import java.io.File;
