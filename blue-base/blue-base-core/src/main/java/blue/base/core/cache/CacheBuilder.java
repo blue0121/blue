@@ -2,6 +2,7 @@ package blue.base.core.cache;
 
 import blue.base.internal.core.cache.DefaultCache;
 import blue.base.internal.core.cache.DefaultCacheLoader;
+import blue.base.internal.core.cache.DefaultExpiry;
 import com.github.benmanes.caffeine.cache.Caffeine;
 
 import java.util.concurrent.TimeUnit;
@@ -28,6 +29,11 @@ public class CacheBuilder {
     public CacheBuilder expireAfterAccess(long val, TimeUnit unit) {
         caffeine.expireAfterAccess(val, unit);
         return this;
+    }
+
+    public <K, V> CacheBuilder expire(Expiry<K, V> expiry) {
+		caffeine.expireAfter(new DefaultExpiry<>(expiry));
+		return this;
     }
 
     public CacheBuilder maximumSize(long size) {
