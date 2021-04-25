@@ -3,36 +3,30 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<parent>
-		<artifactId>blue</artifactId>
+		<artifactId>blue-validation</artifactId>
 		<groupId>blue</groupId>
 		<version>4.0.0</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>blue-http</artifactId>
-
+	<artifactId>blue-validation-core</artifactId>
+	
 	<dependencies>
 		<dependency>
 			<groupId>blue</groupId>
-			<artifactId>blue-core</artifactId>
+			<artifactId>blue-base-core</artifactId>
 			<version>${blue.version}</version>
 		</dependency>
 		
 		<dependency>
-			<groupId>blue</groupId>
-			<artifactId>blue-validation-core</artifactId>
-			<version>${blue.version}</version>
+			<groupId>org.hibernate.validator</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>${validator.version}</version>
 		</dependency>
 		
 		<dependency>
-			<groupId>io.netty</groupId>
-			<artifactId>netty-all</artifactId>
-			<version>${netty.version}</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.freemarker</groupId>
-			<artifactId>freemarker</artifactId>
-			<version>${freemarker.version}</version>
+			<groupId>org.apache.tomcat</groupId>
+			<artifactId>tomcat-jasper-el</artifactId>
+			<version>${tomcat.el.version}</version>
 		</dependency>
 		
 		<dependency>
@@ -54,13 +48,6 @@
 			<version>${mockito.version}</version>
 			<scope>test</scope>
 		</dependency>
-		
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-			<version>${spring.version}</version>
-			<scope>test</scope>
-		</dependency>
 	</dependencies>
 	
 	<build>
@@ -79,12 +66,12 @@
 				<configuration>
 					<argLine>
 						--illegal-access=warn
-						--add-exports blue.http/test.http.controller=spring.beans,blue.core
-						--add-exports blue.http/blue.internal.http.message=ALL-UNNAMED
+						--add-exports blue.validation.core/test.validation.core.model=blue.base.core
+						--add-opens blue.validation.core/test.validation.core.model=ALL-UNNAMED
 					</argLine>
 				</configuration>
 			</plugin>
 		</plugins>
 	</build>
-	
+
 </project>

@@ -2,7 +2,7 @@ module blue.http
 {
 	requires java.xml;
 	requires blue.core;
-	requires blue.validation;
+	requires blue.validation.core;
 	requires io.netty.all;
 	requires fastjson;
 	requires freemarker;
