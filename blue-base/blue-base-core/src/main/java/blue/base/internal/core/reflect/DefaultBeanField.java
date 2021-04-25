@@ -93,19 +93,20 @@ public class DefaultBeanField extends DefaultAnnotationOperation implements Bean
 	}
 
 	@Override
-	public Object getFieldValue() {
-		if (target == null) {
-			logger.warn("bean is null");
+	public Object getFieldValue(Object target) {
+		Object tar = target == null ? this.target : target;
+		if (tar == null) {
+			logger.warn("Target is null");
 			return null;
 		}
 
-		Object value = getterMethod != null ? getterMethod.invokeQuietly() : null;
+		Object value = getterMethod != null ? getterMethod.invokeQuietly(tar) : null;
 		if (value == null && field != null) {
 			try {
-				if (!field.canAccess(target)) {
+				if (!field.canAccess(tar)) {
 					field.setAccessible(true);
 				}
-				value = field.get(target);
+				value = field.get(tar);
 			}
 			catch (Exception e) {
 				logger.error("field get error,", e);
@@ -115,23 +116,24 @@ public class DefaultBeanField extends DefaultAnnotationOperation implements Bean
 	}
 
 	@Override
-	public boolean setFieldValue(Object value) {
-		if (target == null || value == null) {
-			logger.warn("bean or value is null");
+	public boolean setFieldValue(Object target, Object value) {
+		Object tar = target == null ? this.target : target;
+		if (tar == null) {
+			logger.warn("Target is null");
 			return false;
 		}
 
 		boolean flag = false;
 		if (setterMethod != null) {
-			setterMethod.invokeQuietly(value);
+			setterMethod.invokeQuietly(tar, value);
 			flag = true;
 		}
 		else if (field != null) {
 			try {
-				if (!field.canAccess(target)) {
+				if (!field.canAccess(tar)) {
 					field.setAccessible(true);
 				}
-				field.set(target, value);
+				field.set(tar, value);
 				flag = true;
 			}
 			catch (Exception e) {

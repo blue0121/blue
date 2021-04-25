@@ -18,22 +18,24 @@ public interface BeanMethod extends ExecutableOperation {
 	/**
 	 * invoke method with target object, and throw exception
 	 *
+	 * @param target
 	 * @param params
 	 * @return
 	 * @throws IllegalAccessException
 	 * @throws IllegalArgumentException
 	 * @throws InvocationTargetException
 	 */
-	Object invoke(Object... params) throws IllegalAccessException,
+	Object invoke(Object target, Object... params) throws IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException;
 
 	/**
 	 * invoke method with target object, when exception return null
 	 *
+	 * @param target
 	 * @param params
 	 * @return
 	 */
-	Object invokeQuietly(Object... params);
+	Object invokeQuietly(Object target, Object... params);
 
 	/**
 	 * represent field

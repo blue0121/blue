@@ -2,6 +2,7 @@ package test.base.core.reflect;
 
 import blue.base.core.reflect.BeanField;
 import blue.base.core.reflect.JavaBean;
+import blue.base.core.reflect.JavaBeanCache;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import test.base.core.model.CoreTest;
@@ -39,12 +40,12 @@ public class JavaBeanTest {
 		Assertions.assertEquals("setPassword", field2.getSetterMethod().getName());
 		Assertions.assertEquals("password", field2.getColumnName());
 		Assertions.assertNotNull(field2.getSetterAnnotation(CoreTest.class));
-		field1.setFieldValue("name");
-		field2.setFieldValue("pass");
+		field1.setFieldValue(null, "name");
+		field2.setFieldValue(null, "pass");
 		Assertions.assertEquals("name", model.getUsername());
 		Assertions.assertEquals("pass", model.getPassword());
-		Assertions.assertEquals("name", field1.getFieldValue());
-		Assertions.assertEquals("pass", field2.getFieldValue());
+		Assertions.assertEquals("name", field1.getFieldValue(null));
+		Assertions.assertEquals("pass", field2.getFieldValue(null));
 	}
 
 	@Test
@@ -66,12 +67,19 @@ public class JavaBeanTest {
 		Assertions.assertEquals("getPassword", field2.getGetterMethod().getName());
 		Assertions.assertEquals("setPassword", field2.getSetterMethod().getName());
 		Assertions.assertNotNull(field2.getAnnotation(CoreTest.class));
-		field1.setFieldValue("name");
-		field2.setFieldValue("pass");
+		field1.setFieldValue(null, "name");
+		field2.setFieldValue(null,"pass");
 		Assertions.assertEquals("name", model.getUsername());
 		Assertions.assertEquals("pass", model.getPassword());
-		Assertions.assertEquals("name", field1.getFieldValue());
-		Assertions.assertEquals("pass", field2.getFieldValue());
+		Assertions.assertEquals("name", field1.getFieldValue(null));
+		Assertions.assertEquals("pass", field2.getFieldValue(null));
+	}
+
+	@Test
+	public void testCache() {
+		JavaBean bean1 = JavaBeanCache.getJavaBean(TestModel2.class);
+		JavaBean bean2 = JavaBeanCache.getJavaBean(TestModel2.class);
+		Assertions.assertTrue(bean1 == bean2);
 	}
 
 }

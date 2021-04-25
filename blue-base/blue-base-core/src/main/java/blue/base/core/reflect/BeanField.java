@@ -20,18 +20,20 @@ public interface BeanField extends AnnotationOperation, ColumnNameOperation {
 	 * 1. invoke getter method<br/>
 	 * 2. field.setAccessible(true) & field.get(target)
 	 *
+	 * @param target
 	 * @return
 	 */
-	Object getFieldValue();
+	Object getFieldValue(Object target);
 
 	/**
 	 * 1. invoke setter method<br/>
 	 * 2. field.setAccessible(true) & field.set(target, value)
 	 *
+	 * @param target
 	 * @param value
 	 * @return
 	 */
-	boolean setFieldValue(Object value);
+	boolean setFieldValue(Object target, Object value);
 
 	/**
 	 * getter method

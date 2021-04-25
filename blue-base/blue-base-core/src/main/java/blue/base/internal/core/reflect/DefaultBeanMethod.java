@@ -73,21 +73,21 @@ public class DefaultBeanMethod extends DefaultExecutableOperation implements Bea
 	}
 
 	@Override
-	public Object invoke(Object... params) throws IllegalAccessException,
+	public Object invoke(Object target, Object... params) throws IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException {
-		if (target == null) {
-			logger.warn("bean is null");
-			return null;
+		Object tar = target == null ? this.target : target;
+		if (tar == null) {
+			throw new NullPointerException("Target is null");
 		}
 
-		return method.invoke(target, params);
+		return method.invoke(tar, params);
 	}
 
 	@Override
-	public Object invokeQuietly(Object... params) {
+	public Object invokeQuietly(Object target, Object... params) {
 		Object value = null;
 		try {
-			value = this.invoke(params);
+			value = this.invoke(target, params);
 		}
 		catch (Exception e) {
 			logger.error("Invoke method error,", e);
