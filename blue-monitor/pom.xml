@@ -9,69 +9,11 @@
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>blue-monitor</artifactId>
+	<packaging>pom</packaging>
 	
-	<dependencies>
-		<dependency>
-			<groupId>blue</groupId>
-			<artifactId>blue-core</artifactId>
-			<version>${blue.version}</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>io.prometheus</groupId>
-			<artifactId>simpleclient_pushgateway</artifactId>
-			<version>${prometheus.version}</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-engine</artifactId>
-			<version>${junit.jupiter.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.platform</groupId>
-			<artifactId>junit-platform-launcher</artifactId>
-			<version>${junit.platform.version}</version>
-			<scope>test</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-junit-jupiter</artifactId>
-			<version>${mockito.version}</version>
-			<scope>test</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-			<version>${spring.version}</version>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
-	
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>${surefire.version}</version>
-				<dependencies>
-					<dependency>
-						<groupId>org.junit.platform</groupId>
-						<artifactId>junit-platform-launcher</artifactId>
-						<version>${junit.platform.version}</version>
-					</dependency>
-				</dependencies>
-				<configuration>
-					<argLine>
-						--illegal-access=warn
-						--add-exports blue.monitor/test.monitor.metrics=spring.beans
-					</argLine>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+	<modules>
+		<module>blue-monitor-core</module>
+		<module>blue-monitor-spring</module>
+	</modules>
 	
 </project>

@@ -3,7 +3,7 @@ module blue.http.ext
 	requires java.xml;
 	requires blue.core;
 	requires blue.http;
-	requires blue.monitor;
+	requires blue.monitor.core;
 	requires simpleclient;
 	requires simpleclient.common;
 	requires simpleclient.hotspot;
