@@ -21,5 +21,5 @@ module blue.base.core {
 	exports blue.base.core.util;
 
 	exports blue.base.internal.core.dict to fastjson;
-
+	exports blue.base.internal.core.message to blue.mqtt.core;
 }

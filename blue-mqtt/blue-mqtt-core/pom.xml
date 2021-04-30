@@ -3,30 +3,26 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<parent>
-		<artifactId>blue</artifactId>
+		<artifactId>blue-mqtt</artifactId>
 		<groupId>blue</groupId>
 		<version>4.0.0</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>blue-mqtt</artifactId>
-	<packaging>pom</packaging>
-	<modules>
-		<module>blue-mqtt-core</module>
-	</modules>
+	<artifactId>blue-mqtt-core</artifactId>
 	
 	<dependencies>
 		<dependency>
 			<groupId>blue</groupId>
-			<artifactId>blue-core</artifactId>
+			<artifactId>blue-base-core</artifactId>
 			<version>${blue.version}</version>
 		</dependency>
-
+		
 		<dependency>
 			<groupId>org.fusesource.mqtt-client</groupId>
 			<artifactId>mqtt-client</artifactId>
 			<version>${fusesource.version}</version>
 		</dependency>
-
+		
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
@@ -39,7 +35,7 @@
 			<version>${junit.platform.version}</version>
 			<scope>test</scope>
 		</dependency>
-
+		
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-junit-jupiter</artifactId>
@@ -47,7 +43,7 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-
+	
 	<build>
 		<plugins>
 			<plugin>

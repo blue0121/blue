@@ -1,8 +1,9 @@
 package blue.base.internal.core.message;
 
 import blue.base.core.message.Producer;
-import blue.base.core.message.ProducerListener;
+import blue.base.core.message.ProducerOptions;
 import blue.base.core.message.Topic;
+import blue.base.core.util.AssertUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,29 +14,20 @@ import org.slf4j.LoggerFactory;
 public abstract class AbstractProducer<T extends Topic> implements Producer<T> {
 	private static Logger logger = LoggerFactory.getLogger(AbstractProducer.class);
 
-	protected String name;
-	protected ProducerListener<T, Object> listener;
+	protected final String name;
+	protected final ProducerOptions options;
 
-	public AbstractProducer() {
-	}
-
-	public void init() throws Exception {
-		if (this.listener == null) {
-			this.listener = new LoggerProducerListener<>();
-			logger.info("Producer '{}' default ProducerListener is null, use LoggerProducerListener", name);
-		}
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
+	public AbstractProducer(String name, ProducerOptions options) {
+		AssertUtil.notEmpty(name, "Producer Name");
+		AssertUtil.notNull(options, "Producer Options");
 		this.name = name;
+		this.options = options;
 	}
 
-	@Override
-	public void setProducerListener(ProducerListener<T, Object> listener) {
-		this.listener = listener;
+	public void init() {
+		if (options.getProducerListener() == null) {
+			logger.info("Producer '{}' default ProducerListener is null, use LoggerProducerListener", options.getId());
+			options.setProducerListener(new LoggerProducerListener<>());
+		}
 	}
 }

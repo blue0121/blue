@@ -65,11 +65,4 @@ public interface Producer<T extends Topic> {
 	 */
 	void sendAsync(T topic, List<Object> messageList, ProducerListener<T, Object> listener);
 
-	/**
-	 * 设置默认结果监听器
-	 *
-	 * @param listener
-	 */
-	void setProducerListener(ProducerListener<T, Object> listener);
-
 }
