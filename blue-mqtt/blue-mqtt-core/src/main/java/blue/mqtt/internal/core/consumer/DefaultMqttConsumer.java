@@ -8,7 +8,7 @@ import blue.base.internal.core.message.ConsumerListenerConfig;
 import blue.mqtt.core.MqttConsumer;
 import blue.mqtt.core.MqttQos;
 import blue.mqtt.core.MqttTopic;
-import blue.mqtt.internal.core.producer.MqttClient;
+import blue.mqtt.internal.core.client.DefaultMqttClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,11 +23,13 @@ import java.util.List;
 public class DefaultMqttConsumer extends AbstractConsumer<MqttTopic> implements MqttConsumer {
 	private static Logger logger = LoggerFactory.getLogger(DefaultMqttConsumer.class);
 
-	private MqttClient mqttClient;
-	private MqttQos defaultQos;
+	private final DefaultMqttClient mqttClient;
+	private final MqttQos defaultQos;
 
-	public DefaultMqttConsumer(String name, ConsumerOptions options) {
-		super(name, options);
+	public DefaultMqttConsumer(ConsumerOptions options, DefaultMqttClient mqttClient, MqttQos defaultQos) {
+		super(options);
+		this.mqttClient = mqttClient;
+		this.defaultQos = defaultQos;
 	}
 
 	@Override
@@ -60,13 +62,5 @@ public class DefaultMqttConsumer extends AbstractConsumer<MqttTopic> implements 
 			list.add((MqttListenerConfig) config);
 		}
 		mqttClient.subscribe(list);
-	}
-
-	public void setMqttClient(MqttClient mqttClient) {
-		this.mqttClient = mqttClient;
-	}
-
-	public void setDefaultQos(int defaultQos) {
-		this.defaultQos = MqttQos.valueOf(defaultQos);
 	}
 }

@@ -1,4 +1,4 @@
-package blue.mqtt.internal.core.producer;
+package blue.mqtt.internal.core.client;
 
 import blue.base.core.util.JsonUtil;
 import blue.mqtt.core.MqttTopic;

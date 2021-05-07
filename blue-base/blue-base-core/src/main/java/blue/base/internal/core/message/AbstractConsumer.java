@@ -17,20 +17,17 @@ import java.util.List;
 public abstract class AbstractConsumer<T extends Topic> implements Consumer<T> {
 	private static Logger logger = LoggerFactory.getLogger(AbstractConsumer.class);
 
-	protected final String name;
 	protected final ConsumerOptions options;
 	protected List<ConsumerListenerConfig> configList;
 
-	public AbstractConsumer(String name, ConsumerOptions options) {
-		AssertUtil.notEmpty(name, "Consumer Name");
+	public AbstractConsumer(ConsumerOptions options) {
 		AssertUtil.notNull(options, "Consumer Options");
-		this.name = name;
 		this.options = options;
 	}
 
 	public void init() {
 		this.check();
-		logger.info("Consumer '{}' ConsumerListener size: {}", name, configList.size());
+		logger.info("Consumer '{}' ConsumerListener size: {}", options.getId(), configList.size());
 		this.subscribe(configList);
 	}
 
@@ -38,7 +35,7 @@ public abstract class AbstractConsumer<T extends Topic> implements Consumer<T> {
 
 	protected void check() {
 		if (options.getExceptionHandler() == null) {
-			logger.info("Consumer '{}' default ExceptionHandler is null, use LoggerExceptionHandler", name);
+			logger.info("Consumer '{}' default ExceptionHandler is null, use LoggerExceptionHandler", options.getId());
 			options.setExceptionHandler(new LoggerExceptionHandler<>());
 		}
 		this.checkHandler(configList);
@@ -66,10 +63,6 @@ public abstract class AbstractConsumer<T extends Topic> implements Consumer<T> {
 			}
 		}
 		return false;
-	}
-
-	public String getName() {
-		return name;
 	}
 
 	public List<ConsumerListenerConfig> getConfigList() {

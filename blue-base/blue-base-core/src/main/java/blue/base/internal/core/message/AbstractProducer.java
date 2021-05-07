@@ -14,13 +14,10 @@ import org.slf4j.LoggerFactory;
 public abstract class AbstractProducer<T extends Topic> implements Producer<T> {
 	private static Logger logger = LoggerFactory.getLogger(AbstractProducer.class);
 
-	protected final String name;
 	protected final ProducerOptions options;
 
-	public AbstractProducer(String name, ProducerOptions options) {
-		AssertUtil.notEmpty(name, "Producer Name");
+	public AbstractProducer(ProducerOptions options) {
 		AssertUtil.notNull(options, "Producer Options");
-		this.name = name;
 		this.options = options;
 	}
 
