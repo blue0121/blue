@@ -65,17 +65,29 @@ public class ConnectionSet {
 		readLock.lock();
 		try {
 			String clientId = idList.get(idx);
-			return Map.entry(clientId, idConnMap.get(clientId));
+			var conn = idConnMap.get(clientId);
+			if (conn == null) {
+				return null;
+			}
+			return Map.entry(clientId, conn);
 		} finally {
 			readLock.unlock();
 		}
 	}
 
-	public CallbackConnection getConnectionByTopic(String topic) {
+	public Map.Entry<String, CallbackConnection> getConnectionByTopic(String topic) {
 		String clientId = topicIdMap.get(topic);
+		if (clientId == null || clientId.isEmpty()) {
+			return null;
+		}
+
 		readLock.lock();
 		try {
-			return idConnMap.get(clientId);
+			var conn = idConnMap.get(clientId);
+			if (conn == null) {
+				return null;
+			}
+			return Map.entry(clientId, conn);
 		} finally {
 			readLock.unlock();
 		}

@@ -137,7 +137,7 @@ public class DefaultMqttClient implements MqttClient {
 			}
 			var callback = new UnsubscribeCallback<Void>(latch, topic, connectionSet);
 			var ts = new UTF8Buffer[] {new UTF8Buffer(topic)};
-			connection.unsubscribe(ts, callback);
+			connection.getValue().unsubscribe(ts, callback);
 		}
 		WaitUtil.await(latch);
 		logger.info("MQTT '{}' unsubscribe successful, count: {}", options.getId(), topics.size());

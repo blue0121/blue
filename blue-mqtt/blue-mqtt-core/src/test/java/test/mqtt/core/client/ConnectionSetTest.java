@@ -28,9 +28,9 @@ public class ConnectionSetTest {
 		String id1 = "ClientId1";
 		String topic1 = "Topic1";
 		set.connect(id1, conn1);
-		Assertions.assertEquals(conn1, set.getConnection());
+		Assertions.assertEquals(conn1, set.getConnection().getValue());
 		set.subscribe(topic1, id1);
-		Assertions.assertEquals(conn1, set.getConnectionByTopic(topic1));
+		Assertions.assertEquals(conn1, set.getConnectionByTopic(topic1).getValue());
 		set.unsubscribe(topic1);
 		Assertions.assertNull(set.getConnectionByTopic(topic1));
 		set.disconnect(id1);
