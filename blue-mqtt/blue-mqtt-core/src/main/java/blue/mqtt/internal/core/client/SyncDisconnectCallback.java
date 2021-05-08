@@ -1,4 +1,4 @@
-package blue.mqtt.internal.core.producer;
+package blue.mqtt.internal.core.client;
 
 import org.fusesource.mqtt.client.Callback;
 import org.fusesource.mqtt.client.CallbackConnection;
@@ -12,7 +12,7 @@ import java.util.concurrent.CountDownLatch;
  * @since 1.0 2021-01-14
  */
 public class SyncDisconnectCallback implements Callback<Void> {
-	private static Logger logger = LoggerFactory.getLogger(SyncCallback.class);
+	private static Logger logger = LoggerFactory.getLogger(SyncDisconnectCallback.class);
 
 	private final String name;
 	private final CountDownLatch latch;

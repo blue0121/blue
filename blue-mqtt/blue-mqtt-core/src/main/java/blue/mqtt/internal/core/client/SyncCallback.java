@@ -1,4 +1,4 @@
-package blue.mqtt.internal.core.producer;
+package blue.mqtt.internal.core.client;
 
 import org.fusesource.mqtt.client.Callback;
 import org.slf4j.Logger;
