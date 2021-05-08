@@ -1,11 +1,11 @@
 package blue.mqtt.internal.core.consumer;
 
 import blue.base.core.message.ConsumerListener;
-import blue.base.core.message.ConsumerOptions;
 import blue.base.core.util.AssertUtil;
 import blue.base.internal.core.message.AbstractConsumer;
 import blue.base.internal.core.message.ConsumerListenerConfig;
 import blue.mqtt.core.MqttConsumer;
+import blue.mqtt.core.MqttConsumerOptions;
 import blue.mqtt.core.MqttQos;
 import blue.mqtt.core.MqttTopic;
 import blue.mqtt.internal.core.client.DefaultMqttClient;
@@ -26,10 +26,10 @@ public class DefaultMqttConsumer extends AbstractConsumer<MqttTopic> implements 
 	private final DefaultMqttClient mqttClient;
 	private final MqttQos defaultQos;
 
-	public DefaultMqttConsumer(ConsumerOptions options, DefaultMqttClient mqttClient, MqttQos defaultQos) {
+	public DefaultMqttConsumer(MqttConsumerOptions options, DefaultMqttClient mqttClient) {
 		super(options);
 		this.mqttClient = mqttClient;
-		this.defaultQos = defaultQos;
+		this.defaultQos = options.getDefaultQos();
 	}
 
 	@Override

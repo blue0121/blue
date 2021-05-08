@@ -10,6 +10,7 @@ import blue.mqtt.core.MqttConsumerOptions;
 import blue.mqtt.core.MqttProducer;
 import blue.mqtt.core.MqttProducerOptions;
 import blue.mqtt.core.MqttTopic;
+import blue.mqtt.internal.core.consumer.DefaultMqttConsumer;
 import blue.mqtt.internal.core.consumer.MqttListenerConfig;
 import blue.mqtt.internal.core.producer.DefaultMqttProducer;
 import blue.mqtt.internal.core.producer.PublishCallback;
@@ -172,6 +173,6 @@ public class DefaultMqttClient implements MqttClient {
 
 	@Override
 	public MqttConsumer createConsumer(MqttConsumerOptions options) {
-		return null;
+		return new DefaultMqttConsumer(options, this);
 	}
 }
