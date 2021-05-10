@@ -7,7 +7,7 @@ import blue.base.core.message.ConsumerOptions;
  * @since 2021-05-03
  */
 public class MqttConsumerOptions extends ConsumerOptions {
-	private MqttQos defaultQos;
+	private MqttQos defaultQos = MqttQos.AT_MOST_ONCE;
 
 	public MqttConsumerOptions() {
 	}

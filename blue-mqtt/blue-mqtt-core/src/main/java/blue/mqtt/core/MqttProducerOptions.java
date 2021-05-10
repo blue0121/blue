@@ -7,7 +7,7 @@ import blue.base.core.message.ProducerOptions;
  * @since 1.0 2021-04-29
  */
 public class MqttProducerOptions extends ProducerOptions {
-    private MqttQos defaultQos;
+    private MqttQos defaultQos = MqttQos.AT_MOST_ONCE;
 
 	public MqttProducerOptions() {
 	}

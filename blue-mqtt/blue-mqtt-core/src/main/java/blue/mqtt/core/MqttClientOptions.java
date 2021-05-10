@@ -24,7 +24,7 @@ public class MqttClientOptions {
 	private String username;
 	private String password;
 	private String clientId;
-	private int count;
+	private int count = MIN_COUNT;
 	private int timeout;
 	private int keepAlive;
 	private int reconnectDelay;
