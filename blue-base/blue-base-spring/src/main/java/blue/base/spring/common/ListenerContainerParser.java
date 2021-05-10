@@ -31,7 +31,7 @@ public class ListenerContainerParser extends SimpleBeanDefinitionParser {
 				definition.getPropertyValues().addPropertyValue("topic", element.getAttribute("topic"));
 				definition.getPropertyValues().addPropertyValue("multiThread", element.getAttribute("multi-thread"));
 				this.parseRef(element, definition, "listener", "ref-listener");
-				this.parseRef(element, definition, "taskExecutor", "ref-task-executor");
+				this.parseRef(element, definition, "executor", "ref-executor");
 				this.parseRef(element, definition, "exceptionHandler", "ref-exception-handler");
 				this.doParseListenerConfig(element, definition, clazz);
 

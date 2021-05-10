@@ -16,6 +16,11 @@ public class MqttProducerOptions extends ProducerOptions {
         return defaultQos;
     }
 
+    public MqttProducerOptions setDefaultQos(int qos) {
+		this.defaultQos = MqttQos.valueOf(qos);
+		return this;
+    }
+
     public MqttProducerOptions setDefaultQos(MqttQos defaultQos) {
         this.defaultQos = defaultQos;
         return this;

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<xsd:schema xmlns="http://blue.com/schema/mqtt"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="http://blue.com/schema/mqtt"
+            elementFormDefault="qualified" attributeFormDefault="unqualified">
+	
+	<xsd:import namespace="http://www.springframework.org/schema/beans" />
+	
+	<xsd:element name="client">
+		<xsd:complexType>
+			<xsd:attribute name="id" type="xsd:ID" use="required" />
+			<xsd:attribute name="broker" type="xsd:string" use="required" />
+			<xsd:attribute name="username" type="xsd:string" use="optional" />
+			<xsd:attribute name="password" type="xsd:string" use="optional" />
+			<xsd:attribute name="client-id" type="xsd:string" use="optional" />
+			<xsd:attribute name="count" type="xsd:positiveInteger" default="1" />
+			<xsd:attribute name="timeout" type="xsd:positiveInteger" default="30" />
+			<xsd:attribute name="keep-alive" type="xsd:positiveInteger" default="60" />
+			<xsd:attribute name="reconnect-delay" type="xsd:positiveInteger" default="10000" />
+			<xsd:attribute name="ref-ssl-context" type="xsd:string" use="optional" />
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="producer">
+		<xsd:complexType>
+			<xsd:attribute name="id" type="xsd:ID" use="required" />
+			<xsd:attribute name="default-qos" type="mqttQos" default="0" />
+			<xsd:attribute name="ref-mqtt-client" type="xsd:string" use="required" />
+			<xsd:attribute name="ref-producer-listener" type="xsd:string" use="optional" />
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="consumer">
+		<xsd:complexType>
+			<xsd:choice minOccurs="1" maxOccurs="unbounded">
+				<xsd:element ref="listener" />
+			</xsd:choice>
+			<xsd:attribute name="id" type="xsd:ID" use="required" />
+			<xsd:attribute name="default-qos" type="mqttQos" default="0" />
+			<xsd:attribute name="ref-mqtt-client" type="xsd:string" use="required" />
+			<xsd:attribute name="ref-exception-handler" type="xsd:string" use="optional" />
+			<xsd:attribute name="ref-executor" type="xsd:string" use="optional" />
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="listener">
+		<xsd:complexType>
+			<xsd:attribute name="topic" type="xsd:string" use="required" />
+			<xsd:attribute name="qos" type="mqttQos" default="0" />
+			<xsd:attribute name="multi-thread" type="xsd:boolean" default="true" />
+			<xsd:attribute name="ref-listener" type="xsd:string" use="required" />
+			<xsd:attribute name="ref-executor" type="xsd:string" use="optional" />
+			<xsd:attribute name="ref-exception-handler" type="xsd:string" use="optional" />
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:simpleType name="mqttQos">
+		<xsd:restriction base="xsd:int">
+			<xsd:enumeration value="0" />
+			<xsd:enumeration value="1" />
+			<xsd:enumeration value="2" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+</xsd:schema>

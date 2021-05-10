@@ -16,7 +16,13 @@ public class MqttConsumerOptions extends ConsumerOptions {
 		return defaultQos;
 	}
 
-	public void setDefaultQos(MqttQos defaultQos) {
+	public MqttConsumerOptions setDefaultQos(int qos) {
+		this.defaultQos = MqttQos.valueOf(qos);
+		return this;
+	}
+
+	public MqttConsumerOptions setDefaultQos(MqttQos defaultQos) {
 		this.defaultQos = defaultQos;
+		return this;
 	}
 }
