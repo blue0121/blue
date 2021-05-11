@@ -3,9 +3,9 @@ package blue.mqtt.internal.spring.bean;
 import blue.base.core.message.ExceptionHandler;
 import blue.mqtt.core.MqttClient;
 import blue.mqtt.core.MqttConsumer;
-import blue.mqtt.core.MqttConsumerOptions;
 import blue.mqtt.core.MqttException;
 import blue.mqtt.core.MqttTopic;
+import blue.mqtt.core.options.MqttConsumerOptions;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
 

@@ -3,7 +3,7 @@ package blue.mqtt.internal.spring.bean;
 import blue.base.core.message.ProducerListener;
 import blue.mqtt.core.MqttClient;
 import blue.mqtt.core.MqttProducer;
-import blue.mqtt.core.MqttProducerOptions;
+import blue.mqtt.core.options.MqttProducerOptions;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
 

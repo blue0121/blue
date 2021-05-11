@@ -5,4 +5,5 @@ module blue.mqtt.core {
 	requires hawtbuf;
 
 	exports blue.mqtt.core;
+	exports blue.mqtt.core.options;
 }

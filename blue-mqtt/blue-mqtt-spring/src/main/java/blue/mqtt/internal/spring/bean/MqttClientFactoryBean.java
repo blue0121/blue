@@ -1,7 +1,7 @@
 package blue.mqtt.internal.spring.bean;
 
 import blue.mqtt.core.MqttClient;
-import blue.mqtt.core.MqttClientOptions;
+import blue.mqtt.core.options.MqttClientOptions;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;

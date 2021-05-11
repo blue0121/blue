@@ -1,6 +1,7 @@
-package blue.mqtt.core;
+package blue.mqtt.core.options;
 
 import blue.base.core.message.ConsumerOptions;
+import blue.mqtt.core.MqttQos;
 
 /**
  * @author Jin Zheng

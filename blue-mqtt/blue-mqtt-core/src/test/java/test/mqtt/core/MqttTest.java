@@ -2,12 +2,12 @@ package test.mqtt.core;
 
 import blue.base.core.util.WaitUtil;
 import blue.mqtt.core.MqttClient;
-import blue.mqtt.core.MqttClientOptions;
 import blue.mqtt.core.MqttConsumer;
-import blue.mqtt.core.MqttConsumerOptions;
 import blue.mqtt.core.MqttProducer;
-import blue.mqtt.core.MqttProducerOptions;
 import blue.mqtt.core.MqttTopic;
+import blue.mqtt.core.options.MqttClientOptions;
+import blue.mqtt.core.options.MqttConsumerOptions;
+import blue.mqtt.core.options.MqttProducerOptions;
 import org.apache.activemq.broker.BrokerService;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;

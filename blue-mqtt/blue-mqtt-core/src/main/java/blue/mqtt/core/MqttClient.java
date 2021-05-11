@@ -1,5 +1,8 @@
 package blue.mqtt.core;
 
+import blue.mqtt.core.options.MqttClientOptions;
+import blue.mqtt.core.options.MqttConsumerOptions;
+import blue.mqtt.core.options.MqttProducerOptions;
 import blue.mqtt.internal.core.client.DefaultMqttClient;
 
 /**

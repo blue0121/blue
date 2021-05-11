@@ -1,8 +1,9 @@
-package blue.mqtt.core;
+package blue.mqtt.core.options;
 
 import blue.base.core.id.IdGenerator;
 import blue.base.core.util.AssertUtil;
 import blue.base.core.util.RandomUtil;
+import blue.mqtt.core.MqttException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
