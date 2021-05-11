@@ -75,6 +75,7 @@
 		<junit.jupiter.version>5.7.1</junit.jupiter.version>
 		<mockito.version>3.9.0</mockito.version>
 		<wiremock.version>2.27.2</wiremock.version>
+		<activemq.version>5.16.2</activemq.version>
 
 		<!-- maven plugins -->
 		<compiler.version>3.8.1</compiler.version>

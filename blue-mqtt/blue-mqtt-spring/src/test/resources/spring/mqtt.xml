@@ -1,15 +1,15 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:core="http://blue.com/schema/core"
+       xmlns:base="http://blue.com/schema/base"
        xmlns:mqtt="http://blue.com/schema/mqtt"
        xsi:schemaLocation="
        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-       http://blue.com/schema/core http://blue.com/schema/core.xsd
+       http://blue.com/schema/base http://blue.com/schema/base.xsd
        http://blue.com/schema/mqtt http://blue.com/schema/mqtt.xsd">
 	
-	<core:task-executor id="taskExecutor" core-pool-size="10" max-pool-size="1000" queue-capacity="10000" keep-alive-seconds="60" />
+	<base:task-executor id="taskExecutor" core-pool-size="10" max-pool-size="1000" queue-capacity="10000" keep-alive-seconds="60" />
 	
-	<mqtt:client id="mqttClient" broker="tcp://localhost:1883" count="2" username="admin" password="admin" client-id="client_$RANDOM" />
+	<mqtt:client id="mqttClient" broker="tcp://localhost:2883" count="2" username="admin" password="admin" client-id="client_$RANDOM" />
 	
 	<mqtt:producer id="mqttProducer" default-qos="0" ref-mqtt-client="mqttClient" ref-producer-listener="producerListener" />
 	

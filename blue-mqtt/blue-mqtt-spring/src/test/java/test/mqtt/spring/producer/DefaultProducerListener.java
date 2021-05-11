@@ -1,6 +1,6 @@
 package test.mqtt.spring.producer;
 
-import blue.core.util.JsonUtil;
+import blue.base.core.util.JsonUtil;
 import blue.mqtt.core.MqttProducerListener;
 import blue.mqtt.core.MqttTopic;
 import org.slf4j.Logger;

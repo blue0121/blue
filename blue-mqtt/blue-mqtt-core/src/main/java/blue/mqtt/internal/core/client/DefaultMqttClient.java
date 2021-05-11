@@ -104,8 +104,9 @@ public class DefaultMqttClient implements MqttClient {
 		}
 		byte[] payload = JsonUtil.toBytes(message);
 		Callback<Void> callback = new PublishCallback(topic, message, listener);
-		connection.getValue().getDispatchQueue().execute(() ->
-				connection.getValue().publish(topic.getTopic(), payload, topic.getQos().toQoS(), false, callback));
+		var conn = connection.getValue();
+		conn.getDispatchQueue().execute(() ->
+				conn.publish(topic.getTopic(), payload, topic.getQos().toQoS(), false, callback));
 	}
 
 	public void subscribe(List<MqttListenerConfig> configList) {
@@ -121,7 +122,8 @@ public class DefaultMqttClient implements MqttClient {
 			mqttConn.addMqttListenerConfig(config);
 			var callback = new SubscribeCallback<byte[]>(latch, config.getTopic(), connection.getKey(), connectionSet);
 			var ts = new Topic[]{new Topic(config.getTopic(), config.getQos().toQoS())};
-			connection.getValue().subscribe(ts, callback);
+			var conn = connection.getValue();
+			conn.getDispatchQueue().execute(() -> conn.subscribe(ts, callback));
 		}
 		WaitUtil.await(latch);
 		logger.info("MQTT '{}' subscribe successful, count: {}", options.getId(), configList.size());
@@ -137,7 +139,8 @@ public class DefaultMqttClient implements MqttClient {
 			}
 			var callback = new UnsubscribeCallback<Void>(latch, topic, connectionSet);
 			var ts = new UTF8Buffer[] {new UTF8Buffer(topic)};
-			connection.getValue().unsubscribe(ts, callback);
+			var conn = connection.getValue();
+			conn.getDispatchQueue().execute(() -> conn.unsubscribe(ts, callback));
 		}
 		WaitUtil.await(latch);
 		logger.info("MQTT '{}' unsubscribe successful, count: {}", options.getId(), topics.size());

@@ -47,7 +47,7 @@ public class MqttConnection implements ExtendedListener {
         this.mqtt.setClientId(clientId);
         this.connection = mqtt.callbackConnection();
         this.connection.listener(this);
-        this.connection.connect(new SyncCallback<>(latch));
+        this.connection.getDispatchQueue().execute(() -> connection.connect(new SyncCallback<>(latch)));
     }
 
     public List<MqttListenerConfig> getConfigList() {
@@ -63,7 +63,8 @@ public class MqttConnection implements ExtendedListener {
     }
 
     public void disconnect(CountDownLatch latch) {
-        connection.disconnect(new SyncDisconnectCallback(clientId, latch, connection));
+        connection.getDispatchQueue().execute(() ->
+                connection.disconnect(new SyncDisconnectCallback(clientId, latch, connection)));
     }
 
     @Override
