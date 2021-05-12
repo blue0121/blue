@@ -27,7 +27,8 @@ public abstract class AbstractConsumer<T extends Topic> implements Consumer<T> {
 
 	public void init() {
 		this.check();
-		logger.info("Consumer '{}' ConsumerListener size: {}", options.getId(), configList.size());
+		logger.info("Consumer '{}' ConsumerListener size: {}", options.getId(),
+				configList == null ? 0 : configList.size());
 		this.subscribe(configList);
 	}
 
@@ -45,7 +46,9 @@ public abstract class AbstractConsumer<T extends Topic> implements Consumer<T> {
 	}
 
 	protected void checkHandler(List<ConsumerListenerConfig> configList) {
-		AssertUtil.notEmpty(configList, "ConsumerListenerList");
+		if (configList == null || configList.isEmpty()) {
+			return;
+		}
 		for (var config : configList) {
 			if (config.getExceptionHandler() == null) {
 				config.setExceptionHandler(options.getExceptionHandler());
@@ -57,6 +60,9 @@ public abstract class AbstractConsumer<T extends Topic> implements Consumer<T> {
 	}
 
 	private boolean isMultiThread() {
+		if (configList == null || configList.isEmpty()) {
+			return false;
+		}
 		for (ConsumerListenerConfig config : configList) {
 			if (config.isMultiThread()) {
 				return true;

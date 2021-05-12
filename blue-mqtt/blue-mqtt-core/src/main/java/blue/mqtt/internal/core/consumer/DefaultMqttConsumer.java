@@ -30,6 +30,7 @@ public class DefaultMqttConsumer extends AbstractConsumer<MqttTopic> implements 
 		super(options);
 		this.mqttClient = mqttClient;
 		this.defaultQos = options.getDefaultQos();
+		this.init();
 	}
 
 	@Override
@@ -57,6 +58,9 @@ public class DefaultMqttConsumer extends AbstractConsumer<MqttTopic> implements 
 
 	@Override
 	protected void subscribe(List<ConsumerListenerConfig> configList) {
+		if (configList == null || configList.isEmpty()) {
+			return;
+		}
 		List<MqttListenerConfig> list = new ArrayList<>();
 		for (var config : configList) {
 			list.add((MqttListenerConfig) config);

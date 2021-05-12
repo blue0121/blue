@@ -29,6 +29,7 @@ public class DefaultMqttProducer extends AbstractProducer<MqttTopic> implements 
 		super(options);
 		this.mqttClient = mqttClient;
 		this.defaultQos = options.getDefaultQos();
+		this.init();
 	}
 
 	@Override

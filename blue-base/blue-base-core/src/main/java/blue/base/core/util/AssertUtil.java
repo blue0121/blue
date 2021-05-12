@@ -31,6 +31,16 @@ public class AssertUtil {
 		}
 	}
 
+	public static void nonNegative(long num, String name) {
+		if (name == null) {
+			name = "";
+		}
+
+		if (num < 0) {
+			throw new IllegalArgumentException(name + " is negative number");
+		}
+	}
+
 	public static void notEmpty(String str, String name) {
 		if (name == null) {
 			name = "";
