@@ -6,5 +6,6 @@ module blue.redis.core {
 	requires com.github.benmanes.caffeine;
 
 	exports blue.redis.core;
+	exports blue.redis.core.codec;
 	exports blue.redis.core.options;
 }

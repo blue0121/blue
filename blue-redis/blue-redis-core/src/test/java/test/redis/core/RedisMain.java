@@ -4,6 +4,7 @@ import blue.base.core.message.Topic;
 import blue.redis.core.RedisClient;
 import blue.redis.core.RedisConsumer;
 import blue.redis.core.RedisProducer;
+import blue.redis.core.codec.FastjsonCodec;
 import blue.redis.core.options.RedisClientOptions;
 import blue.redis.core.options.RedisConsumerOptions;
 import blue.redis.core.options.RedisProducerOptions;
@@ -19,7 +20,7 @@ public class RedisMain {
 
     public static void main(String[] args) {
         RedisClientOptions clientOptions = new RedisClientOptions();
-        clientOptions.setId("client").setBroker("redis://localhost:6379");
+        clientOptions.setId("client").setBroker("redis://localhost:6379").setCodec(new FastjsonCodec());
 	    RedisClient client = RedisClient.create(clientOptions);
 
 	    RedisConsumerOptions consumerOptions = new RedisConsumerOptions();

@@ -8,6 +8,7 @@ import blue.base.core.util.AssertUtil;
  */
 public class RedisClientOptions {
     private String id;
+    private Object codec;
     private RedisConnectionMode mode = RedisConnectionMode.SINGLE;
     private String broker;
     private String masterName;
@@ -39,6 +40,15 @@ public class RedisClientOptions {
 
 	public RedisClientOptions setId(String id) {
 		this.id = id;
+		return this;
+	}
+
+	public Object getCodec() {
+		return codec;
+	}
+
+	public RedisClientOptions setCodec(Object codec) {
+		this.codec = codec;
 		return this;
 	}
 

@@ -2,6 +2,7 @@ package blue.redis.internal.core.client;
 
 import blue.base.core.util.StringUtil;
 import blue.redis.core.options.RedisClientOptions;
+import org.redisson.client.codec.Codec;
 import org.redisson.config.BaseConfig;
 import org.redisson.config.Config;
 
@@ -18,6 +19,10 @@ public class RedissonConfig {
 
     public Config getConfig() {
         Config config = new Config();
+        if (options.getCodec() != null) {
+            config.setCodec((Codec) options.getCodec());
+        }
+
         switch (options.getMode()) {
             case SINGLE:
                 this.setSingleConfig(config);
