@@ -44,4 +44,11 @@ public interface RedisClient {
 	 */
 	RedisConsumer createConsumer(RedisConsumerOptions options);
 
+	/**
+	 * 创建Redis分布式锁
+	 *
+	 * @return
+	 */
+	RedisLock createLock();
+
 }

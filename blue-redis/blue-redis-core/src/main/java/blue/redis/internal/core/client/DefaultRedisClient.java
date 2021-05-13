@@ -2,11 +2,13 @@ package blue.redis.internal.core.client;
 
 import blue.redis.core.RedisClient;
 import blue.redis.core.RedisConsumer;
+import blue.redis.core.RedisLock;
 import blue.redis.core.RedisProducer;
 import blue.redis.core.options.RedisClientOptions;
 import blue.redis.core.options.RedisConsumerOptions;
 import blue.redis.core.options.RedisProducerOptions;
 import blue.redis.internal.core.consumer.DefaultRedisConsumer;
+import blue.redis.internal.core.lock.DefaultRedisLock;
 import blue.redis.internal.core.producer.DefaultRedisProducer;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
@@ -48,7 +50,9 @@ public class DefaultRedisClient implements RedisClient {
         return new DefaultRedisConsumer(options, client);
     }
 
-    public RedissonClient getRedisson() {
-        return this.client;
+    @Override
+    public RedisLock createLock() {
+        return new DefaultRedisLock(client);
     }
+
 }

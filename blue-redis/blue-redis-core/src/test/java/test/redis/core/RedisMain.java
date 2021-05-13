@@ -3,6 +3,7 @@ package test.redis.core;
 import blue.base.core.message.Topic;
 import blue.redis.core.RedisClient;
 import blue.redis.core.RedisConsumer;
+import blue.redis.core.RedisLock;
 import blue.redis.core.RedisProducer;
 import blue.redis.core.codec.FastjsonCodec;
 import blue.redis.core.options.RedisClientOptions;
@@ -36,6 +37,12 @@ public class RedisMain {
 	    for (int i = 0; i < count; i++) {
 	    	producer.sendSync(new Topic("test"), "blue_" + i);
 	    }
+
+	    RedisLock lock = client.createLock();
+	    lock.lock("lock", () -> {
+	    	System.out.println("Redis Lock");
+	    	return null;
+	    });
 
 	    client.disconnect();
     }
