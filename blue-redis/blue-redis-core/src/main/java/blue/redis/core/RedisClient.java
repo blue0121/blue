@@ -3,6 +3,7 @@ package blue.redis.core;
 import blue.redis.core.options.RedisClientOptions;
 import blue.redis.core.options.RedisConsumerOptions;
 import blue.redis.core.options.RedisProducerOptions;
+import blue.redis.core.options.RedisSequenceOptions;
 import blue.redis.internal.core.client.DefaultRedisClient;
 
 /**
@@ -50,5 +51,13 @@ public interface RedisClient {
 	 * @return
 	 */
 	RedisLock createLock();
+
+	/**
+	 * 创建自增序列
+	 *
+	 * @param options
+	 * @return
+	 */
+	Sequence createSequence(RedisSequenceOptions options);
 
 }

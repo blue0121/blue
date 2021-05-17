@@ -5,10 +5,13 @@ import blue.redis.core.RedisClient;
 import blue.redis.core.RedisConsumer;
 import blue.redis.core.RedisLock;
 import blue.redis.core.RedisProducer;
+import blue.redis.core.Sequence;
 import blue.redis.core.codec.FastjsonCodec;
 import blue.redis.core.options.RedisClientOptions;
 import blue.redis.core.options.RedisConsumerOptions;
 import blue.redis.core.options.RedisProducerOptions;
+import blue.redis.core.options.RedisSequenceMode;
+import blue.redis.core.options.RedisSequenceOptions;
 import test.redis.core.consumer.RedisReceiver;
 
 /**
@@ -44,7 +47,27 @@ public class RedisMain {
 	    	return null;
 	    });
 
+	    RedisSequenceOptions atomicOptions = new RedisSequenceOptions();
+	    atomicOptions.setKey("seq_atomic").setMode(RedisSequenceMode.ATOMIC).setLength(8).setPrefix("A");
+	    testSequence(client, atomicOptions);
+
+	    RedisSequenceOptions dateOptions = new RedisSequenceOptions();
+	    dateOptions.setKey("seq_date").setMode(RedisSequenceMode.DATE).setLength(12).setPrefix("D");
+	    testSequence(client, dateOptions);
+
 	    client.disconnect();
+    }
+
+    private static void testSequence(RedisClient client, RedisSequenceOptions options) {
+		int count = 2;
+	    Sequence sequence = client.createSequence(options);
+	    for (int i = 0; i < count; i++) {
+		    System.out.println(sequence.nextValue());
+	    }
+	    sequence.reset();
+	    for (int i = 0; i < count; i++) {
+		    System.out.println(sequence.nextValue());
+	    }
     }
 
 }
