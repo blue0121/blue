@@ -1,6 +1,6 @@
 package blue.mqtt.internal.spring.bean;
 
-import blue.base.core.message.ExceptionHandler;
+import blue.base.spring.common.ConsumerFactoryBean;
 import blue.mqtt.core.MqttClient;
 import blue.mqtt.core.MqttConsumer;
 import blue.mqtt.core.MqttException;
@@ -11,19 +11,15 @@ import org.springframework.beans.factory.InitializingBean;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Executor;
 
 /**
  * @author Jin Zheng
  * @since 1.0 2021-05-10
  */
-public class MqttConsumerFactoryBean implements FactoryBean<MqttConsumer>, InitializingBean {
+public class MqttConsumerFactoryBean extends ConsumerFactoryBean
+        implements FactoryBean<MqttConsumer>, InitializingBean {
 
-    private String id;
     private int defaultQos;
-    private boolean multiThread;
-    private Executor executor;
-    private ExceptionHandler exceptionHandler;
 
     private MqttClient mqttClient;
     private List<MqttConsumerConfig> configList;
@@ -39,33 +35,18 @@ public class MqttConsumerFactoryBean implements FactoryBean<MqttConsumer>, Initi
             throw new MqttException("MQTT consumer listener config is empty");
         }
 
-        MqttConsumerOptions options = this.createConsumerOptions();
+        MqttConsumerOptions options = new MqttConsumerOptions();
+        this.setConsumerOptions(options);
+        options.setDefaultQos(defaultQos);
         this.mqttConsumer = mqttClient.createConsumer(options);
         this.createMqttConsumers();
     }
 
-    private MqttConsumerOptions createConsumerOptions() {
-        MqttConsumerOptions options = new MqttConsumerOptions();
-        options.setId(id)
-                .setMultiThread(multiThread)
-                .setExecutor(executor)
-                .setExceptionHandler(exceptionHandler);
-        options.setDefaultQos(defaultQos);
-        return options;
-    }
-
     private void createMqttConsumers() {
         for (var config : configList) {
-            MqttConsumerOptions options = this.createConsumerOptions();
-            if (config.getMultiThread() != null) {
-                options.setMultiThread(config.getMultiThread());
-            }
-            if (config.getExecutor() != null) {
-                options.setExecutor(config.getExecutor());
-            }
-            if (config.getExceptionHandler() != null) {
-                options.setExceptionHandler(config.getExceptionHandler());
-            }
+            MqttConsumerOptions options = new MqttConsumerOptions();
+            this.setConsumerOptions(options);
+            this.setConsumerOptions(options, config);
             if (config.getQos() != null) {
                 options.setDefaultQos(config.getQos());
             }
@@ -85,24 +66,8 @@ public class MqttConsumerFactoryBean implements FactoryBean<MqttConsumer>, Initi
         return MqttConsumer.class;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public void setDefaultQos(int defaultQos) {
         this.defaultQos = defaultQos;
-    }
-
-    public void setMultiThread(boolean multiThread) {
-        this.multiThread = multiThread;
-    }
-
-    public void setExecutor(Executor executor) {
-        this.executor = executor;
-    }
-
-    public void setExceptionHandler(ExceptionHandler exceptionHandler) {
-        this.exceptionHandler = exceptionHandler;
     }
 
     public void setMqttClient(MqttClient mqttClient) {
