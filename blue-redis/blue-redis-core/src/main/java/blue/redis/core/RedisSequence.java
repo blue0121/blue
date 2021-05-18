@@ -4,7 +4,7 @@ package blue.redis.core;
  * @author Jin Zheng
  * @since 2020-07-05
  */
-public interface Sequence {
+public interface RedisSequence {
 
 	/**
 	 * 下一个值

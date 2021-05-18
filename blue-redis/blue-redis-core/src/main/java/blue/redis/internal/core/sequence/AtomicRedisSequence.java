@@ -8,8 +8,8 @@ import org.redisson.api.RedissonClient;
  * @author Jin Zheng
  * @since 1.0 2019-11-08
  */
-public class AtomicSequence extends AbstractSequence {
-	public AtomicSequence(RedisSequenceOptions options, RedissonClient client) {
+public class AtomicRedisSequence extends AbstractRedisSequence {
+	public AtomicRedisSequence(RedisSequenceOptions options, RedissonClient client) {
 		super(options, client);
 	}
 

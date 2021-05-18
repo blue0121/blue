@@ -59,7 +59,7 @@ public interface RedisClient {
 	 * @param options
 	 * @return
 	 */
-	Sequence createSequence(RedisSequenceOptions options);
+	RedisSequence createSequence(RedisSequenceOptions options);
 
 	/**
 	 * 创建Redis缓存

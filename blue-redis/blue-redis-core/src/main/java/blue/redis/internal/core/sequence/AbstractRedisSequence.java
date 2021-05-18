@@ -1,6 +1,6 @@
 package blue.redis.internal.core.sequence;
 
-import blue.redis.core.Sequence;
+import blue.redis.core.RedisSequence;
 import blue.redis.core.options.RedisSequenceOptions;
 import org.redisson.api.RAtomicLong;
 import org.redisson.api.RedissonClient;
@@ -11,14 +11,14 @@ import org.slf4j.LoggerFactory;
  * @author Jin Zheng
  * @since 1.0 2019-11-08
  */
-public abstract class AbstractSequence implements Sequence {
-	private static Logger logger = LoggerFactory.getLogger(AbstractSequence.class);
+public abstract class AbstractRedisSequence implements RedisSequence {
+	private static Logger logger = LoggerFactory.getLogger(AbstractRedisSequence.class);
 	public static final String ZERO = "0";
 
 	protected final RAtomicLong counter;
 	protected final RedisSequenceOptions options;
 
-	public AbstractSequence(RedisSequenceOptions options, RedissonClient client) {
+	public AbstractRedisSequence(RedisSequenceOptions options, RedissonClient client) {
 		this.options = options;
 		this.options.check();
 		this.counter = client.getAtomicLong(options.getKey());

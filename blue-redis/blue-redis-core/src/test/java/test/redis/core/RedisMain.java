@@ -6,7 +6,7 @@ import blue.redis.core.RedisClient;
 import blue.redis.core.RedisConsumer;
 import blue.redis.core.RedisLock;
 import blue.redis.core.RedisProducer;
-import blue.redis.core.Sequence;
+import blue.redis.core.RedisSequence;
 import blue.redis.core.codec.FastjsonCodec;
 import blue.redis.core.options.RedisCacheMode;
 import blue.redis.core.options.RedisCacheOptions;
@@ -75,7 +75,7 @@ public class RedisMain {
 
     private static void testSequence(RedisClient client, RedisSequenceOptions options) {
 		int count = 2;
-	    Sequence sequence = client.createSequence(options);
+	    RedisSequence sequence = client.createSequence(options);
 	    for (int i = 0; i < count; i++) {
 		    System.out.println(sequence.nextValue());
 	    }

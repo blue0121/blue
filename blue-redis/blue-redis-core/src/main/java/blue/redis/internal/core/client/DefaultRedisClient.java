@@ -6,7 +6,7 @@ import blue.redis.core.RedisClient;
 import blue.redis.core.RedisConsumer;
 import blue.redis.core.RedisLock;
 import blue.redis.core.RedisProducer;
-import blue.redis.core.Sequence;
+import blue.redis.core.RedisSequence;
 import blue.redis.core.options.RedisCacheOptions;
 import blue.redis.core.options.RedisClientOptions;
 import blue.redis.core.options.RedisConsumerOptions;
@@ -17,8 +17,8 @@ import blue.redis.internal.core.cache.DefaultRedisCache;
 import blue.redis.internal.core.consumer.DefaultRedisConsumer;
 import blue.redis.internal.core.lock.DefaultRedisLock;
 import blue.redis.internal.core.producer.DefaultRedisProducer;
-import blue.redis.internal.core.sequence.AtomicSequence;
-import blue.redis.internal.core.sequence.DateSequence;
+import blue.redis.internal.core.sequence.AtomicRedisSequence;
+import blue.redis.internal.core.sequence.DateRedisSequence;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
 import org.slf4j.Logger;
@@ -70,12 +70,12 @@ public class DefaultRedisClient implements RedisClient {
     }
 
     @Override
-    public Sequence createSequence(RedisSequenceOptions options) {
+    public RedisSequence createSequence(RedisSequenceOptions options) {
         switch (options.getMode()) {
             case ATOMIC:
-                return new AtomicSequence(options, client);
+                return new AtomicRedisSequence(options, client);
             case DATE:
-                return new DateSequence(options, client);
+                return new DateRedisSequence(options, client);
             default:
                 throw new UnsupportedOperationException("Unsupported mode: " + options.getMode());
         }

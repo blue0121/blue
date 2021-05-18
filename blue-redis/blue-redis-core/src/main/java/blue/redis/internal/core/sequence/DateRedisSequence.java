@@ -11,10 +11,10 @@ import java.time.format.DateTimeFormatter;
  * @author Jin Zheng
  * @since 1.0 2019-11-08
  */
-public class DateSequence extends AbstractSequence {
+public class DateRedisSequence extends AbstractRedisSequence {
 	private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
 
-	public DateSequence(RedisSequenceOptions options, RedissonClient client) {
+	public DateRedisSequence(RedisSequenceOptions options, RedissonClient client) {
 		super(options, client);
 	}
 
