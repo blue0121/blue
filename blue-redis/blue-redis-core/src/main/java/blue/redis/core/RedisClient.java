@@ -1,5 +1,6 @@
 package blue.redis.core;
 
+import blue.redis.core.options.RedisCacheOptions;
 import blue.redis.core.options.RedisClientOptions;
 import blue.redis.core.options.RedisConsumerOptions;
 import blue.redis.core.options.RedisProducerOptions;
@@ -59,5 +60,13 @@ public interface RedisClient {
 	 * @return
 	 */
 	Sequence createSequence(RedisSequenceOptions options);
+
+	/**
+	 * 创建Redis缓存
+	 *
+	 * @param options
+	 * @return
+	 */
+	<T> RedisCache<T> createCache(RedisCacheOptions options);
 
 }

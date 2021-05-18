@@ -1,14 +1,19 @@
 package blue.redis.internal.core.client;
 
+import blue.base.core.collection.ConcurrentSet;
+import blue.redis.core.RedisCache;
 import blue.redis.core.RedisClient;
 import blue.redis.core.RedisConsumer;
 import blue.redis.core.RedisLock;
 import blue.redis.core.RedisProducer;
 import blue.redis.core.Sequence;
+import blue.redis.core.options.RedisCacheOptions;
 import blue.redis.core.options.RedisClientOptions;
 import blue.redis.core.options.RedisConsumerOptions;
 import blue.redis.core.options.RedisProducerOptions;
 import blue.redis.core.options.RedisSequenceOptions;
+import blue.redis.internal.core.cache.DefaultLocalRedisCache;
+import blue.redis.internal.core.cache.DefaultRedisCache;
 import blue.redis.internal.core.consumer.DefaultRedisConsumer;
 import blue.redis.internal.core.lock.DefaultRedisLock;
 import blue.redis.internal.core.producer.DefaultRedisProducer;
@@ -29,6 +34,8 @@ public class DefaultRedisClient implements RedisClient {
     private final RedisClientOptions options;
     private final RedissonClient client;
 
+    private final ConcurrentSet<RedisCache<?>> cacheSet = ConcurrentSet.create(null);
+
     public DefaultRedisClient(RedisClientOptions options) {
         this.options = options;
         var config = new RedissonConfig(options);
@@ -38,6 +45,9 @@ public class DefaultRedisClient implements RedisClient {
 
     @Override
     public void disconnect() {
+        for (var cache : cacheSet) {
+            cache.disconnect();
+        }
         if (client != null && !client.isShutdown()) {
             client.shutdown();
             logger.info("Redis '{}' disconnect successful, broker: {}", options.getId(), options.getBroker());
@@ -66,6 +76,20 @@ public class DefaultRedisClient implements RedisClient {
                 return new AtomicSequence(options, client);
             case DATE:
                 return new DateSequence(options, client);
+            default:
+                throw new UnsupportedOperationException("Unsupported mode: " + options.getMode());
+        }
+    }
+
+    @Override
+    public RedisCache<?> createCache(RedisCacheOptions options) {
+        switch (options.getMode()) {
+            case REDIS:
+                return new DefaultRedisCache<>(options, client);
+            case LOCAL_REDIS:
+                RedisCache<?> cache = new DefaultLocalRedisCache<>(options, client);
+                cacheSet.add(cache);
+                return cache;
             default:
                 throw new UnsupportedOperationException("Unsupported mode: " + options.getMode());
         }
