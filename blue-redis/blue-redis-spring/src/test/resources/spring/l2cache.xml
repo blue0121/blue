@@ -1,0 +1,13 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:redis="http://blue.com/schema/redis"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://blue.com/schema/redis http://blue.com/schema/redis.xsd">
+	
+	<redis:fastjson-codec id="fastjsonCodec" />
+	
+	<redis:client id="redisClient" broker="redis://localhost:6379" ref-codec="fastjsonCodec" />
+	
+	<redis:cache id="testKey" mode="LOCAL_REDIS" ref-redis-client="redisClient" prefix="com.blue.test" />
+
+</beans>

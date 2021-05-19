@@ -27,8 +27,10 @@ public abstract class AbstractConsumer<T extends Topic> implements Consumer<T> {
 
 	public void init() {
 		this.check();
-		logger.info("Consumer '{}' ConsumerListener size: {}", options.getId(),
-				configList == null ? 0 : configList.size());
+		if (configList != null && !configList.isEmpty()) {
+			logger.info("Consumer '{}' ConsumerListener size: {}", options.getId(),
+					configList == null ? 0 : configList.size());
+		}
 		this.subscribe(configList);
 	}
 

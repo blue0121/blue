@@ -65,16 +65,7 @@ public abstract class AbstractRedisCache<T> implements RedisCache<T> {
 
 	private MapOptions<String, T> getMapOption() {
 		MapOptions<String, T> ops = MapOptions.defaults();
-		switch (options.getWriteMode()) {
-			case SYNC:
-				ops.writeMode(MapOptions.WriteMode.WRITE_THROUGH);
-				break;
-			case ASYNC:
-				ops.writeMode(MapOptions.WriteMode.WRITE_BEHIND);
-				break;
-			default:
-				throw new UnsupportedOperationException("Unsupported mode: " + options.getWriteMode());
-		}
+		ops.writeMode(MapOptions.WriteMode.WRITE_THROUGH);
 		if (options.getLoader() != null) {
 			ops.loader(new DefaultMapLoader<>(options.getLoader()));
 		}

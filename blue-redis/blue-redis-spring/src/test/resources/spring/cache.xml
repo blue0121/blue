@@ -1,0 +1,26 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:cache="http://www.springframework.org/schema/cache"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:redis="http://blue.com/schema/redis"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+       http://blue.com/schema/redis http://blue.com/schema/redis.xsd">
+	
+	<aop:aspectj-autoproxy />
+	
+	<redis:fastjson-codec id="fastjsonCodec" />
+	
+	<redis:client id="redisClient" broker="redis://localhost:6379" ref-codec="fastjsonCodec" />
+	
+	<cache:annotation-driven cache-manager="cacheManager" />
+	<redis:cache-manager id="cacheManager" ref-redis-client="redisClient" prefix="test.">
+		<redis:cache-config name="user" ttl="1000" local-ttl="300" />
+	</redis:cache-manager>
+	
+	<redis:lock-advice id="lockAdvice" ref-redis-client="redisClient" />
+	
+	<bean id="userService" class="test.redis.spring.service.UserService" />
+
+</beans>

@@ -1,0 +1,28 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:core="http://blue.com/schema/core"
+       xmlns:redis="http://blue.com/schema/redis"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://blue.com/schema/core http://blue.com/schema/core.xsd
+       http://blue.com/schema/redis http://blue.com/schema/redis.xsd">
+	
+	<core:task-executor id="taskExecutor" core-pool-size="10" max-pool-size="1000" queue-capacity="10000" keep-alive-seconds="60" />
+	
+	<redis:fastjson-codec id="fastjsonCodec" />
+	<redis:client id="redisClient" broker="redis://127.0.0.1:6379" connection-pool-size="64"
+	              subscription-connection-pool-size="32"
+	              ref-codec="fastjsonCodec" timeout-millis="5000" />
+	
+	<redis:producer id="redisProducer" ref-redis-client="redisClient" ref-producer-listener="producerListener" />
+	
+	<redis:consumer id="mqttListenerContainer" ref-redis-client="redisClient" ref-executor="taskExecutor">
+		<redis:listener topic="test" ref-listener="redisReceiver" />
+	</redis:consumer>
+	
+	<bean id="producerListener" class="test.redis.spring.producer.ProducerListener" />
+	<bean id="redisReceiver" class="test.redis.spring.consumer.RedisReceiver" />
+	
+	<redis:sequence id="orderSeq" mode="DATE" ref-redis-client="redisClient" key="order_seq" length="14" prefix="OD" />
+
+</beans>
