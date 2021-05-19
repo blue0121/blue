@@ -31,8 +31,8 @@ public class SpringCacheConfig {
 
 	@Override
 	public String toString() {
-		return String.format("%s{name: %s, ttl: %dms, localTtl: %dms, localMaxSize: %dms, timeout: %dms}",
-				this.getClass().getSimpleName(), name, ttl, localTtl, localMaxSize, timeout);
+		return String.format("%s {mode: %s, ttl: %dms, localTtl: %dms, localMaxSize: %d, timeout: %dms}",
+				name, mode, ttl, localTtl, localMaxSize, timeout);
 	}
 
 	public RedisCacheOptions merge(RedisCacheOptions options) {

@@ -16,7 +16,7 @@
 	
 	<cache:annotation-driven cache-manager="cacheManager" />
 	<redis:cache-manager id="cacheManager" ref-redis-client="redisClient" prefix="test.">
-		<redis:cache-config name="user" ttl="1000" local-ttl="300" />
+		<redis:cache-config name="user" mode="LOCAL_REDIS" ttl="1000" local-ttl="300" />
 	</redis:cache-manager>
 	
 	<redis:lock-advice id="lockAdvice" ref-redis-client="redisClient" />

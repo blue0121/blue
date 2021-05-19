@@ -11,6 +11,8 @@ import org.redisson.config.Config;
  * @since 1.0 2021-05-12
  */
 public class RedissonConfig {
+    private static final int MIN_SUBSCRIPTION_CONNECTION_POOL_SIZE = 2;
+
     private final RedisClientOptions options;
 
     public RedissonConfig(RedisClientOptions options) {
@@ -50,6 +52,7 @@ public class RedissonConfig {
         if (options.getSubscriptionConnectionPoolSize() > 0) {
             singleConfig.setSubscriptionConnectionPoolSize(options.getSubscriptionConnectionPoolSize());
         }
+        singleConfig.setSubscriptionConnectionMinimumIdleSize(MIN_SUBSCRIPTION_CONNECTION_POOL_SIZE);
         this.setBaseConfig(singleConfig);
     }
 
@@ -66,6 +69,7 @@ public class RedissonConfig {
         if (options.getSubscriptionConnectionPoolSize() > 0) {
             sentinelConfig.setSubscriptionConnectionPoolSize(options.getSubscriptionConnectionPoolSize());
         }
+        sentinelConfig.setSubscriptionConnectionMinimumIdleSize(MIN_SUBSCRIPTION_CONNECTION_POOL_SIZE);
         this.setBaseConfig(sentinelConfig);
     }
 
@@ -79,6 +83,7 @@ public class RedissonConfig {
         if (options.getSubscriptionConnectionPoolSize() > 0) {
             clusterConfig.setSubscriptionConnectionPoolSize(options.getSubscriptionConnectionPoolSize());
         }
+        clusterConfig.setSubscriptionConnectionMinimumIdleSize(MIN_SUBSCRIPTION_CONNECTION_POOL_SIZE);
         this.setBaseConfig(clusterConfig);
     }
 

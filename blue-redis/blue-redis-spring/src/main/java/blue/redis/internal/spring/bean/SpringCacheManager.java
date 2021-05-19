@@ -72,9 +72,13 @@ public class SpringCacheManager implements CacheManager, InitializingBean {
 	public void afterPropertiesSet() {
 		AssertUtil.notNull(redisClient, "Redis Client");
 		options.check();
+		logger.info("default {mode: {}, ttl: {}ms, localTtl: {}ms, localMaxSize: {}, timeout: {}ms}",
+				options.getMode(), options.getTtl(), options.getLocalTtl(), options.getLocalMaxSize(), options.getTimeout());
 		if (configList != null && !configList.isEmpty()) {
 			for (var config : configList) {
 				var opt = config.merge(options);
+				logger.info("{} {mode: {}, ttl: {}ms, localTtl: {}ms, localMaxSize: {}, timeout: {}ms}",
+						config.getName(), opt.getMode(), opt.getTtl(), opt.getLocalTtl(), opt.getLocalMaxSize(), opt.getTimeout());
 				optionsMap.put(config.getName(), opt);
 			}
 		}
