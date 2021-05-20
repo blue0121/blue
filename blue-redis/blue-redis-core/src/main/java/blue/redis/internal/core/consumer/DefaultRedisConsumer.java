@@ -8,6 +8,8 @@ import blue.base.internal.core.message.AbstractConsumer;
 import blue.base.internal.core.message.ConsumerListenerConfig;
 import blue.redis.core.RedisConsumer;
 import org.redisson.api.RedissonClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -18,6 +20,7 @@ import java.util.List;
  * @since 1.0 2021-01-08
  */
 public class DefaultRedisConsumer extends AbstractConsumer<Topic> implements RedisConsumer {
+	private static Logger logger = LoggerFactory.getLogger(DefaultRedisConsumer.class);
 	private final RedissonClient redisson;
 
 	public DefaultRedisConsumer(ConsumerOptions options, RedissonClient redisson) {
@@ -34,6 +37,7 @@ public class DefaultRedisConsumer extends AbstractConsumer<Topic> implements Red
 		for (ConsumerListenerConfig config : configList) {
 			RedissonMessageListener listener = new RedissonMessageListener(config);
 			redisson.getTopic(config.getTopic()).addListener(config.getClazz(), listener);
+			logger.info("RedisConsumer '{}' subscribe, topic: {}", options.getId(), config.getTopic());
 		}
 	}
 
@@ -61,6 +65,7 @@ public class DefaultRedisConsumer extends AbstractConsumer<Topic> implements Red
 		AssertUtil.notEmpty(topicList, "Topic list");
 		for (String topic : topicList) {
 			redisson.getTopic(topic).removeAllListeners();
+			logger.info("RedisConsumer '{}' unsubscribe, topic: {}", options.getId(), topic);
 		}
 	}
 

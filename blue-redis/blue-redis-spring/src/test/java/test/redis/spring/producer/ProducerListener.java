@@ -1,7 +1,7 @@
 package test.redis.spring.producer;
 
 import blue.base.core.message.Topic;
-import blue.core.util.JsonUtil;
+import blue.base.core.util.JsonUtil;
 import blue.redis.core.RedisProducerListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

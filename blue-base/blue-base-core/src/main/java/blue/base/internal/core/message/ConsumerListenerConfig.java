@@ -31,7 +31,7 @@ public class ConsumerListenerConfig {
 		AssertUtil.notEmpty(topic, "Topic");
 		AssertUtil.notNull(listener, "ConsumerListener");
 
-		if (!multiThread && executor != null) {
+		if (!multiThread && executor == null) {
 			throw new MessageException(topic + " is multi-thread，Executor is not null");
 		}
 

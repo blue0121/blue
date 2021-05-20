@@ -1,6 +1,7 @@
 package test.redis.spring;
 
 import blue.redis.core.RedisCache;
+import org.junit.jupiter.api.Assertions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -36,13 +37,15 @@ public class L2CacheSpringMain {
 		cache.set("k1", "vv1");
 		Thread.sleep(10);
 		logger.info("key: k1, value: {}", cache.get("k1"));
+		Assertions.assertEquals("vv1", cache.get("k1"));
 
 		cache.remove("k2");
 		Thread.sleep(10);
 		logger.info("key: k2, value: {}", cache.get("k2"));
+		Assertions.assertNull(cache.get("k2"));
 
 		cache.clear();
-		getSync(cache, map.keySet());
+		Assertions.assertEquals(0, cache.getMap(map.keySet().toArray(new String[0])).size());
 
 		ctx.close();
 	}
@@ -51,6 +54,11 @@ public class L2CacheSpringMain {
 		logger.info("=============== getSync ===============");
 		Map<String, String> map = cache.getMap(nameList.toArray(new String[0]));
 		logger.info("map: {}", map);
+		int i = 0;
+		for (String name : nameList) {
+			Assertions.assertEquals("v" + i, map.get(name));
+			i++;
+		}
 		logger.info("=============== getSync ===============");
 	}
 

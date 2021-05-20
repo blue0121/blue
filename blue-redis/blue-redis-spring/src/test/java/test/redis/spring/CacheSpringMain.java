@@ -8,8 +8,8 @@ import test.redis.spring.service.UserService;
  * @author Jin Zheng
  * @since 1.0 2020-12-14
  */
-public class CacheMain {
-	public CacheMain() {
+public class CacheSpringMain {
+	public CacheSpringMain() {
 	}
 
 	public static void main(String[] args) throws Exception {
