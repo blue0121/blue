@@ -1,5 +1,10 @@
 package blue.base.core.message;
 
+import blue.base.core.id.IdGenerator;
+import blue.base.internal.core.message.LoggerExceptionHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.concurrent.Executor;
 
 /**
@@ -8,13 +13,28 @@ import java.util.concurrent.Executor;
  */
 @SuppressWarnings("rawtypes")
 public class ConsumerOptions {
-    private String id;
-    private boolean multiThread;
-    private Executor executor;
-    private ExceptionHandler exceptionHandler;
+    private static Logger logger = LoggerFactory.getLogger(ConsumerOptions.class);
 
-	public ConsumerOptions() {
-	}
+    protected String id;
+    protected boolean multiThread;
+    protected Executor executor;
+    protected ExceptionHandler exceptionHandler;
+
+    public ConsumerOptions() {
+    }
+
+    public void check() {
+        if (multiThread && executor == null) {
+            throw new MessageException("Executor config is null");
+        }
+        if (id == null || id.isEmpty()) {
+            id = "Consumer" + IdGenerator.uuid12bit();
+        }
+        if (exceptionHandler == null) {
+            logger.info("Consumer '{}' default ExceptionHandler is null, use LoggerExceptionHandler", id);
+            exceptionHandler = new LoggerExceptionHandler<>();
+        }
+    }
 
     public String getId() {
         return id;

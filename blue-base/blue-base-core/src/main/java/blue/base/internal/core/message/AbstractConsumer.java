@@ -22,6 +22,7 @@ public abstract class AbstractConsumer<T extends Topic> implements Consumer<T> {
 
 	public AbstractConsumer(ConsumerOptions options) {
 		AssertUtil.notNull(options, "Consumer Options");
+		options.check();
 		this.options = options;
 	}
 

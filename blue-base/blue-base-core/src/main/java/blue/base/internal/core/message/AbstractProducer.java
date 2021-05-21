@@ -18,6 +18,7 @@ public abstract class AbstractProducer<T extends Topic> implements Producer<T> {
 
 	public AbstractProducer(ProducerOptions options) {
 		AssertUtil.notNull(options, "Producer Options");
+		options.check();
 		this.options = options;
 	}
 
