@@ -22,10 +22,4 @@ public abstract class AbstractProducer<T extends Topic> implements Producer<T> {
 		this.options = options;
 	}
 
-	public void init() {
-		if (options.getProducerListener() == null) {
-			logger.info("Producer '{}' default ProducerListener is null, use LoggerProducerListener", options.getId());
-			options.setProducerListener(new LoggerProducerListener<>());
-		}
-	}
 }

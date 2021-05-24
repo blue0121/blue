@@ -21,7 +21,7 @@ public class ProducerOptions {
 
 	public void check() {
 		if (id == null || id.isEmpty()) {
-			id = "Producer" + IdGenerator.uuid12bit();
+			id = "Producer-" + IdGenerator.uuid12bit();
 		}
 		if (producerListener == null) {
 			logger.info("Producer '{}' default ProducerListener is null, use LoggerProducerListener", id);

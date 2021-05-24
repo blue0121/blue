@@ -3,7 +3,6 @@ package blue.mqtt.internal.core.consumer;
 import blue.base.core.message.ConsumerListener;
 import blue.base.core.util.AssertUtil;
 import blue.base.internal.core.message.AbstractConsumer;
-import blue.base.internal.core.message.ConsumerListenerConfig;
 import blue.mqtt.core.MqttConsumer;
 import blue.mqtt.core.MqttQos;
 import blue.mqtt.core.MqttTopic;
@@ -30,41 +29,37 @@ public class DefaultMqttConsumer extends AbstractConsumer<MqttTopic> implements 
 		super(options);
 		this.mqttClient = mqttClient;
 		this.defaultQos = options.getDefaultQos();
-		this.init();
 	}
 
 	@Override
 	public void subscribe(Collection<MqttTopic> topicList, ConsumerListener<MqttTopic, ?> listener) {
 		AssertUtil.notEmpty(topicList, "Topic list");
-		List<ConsumerListenerConfig> configList = new ArrayList<>();
+		AssertUtil.notNull(listener, "ConsumerListener");
+		List<MqttListenerConfig> configList = new ArrayList<>();
 		for (var topic : topicList) {
 			var config = new MqttListenerConfig();
 			config.setTopic(topic.getTopic());
 			config.setQos(topic.getQos() == null ? defaultQos.getType() : topic.getQos().getType());
 			config.setMultiThread(options.isMultiThread());
 			config.setListener(listener);
+			config.setExceptionHandler(options.getExceptionHandler());
+			config.setExecutor(options.getExecutor());
 			config.init();
 			configList.add(config);
 		}
-		this.checkHandler(configList);
 		this.subscribe(configList);
+	}
+
+	private void subscribe(List<MqttListenerConfig> configList) {
+		if (configList == null || configList.isEmpty()) {
+			return;
+		}
+		mqttClient.subscribe(configList);
 	}
 
 	@Override
 	public void unsubscribe(Collection<String> topicList) {
 		AssertUtil.notEmpty(topicList, "Topic list");
 		mqttClient.unsubscribe(topicList);
-	}
-
-	@Override
-	protected void subscribe(List<ConsumerListenerConfig> configList) {
-		if (configList == null || configList.isEmpty()) {
-			return;
-		}
-		List<MqttListenerConfig> list = new ArrayList<>();
-		for (var config : configList) {
-			list.add((MqttListenerConfig) config);
-		}
-		mqttClient.subscribe(list);
 	}
 }

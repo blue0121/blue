@@ -29,7 +29,6 @@ public class DefaultRedisProducer extends AbstractProducer<Topic> implements Red
 	public DefaultRedisProducer(ProducerOptions options, RedissonClient redisson) {
 		super(options);
 		this.redisson = redisson;
-		this.init();
 	}
 
 	@Override

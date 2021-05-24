@@ -1,6 +1,7 @@
 package blue.kafka.core.options;
 
 import blue.base.core.message.ConsumerOptions;
+import blue.kafka.core.KafkaException;
 import blue.kafka.core.codec.FastjsonDeserializer;
 import blue.kafka.internal.core.offset.MemoryOffsetManager;
 import blue.kafka.internal.core.offset.OffsetManager;
@@ -9,6 +10,7 @@ import org.apache.kafka.common.serialization.StringDeserializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.Duration;
 import java.util.Properties;
 
 /**
@@ -18,8 +20,14 @@ import java.util.Properties;
 public class KafkaConsumerOptions extends ConsumerOptions {
 	private static Logger logger = LoggerFactory.getLogger(KafkaConsumerOptions.class);
 
+	public static final int MIN_COUNT = 1;
+	public static final int MAX_COUNT = 100;
+	public static final int DURATION = 1000;
+
 	private Class<?> keyDeserializer;
 	private Class<?> valueDeserializer;
+	private int count = MIN_COUNT;
+	private Duration duration;
 	private String group;
 	private OffsetManager offsetManager;
 	private Properties prop = new Properties();
@@ -30,6 +38,12 @@ public class KafkaConsumerOptions extends ConsumerOptions {
 	@Override
 	public void check() {
 		super.check();
+		if (count < MIN_COUNT || count > MAX_COUNT) {
+			throw new KafkaException("Kafka count must be between " + MIN_COUNT + " and " + MAX_COUNT);
+		}
+		if (duration == null) {
+			this.duration = Duration.ofMillis(DURATION);
+		}
 		if (group != null && !group.isEmpty()) {
 			prop.put(ConsumerConfig.GROUP_ID_CONFIG, group);
 		}
@@ -41,12 +55,12 @@ public class KafkaConsumerOptions extends ConsumerOptions {
 		}
 		if (!prop.containsKey(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG)) {
 			logger.info("KafkaConsumer '{}' config '{}' is empty, default: {}",
-					id, ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+					id, ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
 			prop.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
 		}
 		if (!prop.containsKey(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG)) {
 			logger.info("KafkaConsumer '{}' config '{}' is empty, default: {}",
-					id, ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, FastjsonDeserializer.class);
+					id, ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, FastjsonDeserializer.class.getName());
 			prop.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, FastjsonDeserializer.class.getName());
 		}
 		if (offsetManager == null) {
@@ -70,6 +84,24 @@ public class KafkaConsumerOptions extends ConsumerOptions {
 
 	public KafkaConsumerOptions setValueDeserializer(Class<?> valueDeserializer) {
 		this.valueDeserializer = valueDeserializer;
+		return this;
+	}
+
+	public int getCount() {
+		return count;
+	}
+
+	public KafkaConsumerOptions setCount(int count) {
+		this.count = count;
+		return this;
+	}
+
+	public Duration getDuration() {
+		return duration;
+	}
+
+	public KafkaConsumerOptions setDuration(Duration duration) {
+		this.duration = duration;
 		return this;
 	}
 

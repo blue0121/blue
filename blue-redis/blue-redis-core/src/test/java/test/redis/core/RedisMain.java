@@ -33,18 +33,17 @@ public class RedisMain {
 	}
 
 	public static void main(String[] args) {
-        RedisClientOptions clientOptions = new RedisClientOptions();
-        clientOptions.setId("client").setBroker("redis://localhost:6379").setCodec(new FastjsonCodec());
-	    RedisClient client = RedisClient.create(clientOptions);
+		RedisClientOptions clientOptions = new RedisClientOptions();
+		clientOptions.setBroker("redis://localhost:6379");
+		clientOptions.setCodec(new FastjsonCodec());
+		RedisClient client = RedisClient.create(clientOptions);
 
-	    RedisConsumerOptions consumerOptions = new RedisConsumerOptions();
-	    consumerOptions.setId("consumer");
-	    RedisConsumer consumer = client.createConsumer(consumerOptions);
+		RedisConsumerOptions consumerOptions = new RedisConsumerOptions();
+		RedisConsumer consumer = client.createConsumer(consumerOptions);
 		RedisReceiver receiver = new RedisReceiver();
 		consumer.subscribe(new Topic("test"), receiver);
 
 		RedisProducerOptions producerOptions = new RedisProducerOptions();
-		producerOptions.setId("producer");
 		RedisProducer producer = client.createProducer(producerOptions);
 		int count = 10;
 		for (int i = 0; i < count; i++) {

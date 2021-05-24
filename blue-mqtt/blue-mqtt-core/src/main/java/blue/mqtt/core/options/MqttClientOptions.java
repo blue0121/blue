@@ -1,6 +1,7 @@
 package blue.mqtt.core.options;
 
 import blue.base.core.id.IdGenerator;
+import blue.base.core.message.ClientOptions;
 import blue.base.core.util.AssertUtil;
 import blue.base.core.util.RandomUtil;
 import blue.mqtt.core.MqttException;
@@ -13,15 +14,13 @@ import javax.net.ssl.SSLContext;
  * @author Jin Zheng
  * @since 2021-05-03
  */
-public class MqttClientOptions {
+public class MqttClientOptions extends ClientOptions {
 	private static Logger logger = LoggerFactory.getLogger(MqttClientOptions.class);
 
 	public static final String RANDOM = "$RANDOM";
 	public static final int MIN_COUNT = 1;
 	public static final int MAX_COUNT = 200;
 
-	private String id;
-	private String broker;
 	private String username;
 	private String password;
 	private String clientId;
@@ -34,8 +33,8 @@ public class MqttClientOptions {
 	public MqttClientOptions() {
 	}
 
+	@Override
 	public void check() {
-		AssertUtil.notEmpty(broker, "Broker");
 		if (count < MIN_COUNT || count > MAX_COUNT) {
 			throw new MqttException("MQTT count must be between " + MIN_COUNT + " and " + MAX_COUNT);
 		}
@@ -55,24 +54,6 @@ public class MqttClientOptions {
 			String random = RandomUtil.rand(RandomUtil.RandomType.UPPER_LOWER_CASE_NUMBER, 10);
 			clientId = clientId.replace(RANDOM, random);
 		}
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public MqttClientOptions setId(String id) {
-		this.id = id;
-		return this;
-	}
-
-	public String getBroker() {
-		return broker;
-	}
-
-	public MqttClientOptions setBroker(String broker) {
-		this.broker = broker;
-		return this;
 	}
 
 	public String getUsername() {

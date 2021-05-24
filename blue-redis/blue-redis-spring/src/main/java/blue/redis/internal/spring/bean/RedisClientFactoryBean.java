@@ -43,9 +43,9 @@ public class RedisClientFactoryBean implements FactoryBean<RedisClient>, Initial
 	public void afterPropertiesSet() throws Exception {
 		RedisClientOptions options = new RedisClientOptions();
 		options.setId(id)
-				.setCodec(codec)
+				.setBroker(broker);
+		options.setCodec(codec)
 				.setMode(mode)
-				.setBroker(broker)
 				.setMasterName(masterName)
 				.setDatabase(database)
 				.setPassword(password)

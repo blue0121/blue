@@ -22,7 +22,7 @@ public class ClientOptions {
     public void check() {
         AssertUtil.notEmpty(broker, "Broker");
         if (id == null || id.isEmpty()) {
-            id = "Producer" + IdGenerator.uuid12bit();
+            id = "Client-" + IdGenerator.uuid12bit();
         }
     }
 

@@ -41,18 +41,18 @@ public class MqttClientFactoryBean implements FactoryBean<MqttClient>, Initializ
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        MqttClientOptions options = new MqttClientOptions();
-        options.setId(id)
-                .setBroker(broker)
-                .setUsername(username)
-                .setPassword(password)
-                .setClientId(clientId)
-                .setCount(count)
-                .setTimeout(timeout)
-                .setKeepAlive(keepAlive)
-                .setReconnectDelay(reconnectDelay)
-                .setSslContext(sslContext);
-        this.mqttClient = MqttClient.create(options);
+	    MqttClientOptions options = new MqttClientOptions();
+	    options.setId(id)
+			    .setBroker(broker);
+	    options.setUsername(username)
+			    .setPassword(password)
+			    .setClientId(clientId)
+			    .setCount(count)
+			    .setTimeout(timeout)
+			    .setKeepAlive(keepAlive)
+			    .setReconnectDelay(reconnectDelay)
+			    .setSslContext(sslContext);
+	    this.mqttClient = MqttClient.create(options);
     }
 
     @Override

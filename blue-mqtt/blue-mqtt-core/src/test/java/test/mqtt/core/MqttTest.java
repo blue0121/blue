@@ -55,20 +55,20 @@ public class MqttTest {
 
     @Test
     public void test() {
-        MqttClientOptions clientOptions = new MqttClientOptions();
-        clientOptions.setId("client")
-                .setBroker("tcp://localhost:2883")
-                .setUsername("test")
-                .setPassword("test")
-                .setClientId("client_$RANDOM")
-                .setCount(2);
-        MqttClient client = MqttClient.create(clientOptions);
+	    MqttClientOptions clientOptions = new MqttClientOptions();
+	    clientOptions.setId("client")
+			    .setBroker("tcp://localhost:2883");
+	    clientOptions.setUsername("test")
+			    .setPassword("test")
+			    .setClientId("client_$RANDOM")
+			    .setCount(2);
+	    MqttClient client = MqttClient.create(clientOptions);
 
-        var receiver = new MqttReceiver();
-        MqttConsumerOptions consumerOptions = new MqttConsumerOptions();
-        consumerOptions.setId("consumer");
-        MqttConsumer consumer = client.createConsumer(consumerOptions);
-        consumer.subscribe(new MqttTopic("test/+"), receiver);
+	    var receiver = new MqttReceiver();
+	    MqttConsumerOptions consumerOptions = new MqttConsumerOptions();
+	    consumerOptions.setId("consumer");
+	    MqttConsumer consumer = client.createConsumer(consumerOptions);
+	    consumer.subscribe(new MqttTopic("test/+"), receiver);
 
         MqttProducerOptions producerOptions = new MqttProducerOptions();
         producerOptions.setId("producer");

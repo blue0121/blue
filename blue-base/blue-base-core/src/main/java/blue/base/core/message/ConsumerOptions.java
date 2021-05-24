@@ -28,7 +28,7 @@ public class ConsumerOptions {
             throw new MessageException("Executor config is null");
         }
         if (id == null || id.isEmpty()) {
-            id = "Consumer" + IdGenerator.uuid12bit();
+            id = "Consumer-" + IdGenerator.uuid12bit();
         }
         if (exceptionHandler == null) {
             logger.info("Consumer '{}' default ExceptionHandler is null, use LoggerExceptionHandler", id);

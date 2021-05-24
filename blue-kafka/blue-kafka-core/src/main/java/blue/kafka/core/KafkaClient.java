@@ -18,7 +18,6 @@ public interface KafkaClient {
 	 * @return
 	 */
 	static KafkaClient create(KafkaClientOptions options) {
-		options.check();
 		KafkaClient client = new DefaultKafkaClient(options);
 		return client;
 	}

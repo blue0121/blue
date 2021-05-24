@@ -29,7 +29,6 @@ public class DefaultMqttProducer extends AbstractProducer<MqttTopic> implements 
 		super(options);
 		this.mqttClient = mqttClient;
 		this.defaultQos = options.getDefaultQos();
-		this.init();
 	}
 
 	@Override
@@ -57,14 +56,6 @@ public class DefaultMqttProducer extends AbstractProducer<MqttTopic> implements 
 		for (Object message : messageList) {
 			this.mqttClient.publish(topic, message, listener);
 		}
-	}
-
-	@Override
-	public void init() {
-		AssertUtil.notNull(mqttClient, "MqttClient");
-		AssertUtil.notNull(defaultQos, "DefaultQos");
-
-		super.init();
 	}
 
 	private void setMqttTopic(MqttTopic topic) {

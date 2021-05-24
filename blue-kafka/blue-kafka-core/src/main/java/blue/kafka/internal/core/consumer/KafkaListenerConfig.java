@@ -2,8 +2,10 @@ package blue.kafka.internal.core.consumer;
 
 import blue.base.internal.core.message.ConsumerListenerConfig;
 import blue.kafka.core.KafkaException;
+import blue.kafka.core.options.KafkaConsumerOptions;
 import blue.kafka.internal.core.offset.OffsetManager;
 
+import java.time.Duration;
 import java.util.regex.Pattern;
 
 /**
@@ -14,9 +16,9 @@ import java.util.regex.Pattern;
  */
 public class KafkaListenerConfig extends ConsumerListenerConfig {
 	private Pattern topicPattern;
-	private int count = 1;
+	private int count;
 	private String group;
-	private int duration = 1000;
+	private Duration duration;
 	private OffsetManager offsetManager;
 
 	public KafkaListenerConfig() {
@@ -26,8 +28,12 @@ public class KafkaListenerConfig extends ConsumerListenerConfig {
 	public void init() {
 		super.init();
 
-		if (count < 1) {
-			throw new KafkaException(topic + " Consumer size less than 1");
+		if (count < KafkaConsumerOptions.MIN_COUNT || count > KafkaConsumerOptions.MAX_COUNT) {
+			throw new KafkaException("Kafka count must be between " + KafkaConsumerOptions.MIN_COUNT
+					+ " and " + KafkaConsumerOptions.MAX_COUNT);
+		}
+		if (duration == null) {
+			this.duration = Duration.ofMillis(KafkaConsumerOptions.DURATION);
 		}
 
 		topicPattern = Pattern.compile(topic);
@@ -59,11 +65,11 @@ public class KafkaListenerConfig extends ConsumerListenerConfig {
 		this.group = group;
 	}
 
-	public int getDuration() {
+	public Duration getDuration() {
 		return duration;
 	}
 
-	public void setDuration(int duration) {
+	public void setDuration(Duration duration) {
 		this.duration = duration;
 	}
 

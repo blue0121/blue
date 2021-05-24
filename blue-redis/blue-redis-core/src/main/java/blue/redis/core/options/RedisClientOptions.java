@@ -1,20 +1,19 @@
 package blue.redis.core.options;
 
+import blue.base.core.message.ClientOptions;
 import blue.base.core.util.AssertUtil;
 
 /**
  * @author Jin Zheng
  * @since 1.0 2021-05-11
  */
-public class RedisClientOptions {
-    private String id;
-    private Object codec;
-    private RedisConnectionMode mode = RedisConnectionMode.SINGLE;
-    private String broker;
-    private String masterName;
-    private int database = 0;
-    private String password;
-    private int timeoutMillis;
+public class RedisClientOptions extends ClientOptions {
+	private Object codec;
+	private RedisConnectionMode mode = RedisConnectionMode.SINGLE;
+	private String masterName;
+	private int database = 0;
+	private String password;
+	private int timeoutMillis;
 	private int subscriptionConnectionPoolSize;
 	private int connectionPoolSize;
 	private int retry;
@@ -22,9 +21,10 @@ public class RedisClientOptions {
 	public RedisClientOptions() {
 	}
 
+	@Override
 	public void check() {
+		super.check();
 		AssertUtil.notNull(mode, "RedisConnectionMode");
-		AssertUtil.notEmpty(broker, "Broker");
 		if (mode == RedisConnectionMode.SENTINEL) {
 			AssertUtil.notEmpty(masterName, "MasterName");
 		}
@@ -32,15 +32,6 @@ public class RedisClientOptions {
 		AssertUtil.nonNegative(subscriptionConnectionPoolSize, "SubscriptionConnectionPoolSize");
 		AssertUtil.nonNegative(connectionPoolSize, "ConnectionPoolSize");
 		AssertUtil.nonNegative(retry, "Retry");
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public RedisClientOptions setId(String id) {
-		this.id = id;
-		return this;
 	}
 
 	public Object getCodec() {
@@ -58,15 +49,6 @@ public class RedisClientOptions {
 
 	public RedisClientOptions setMode(RedisConnectionMode mode) {
 		this.mode = mode;
-		return this;
-	}
-
-	public String getBroker() {
-		return broker;
-	}
-
-	public RedisClientOptions setBroker(String broker) {
-		this.broker = broker;
 		return this;
 	}
 

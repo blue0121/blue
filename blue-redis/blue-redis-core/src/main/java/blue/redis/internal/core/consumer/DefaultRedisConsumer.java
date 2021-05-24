@@ -26,11 +26,9 @@ public class DefaultRedisConsumer extends AbstractConsumer<Topic> implements Red
 	public DefaultRedisConsumer(ConsumerOptions options, RedissonClient redisson) {
 		super(options);
 		this.redisson = redisson;
-		this.init();
 	}
 
-	@Override
-	protected void subscribe(List<ConsumerListenerConfig> configList) {
+	private void subscribe(List<ConsumerListenerConfig> configList) {
 		if (configList == null || configList.isEmpty()) {
 			return;
 		}
@@ -56,7 +54,6 @@ public class DefaultRedisConsumer extends AbstractConsumer<Topic> implements Red
 			config.init();
 			configList.add(config);
 		}
-		this.checkHandler(configList);
 		this.subscribe(configList);
 	}
 

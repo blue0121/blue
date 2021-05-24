@@ -76,6 +76,7 @@
 		<mockito.version>3.9.0</mockito.version>
 		<wiremock.version>2.27.2</wiremock.version>
 		<activemq.version>5.16.2</activemq.version>
+		<kafka.test.version>2.7.1</kafka.test.version>
 		
 		<!-- maven plugins -->
 		<compiler.version>3.8.1</compiler.version>

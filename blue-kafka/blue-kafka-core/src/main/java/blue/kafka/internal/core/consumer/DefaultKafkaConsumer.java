@@ -3,7 +3,6 @@ package blue.kafka.internal.core.consumer;
 import blue.base.core.message.ConsumerListener;
 import blue.base.core.util.AssertUtil;
 import blue.base.internal.core.message.AbstractConsumer;
-import blue.base.internal.core.message.ConsumerListenerConfig;
 import blue.kafka.core.KafkaConsumer;
 import blue.kafka.core.KafkaTopic;
 import blue.kafka.core.options.KafkaConsumerOptions;
@@ -35,34 +34,37 @@ public class DefaultKafkaConsumer extends AbstractConsumer<KafkaTopic> implement
 	}
 
 	@Override
-	protected void subscribe(List<ConsumerListenerConfig> configList) {
-		for (ConsumerListenerConfig config : configList) {
-			KafkaListenerConfig listenerConfig = (KafkaListenerConfig) config;
-			for (int i = 0; i < listenerConfig.getCount(); i++) {
-				ConsumerRunnable consumer = new ConsumerThread(this.prop, listenerConfig);
+	public void subscribe(Collection<KafkaTopic> topicList, ConsumerListener<KafkaTopic, ?> listener) {
+		AssertUtil.notEmpty(topicList, "Topic list");
+		AssertUtil.notNull(listener, "ConsumerListener");
+		List<KafkaListenerConfig> configList = new ArrayList<>();
+		for (var topic : topicList) {
+			var config = new KafkaListenerConfig();
+			config.setTopic(topic.getTopic());
+			config.setGroup(options.getGroup());
+			config.setCount(options.getCount());
+			config.setDuration(options.getDuration());
+			config.setMultiThread(options.isMultiThread());
+			config.setListener(listener);
+			config.setExceptionHandler(options.getExceptionHandler());
+			config.setExecutor(options.getExecutor());
+			config.setOffsetManager(options.getOffsetManager());
+			config.init();
+			configList.add(config);
+		}
+		this.subscribe(configList);
+	}
+
+	protected void subscribe(List<KafkaListenerConfig> configList) {
+		for (KafkaListenerConfig config : configList) {
+			for (int i = 0; i < config.getCount(); i++) {
+				ConsumerRunnable consumer = new ConsumerThread(this.prop, config);
 				List<ConsumerRunnable> consumerList = consumerMap.computeIfAbsent(config.getTopic(), k -> new ArrayList<>());
 				consumerList.add(consumer);
 				Thread thread = new Thread(consumer);
 				thread.start();
 			}
 		}
-	}
-
-	@Override
-	public void subscribe(Collection<KafkaTopic> topicList, ConsumerListener<KafkaTopic, ?> listener) {
-		AssertUtil.notEmpty(topicList, "Topic list");
-		List<ConsumerListenerConfig> configList = new ArrayList<>();
-		for (var topic : topicList) {
-			var config = new KafkaListenerConfig();
-			config.setTopic(topic.getTopic());
-			config.setMultiThread(options.isMultiThread());
-			config.setListener(listener);
-			config.setOffsetManager(options.getOffsetManager());
-			config.init();
-			configList.add(config);
-		}
-		this.checkHandler(configList);
-		this.subscribe(configList);
 	}
 
 	@Override
