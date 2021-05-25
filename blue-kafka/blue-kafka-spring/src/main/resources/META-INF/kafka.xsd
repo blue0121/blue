@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<xsd:schema xmlns="http://blue.com/schema/kafka"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:util="http://www.springframework.org/schema/util"
+            targetNamespace="http://blue.com/schema/kafka"
+            elementFormDefault="qualified" attributeFormDefault="unqualified">
+	
+	<xsd:import namespace="http://www.springframework.org/schema/util" />
+	
+	<xsd:element name="client">
+		<xsd:complexType>
+			<xsd:attribute name="id" type="xsd:ID" use="required" />
+			<xsd:attribute name="broker" type="xsd:string" use="required" />
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="producer">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="config" minOccurs="0" maxOccurs="1">
+					<xsd:complexType>
+						<xsd:all>
+							<xsd:element ref="util:properties" />
+						</xsd:all>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+			<xsd:attribute name="id" type="xsd:ID" use="required" />
+			<xsd:attribute name="ref-kafka-client" type="xsd:string" use="required" />
+			<xsd:attribute name="key-serializer-class" type="xsd:string" use="optional" />
+			<xsd:attribute name="value-serializer-class" type="xsd:string" use="optional" />
+			<xsd:attribute name="ref-producer-listener" type="xsd:string" use="optional" />
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="consumer">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="config" minOccurs="0" maxOccurs="1">
+					<xsd:complexType>
+						<xsd:all>
+							<xsd:element ref="util:properties" />
+						</xsd:all>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="listeners" minOccurs="1">
+					<xsd:complexType>
+						<xsd:all>
+							<xsd:element ref="listener" />
+						</xsd:all>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+			<xsd:attribute name="id" type="xsd:ID" use="required" />
+			<xsd:attribute name="count" type="xsd:string" default="1" />
+			<xsd:attribute name="group" type="xsd:string" use="optional" />
+			<xsd:attribute name="duration" type="xsd:string" default="1000" />
+			<xsd:attribute name="multi-thread" type="xsd:boolean" default="true" />
+			<xsd:attribute name="ref-kafka-client" type="xsd:string" use="required" />
+			<xsd:attribute name="key-deserializer-class" type="xsd:string" use="optional" />
+			<xsd:attribute name="value-deserializer-class" type="xsd:string" use="optional" />
+			<xsd:attribute name="ref-exception-handler" type="xsd:string" use="optional" />
+			<xsd:attribute name="ref-executor" type="xsd:string" use="optional" />
+			<xsd:attribute name="ref-offset-manager" type="xsd:string" use="optional" />
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="listener">
+		<xsd:complexType>
+			<xsd:attribute name="topic" type="xsd:string" use="required" />
+			<xsd:attribute name="ref-listener" type="xsd:string" use="required" />
+			<xsd:attribute name="count" type="xsd:positiveInteger" use="optional" />
+			<xsd:attribute name="group" type="xsd:string" use="optional" />
+			<xsd:attribute name="duration" type="xsd:positiveInteger" use="optional" />
+			<xsd:attribute name="multi-thread" type="xsd:boolean" use="optional" />
+			<xsd:attribute name="ref-executor" type="xsd:string" use="optional" />
+			<xsd:attribute name="ref-exception-handler" type="xsd:string" use="optional" />
+			<xsd:attribute name="ref-offset-manager" type="xsd:string" use="optional" />
+		</xsd:complexType>
+	</xsd:element>
+
+</xsd:schema>

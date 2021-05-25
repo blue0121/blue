@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * Spring xml简化解析器
@@ -72,6 +73,19 @@ public class SimpleBeanDefinitionParser extends AbstractSimpleBeanDefinitionPars
 			map = new HashMap<>();
 		}
 		return map;
+	}
+
+	protected final Properties getBeanProps(Element element, ParserContext parserContext, BeanDefinitionBuilder builder, String namespace, String attribute) {
+		Properties props = null;
+		NodeList pkgList = element.getElementsByTagNameNS(namespace, attribute);
+		if (pkgList.getLength() > 0) {
+			Element node = (Element) pkgList.item(0).getChildNodes().item(1);
+			props = parserContext.getDelegate().parsePropsElement(node);
+		}
+		if (props == null) {
+			props = new Properties();
+		}
+		return props;
 	}
 
 	protected final List<Object> parseList(List<Object> list, Element element, String attribute) {

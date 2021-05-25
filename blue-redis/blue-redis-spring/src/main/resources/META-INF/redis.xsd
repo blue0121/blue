@@ -4,8 +4,6 @@
             targetNamespace="http://blue.com/schema/redis"
             elementFormDefault="qualified" attributeFormDefault="unqualified">
 	
-	<xsd:import namespace="http://www.springframework.org/schema/beans" />
-	
 	<xsd:element name="client">
 		<xsd:complexType>
 			<xsd:attribute name="id" type="xsd:ID" use="required" />

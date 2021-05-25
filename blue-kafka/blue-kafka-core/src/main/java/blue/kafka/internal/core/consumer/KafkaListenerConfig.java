@@ -2,8 +2,8 @@ package blue.kafka.internal.core.consumer;
 
 import blue.base.internal.core.message.ConsumerListenerConfig;
 import blue.kafka.core.KafkaException;
+import blue.kafka.core.OffsetManager;
 import blue.kafka.core.options.KafkaConsumerOptions;
-import blue.kafka.internal.core.offset.OffsetManager;
 
 import java.time.Duration;
 import java.util.regex.Pattern;

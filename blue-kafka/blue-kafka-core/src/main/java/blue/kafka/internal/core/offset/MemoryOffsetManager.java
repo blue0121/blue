@@ -1,5 +1,6 @@
 package blue.kafka.internal.core.offset;
 
+import blue.kafka.core.OffsetManager;
 import org.apache.kafka.clients.consumer.OffsetAndMetadata;
 import org.apache.kafka.common.TopicPartition;
 import org.slf4j.Logger;

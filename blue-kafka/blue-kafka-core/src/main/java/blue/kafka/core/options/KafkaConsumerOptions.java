@@ -2,9 +2,9 @@ package blue.kafka.core.options;
 
 import blue.base.core.message.ConsumerOptions;
 import blue.kafka.core.KafkaException;
+import blue.kafka.core.OffsetManager;
 import blue.kafka.core.codec.FastjsonDeserializer;
 import blue.kafka.internal.core.offset.MemoryOffsetManager;
-import blue.kafka.internal.core.offset.OffsetManager;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.slf4j.Logger;
