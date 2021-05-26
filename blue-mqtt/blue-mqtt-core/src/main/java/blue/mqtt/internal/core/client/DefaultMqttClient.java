@@ -1,6 +1,7 @@
 package blue.mqtt.internal.core.client;
 
 import blue.base.core.message.ProducerListener;
+import blue.base.core.util.AssertUtil;
 import blue.base.core.util.JsonUtil;
 import blue.base.core.util.WaitUtil;
 import blue.mqtt.core.MqttClient;
@@ -43,6 +44,7 @@ public class DefaultMqttClient implements MqttClient {
 	private final MqttClientOptions options;
 
 	public DefaultMqttClient(MqttClientOptions options) {
+		AssertUtil.notNull(options, "MQTT Client Options");
 		this.options = options;
 	}
 

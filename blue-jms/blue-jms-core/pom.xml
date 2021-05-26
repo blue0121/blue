@@ -3,21 +3,17 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<parent>
-		<artifactId>blue</artifactId>
+		<artifactId>blue-jms</artifactId>
 		<groupId>blue</groupId>
 		<version>4.0.0</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>blue-jms</artifactId>
-	<packaging>pom</packaging>
-	<modules>
-		<module>blue-jms-core</module>
-	</modules>
+	<artifactId>blue-jms-core</artifactId>
 	
 	<dependencies>
 		<dependency>
 			<groupId>blue</groupId>
-			<artifactId>blue-core</artifactId>
+			<artifactId>blue-base-core</artifactId>
 			<version>${blue.version}</version>
 		</dependency>
 		
@@ -35,6 +31,26 @@
 				<exclusion>
 					<groupId>org.slf4j</groupId>
 					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.activemq</groupId>
+			<artifactId>activemq-client</artifactId>
+			<version>${activemq.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.geronimo.specs</groupId>
+					<artifactId>geronimo-jms_1.1_spec</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.geronimo.specs</groupId>
+					<artifactId>geronimo-j2ee-management_1.1_spec</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
@@ -81,5 +97,5 @@
 			</plugin>
 		</plugins>
 	</build>
-	
+
 </project>

@@ -26,6 +26,7 @@ public class DefaultKafkaClient implements KafkaClient {
     private final List<KafkaConsumer> consumerList = new CopyOnWriteArrayList<>();
 
     public DefaultKafkaClient(KafkaClientOptions options) {
+        AssertUtil.notNull(options, "Kafka Client Options");
         options.check();
 	    this.clientOptions = options;
     }
