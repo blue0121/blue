@@ -22,8 +22,6 @@ import test.mqtt.core.consumer.MqttReceiver;
 public class MqttTest {
     private static BrokerService brokerService;
 
-
-
 	public MqttTest() {
 	}
 

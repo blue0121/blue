@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<xsd:schema xmlns="http://blue.com/schema/jms"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="http://blue.com/schema/jms"
+            elementFormDefault="qualified" attributeFormDefault="unqualified">
+	
+	<xsd:element name="client">
+		<xsd:complexType>
+			<xsd:attribute name="id" type="xsd:ID" use="required" />
+			<xsd:attribute name="broker" type="xsd:string" use="required" />
+			<xsd:attribute name="type" type="ConnectionType" use="required" />
+			<xsd:attribute name="username" type="xsd:string" use="required" />
+			<xsd:attribute name="password" type="xsd:string" use="required" />
+			<xsd:attribute name="client-id" type="xsd:string" use="optional" />
+			<xsd:attribute name="virtual-host" type="xsd:string" use="optional" />
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:simpleType name="ConnectionType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="QPID" />
+			<xsd:enumeration value="ACTIVE_MQ" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:element name="producer">
+		<xsd:complexType>
+			<xsd:attribute name="id" type="xsd:ID" use="required" />
+			<xsd:attribute name="ref-jms-client" type="xsd:string" use="required" />
+			<xsd:attribute name="ref-executor" type="xsd:string" use="required" />
+			<xsd:attribute name="ref-producer-listener" type="xsd:string" use="optional" />
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="consumer">
+		<xsd:complexType>
+			<xsd:choice minOccurs="1" maxOccurs="unbounded">
+				<xsd:element ref="listener" />
+			</xsd:choice>
+			<xsd:attribute name="id" type="xsd:ID" use="required" />
+			<xsd:attribute name="default-type" type="jmsType" use="required" />
+			<xsd:attribute name="multi-thread" type="xsd:string" use="required" />
+			<xsd:attribute name="ref-jms-client" type="xsd:string" use="required" />
+			<xsd:attribute name="ref-executor" type="xsd:string" use="optional" />
+			<xsd:attribute name="ref-exception-handler" type="xsd:string" use="optional" />
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="listener">
+		<xsd:complexType>
+			<xsd:attribute name="topic" type="xsd:string" use="required" />
+			<xsd:attribute name="type" type="jmsType" use="optional" />
+			<xsd:attribute name="multi-thread" type="xsd:boolean" use="optional" />
+			<xsd:attribute name="ref-listener" type="xsd:string" use="required" />
+			<xsd:attribute name="ref-executor" type="xsd:string" use="optional" />
+			<xsd:attribute name="ref-exception-handler" type="xsd:string" use="optional" />
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:simpleType name="jmsType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="QUEUE" />
+			<xsd:enumeration value="TOPIC" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+</xsd:schema>

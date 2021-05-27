@@ -101,6 +101,7 @@ public abstract class AbstractJmsClient implements JmsClient {
 					l.onSuccess(topic, object);
 				}
 			}
+			session.commit();
 		}
 		catch (Exception e) {
 			for (ProducerListener<JmsTopic, Object> l : listenerList) {

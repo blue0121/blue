@@ -29,39 +29,44 @@ public class JmsClientOptions extends ClientOptions {
 		return type;
 	}
 
-	public void setType(JmsConnectionType type) {
+	public JmsClientOptions setType(JmsConnectionType type) {
 		this.type = type;
+		return this;
 	}
 
 	public String getUsername() {
 		return username;
 	}
 
-	public void setUsername(String username) {
+	public JmsClientOptions setUsername(String username) {
 		this.username = username;
+		return this;
 	}
 
 	public String getPassword() {
 		return password;
 	}
 
-	public void setPassword(String password) {
+	public JmsClientOptions setPassword(String password) {
 		this.password = password;
+		return this;
 	}
 
 	public String getClientId() {
 		return clientId;
 	}
 
-	public void setClientId(String clientId) {
+	public JmsClientOptions setClientId(String clientId) {
 		this.clientId = clientId;
+		return this;
 	}
 
 	public String getVirtualHost() {
 		return virtualHost;
 	}
 
-	public void setVirtualHost(String virtualHost) {
+	public JmsClientOptions setVirtualHost(String virtualHost) {
 		this.virtualHost = virtualHost;
+		return this;
 	}
 }

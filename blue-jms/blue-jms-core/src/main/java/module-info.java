@@ -1,4 +1,5 @@
 module blue.jms.core {
+	requires java.naming;
 	requires javax.jms.api;
 	requires blue.base.core;
 	requires qpid.client;

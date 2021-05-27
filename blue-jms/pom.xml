@@ -10,76 +10,10 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>blue-jms</artifactId>
 	<packaging>pom</packaging>
+	
 	<modules>
 		<module>blue-jms-core</module>
+		<module>blue-jms-spring</module>
 	</modules>
-	
-	<dependencies>
-		<dependency>
-			<groupId>blue</groupId>
-			<artifactId>blue-core</artifactId>
-			<version>${blue.version}</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>javax.jms</groupId>
-			<artifactId>javax.jms-api</artifactId>
-			<version>${jms.version}</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.apache.qpid</groupId>
-			<artifactId>qpid-client</artifactId>
-			<version>${qpid.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>slf4j-api</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-engine</artifactId>
-			<version>${junit.jupiter.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.platform</groupId>
-			<artifactId>junit-platform-launcher</artifactId>
-			<version>${junit.platform.version}</version>
-			<scope>test</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-junit-jupiter</artifactId>
-			<version>${mockito.version}</version>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
-	
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>${surefire.version}</version>
-				<dependencies>
-					<dependency>
-						<groupId>org.junit.platform</groupId>
-						<artifactId>junit-platform-launcher</artifactId>
-						<version>${junit.platform.version}</version>
-					</dependency>
-				</dependencies>
-				<configuration>
-					<argLine>
-						--illegal-access=warn
-					</argLine>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
 	
 </project>

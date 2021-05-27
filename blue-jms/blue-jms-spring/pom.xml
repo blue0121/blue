@@ -8,51 +8,19 @@
 		<version>4.0.0</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>blue-jms-core</artifactId>
+	<artifactId>blue-jms-spring</artifactId>
 	
 	<dependencies>
 		<dependency>
 			<groupId>blue</groupId>
-			<artifactId>blue-base-core</artifactId>
+			<artifactId>blue-jms-core</artifactId>
 			<version>${blue.version}</version>
 		</dependency>
 		
 		<dependency>
-			<groupId>javax.jms</groupId>
-			<artifactId>javax.jms-api</artifactId>
-			<version>${jms.version}</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.apache.qpid</groupId>
-			<artifactId>qpid-client</artifactId>
-			<version>${qpid.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>slf4j-api</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.apache.activemq</groupId>
-			<artifactId>activemq-client</artifactId>
-			<version>${activemq.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>slf4j-api</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.geronimo.specs</groupId>
-					<artifactId>geronimo-jms_1.1_spec</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.geronimo.specs</groupId>
-					<artifactId>geronimo-j2ee-management_1.1_spec</artifactId>
-				</exclusion>
-			</exclusions>
+			<groupId>blue</groupId>
+			<artifactId>blue-base-spring</artifactId>
+			<version>${blue.version}</version>
 		</dependency>
 		
 		<dependency>
@@ -74,11 +42,10 @@
 			<version>${mockito.version}</version>
 			<scope>test</scope>
 		</dependency>
-		
 		<dependency>
-			<groupId>org.apache.activemq</groupId>
-			<artifactId>activemq-all</artifactId>
-			<version>${activemq.version}</version>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${spring.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
