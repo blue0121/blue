@@ -81,6 +81,16 @@ public class AssertUtil {
 		}
 	}
 
+	public static <T> void notEmpty(byte[] array, String name) {
+		if (name == null) {
+			name = "";
+		}
+
+		if (array == null || array.length == 0) {
+			throw new NullPointerException(name + " is empty.");
+		}
+	}
+
 	public static void equal(long n1, long n2, String text) {
 		if (n1 != n2) {
 			throw new IllegalArgumentException(text);
