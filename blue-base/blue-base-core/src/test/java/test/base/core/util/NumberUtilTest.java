@@ -42,13 +42,20 @@ public class NumberUtilTest
 	}
 
 	@Test
-	public void testSplitInt()
-	{
+	public void testSplitInt() {
 		String str = "5, 10, 50";
 		int[] arr = NumberUtil.splitInt(str);
 		Assertions.assertEquals(3, arr.length);
 		int[] array = {5, 10, 50};
 		Assertions.assertArrayEquals(array, arr);
 	}
-	
+
+	@Test
+	public void testToHexString() {
+		byte[] bytes = new byte[]{-128, 0, 127};
+		String hex = NumberUtil.toHexString(bytes);
+		System.out.println(hex);
+		Assertions.assertEquals("80007f", hex);
+	}
+
 }

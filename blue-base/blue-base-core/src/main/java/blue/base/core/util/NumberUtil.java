@@ -98,9 +98,16 @@ public class NumberUtil {
 	 * @return 十六进制字符串，范围是00~ff，每个字节占用两个字符
 	 */
 	public static String toHexString(byte[] bytes) {
+		if (bytes == null || bytes.length == 0) {
+			return "";
+		}
 		StringBuilder sb = new StringBuilder(bytes.length * 2);
 		for (byte b : bytes) {
-			sb.append(Integer.toHexString(b & 0xff | 0x100).substring(1));
+			String hex = Integer.toHexString(b & 0xff);
+			if (hex.length() < 2) {
+				sb.append('0');
+			}
+			sb.append(hex);
 		}
 		return sb.toString();
 	}
@@ -190,10 +197,10 @@ public class NumberUtil {
 	 * @return 格式后字符串
 	 */
 	public static String byteFormat(long size) {
-		String[] a = {"B", "KB", "MB", "GB", "TB", "PB"};
+		String[] a = {"B", "KB", "MB", "GB", "TB", "PB", "EB"};
 		double val = size;
 		int pos = 0;
-		while (val >= 1024.0d) {
+		while (val >= 1024.0d && pos < a.length) {
 			val /= 1024;
 			pos++;
 		}
