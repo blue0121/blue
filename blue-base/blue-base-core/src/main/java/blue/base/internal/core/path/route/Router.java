@@ -1,7 +1,5 @@
 package blue.base.internal.core.path.route;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -9,27 +7,25 @@ import java.util.Objects;
  * @since 1.0 2021-05-28
  */
 public class Router {
-	public enum Type {
-		EXACTLY,
-		WILDCARD,
-		MULTI_WILDCARD,
+
+	private final int level;
+	private final String word;
+	private final MatchType type;
+	private final Object param;
+
+	public Router(int level, String word, Object param) {
+		this.level = level;
+		this.word = word;
+		this.param = param;
+		if (word.contains(HttpPathParser.BRACE_LEFT) && word.contains(HttpPathParser.BRACE_RIGHT)) {
+			type = MatchType.VARIABLE;
+		} else {
+			type = MatchType.EXACTLY;
+		}
 	}
 
-	private final String word;
-	private final Type type;
-	private final Map<Router, Router> exactly = new HashMap<>();
-	private final Map<Router, Router> wildcard = new HashMap<>();
-
-	public Router(String word) {
-		this.word = word;
-		if (word.contains(HttpRouteMatcher.MULTI_WILDCARD)) {
-			type = Type.MULTI_WILDCARD;
-		} else if (word.contains(HttpRouteMatcher.WILDCARD)
-				|| word.contains(HttpRouteMatcher.BRACE_LEFT)) {
-			type = Type.WILDCARD;
-		} else {
-			type = Type.EXACTLY;
-		}
+	public boolean isExactly() {
+		return type == MatchType.EXACTLY;
 	}
 
 	@Override
@@ -41,27 +37,35 @@ public class Router {
 			return false;
 		}
 		Router router = (Router) o;
-		if (type == Type.EXACTLY) {
-			return word.equals(router.word);
+		if (type == MatchType.EXACTLY) {
+			return word.equals(router.word) && level == router.level;
 		} else {
-			return type.equals(router.type);
+			return type.equals(router.type) && level == router.level;
 		}
 	}
 
 	@Override
 	public int hashCode() {
-		if (type == Type.EXACTLY) {
-			return Objects.hash(word);
+		if (type == MatchType.EXACTLY) {
+			return Objects.hash(word, level);
 		} else {
-			return Objects.hash(type);
+			return Objects.hash(type, level);
 		}
+	}
+
+	public int getLevel() {
+		return level;
 	}
 
 	public String getWord() {
 		return word;
 	}
 
-	public Type getType() {
+	public MatchType getType() {
 		return type;
+	}
+
+	public Object getParam() {
+		return param;
 	}
 }

@@ -2,12 +2,11 @@ package blue.base.internal.core.path.route;
 
 import blue.base.core.path.MatchResult;
 import blue.base.core.path.RouteMatcher;
-import blue.base.core.util.AssertUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Jin Zheng
@@ -24,40 +23,42 @@ public class HttpRouteMatcher implements RouteMatcher {
 	public static final String MULTI_WILDCARD = "**";
 	public static final char CHAR_WILDCARD = WILDCARD.charAt(0);
 
+	private final Map<String, Object> pathMap = new HashMap<>();
+	private final TrieRouter trieRouter = new TrieRouter();
 
 	public HttpRouteMatcher() {
 	}
 
 	@Override
 	public boolean validate(String path) {
-		HttpValidator validator = new HttpValidator(path);
-		return validator.validate();
+		HttpPathParser parser = new HttpPathParser(path);
+		return parser.parse();
 	}
 
 	@Override
 	public boolean add(String pattern, Object param) {
-		HttpValidator validator = new HttpValidator(pattern);
-		if (!validator.validate()) {
+		HttpPathParser parser = new HttpPathParser(pattern);
+		if (!parser.parse()) {
 			return false;
 		}
-		int index = -1;
-		int start = 1;
-		List<String> list = new ArrayList<>();
-		while ((index = pattern.indexOf(RouteMatcher.CHAR_SLASH, start)) != -1) {
-			String word = pattern.substring(start, index);
-			System.out.println(word);
-			list.add(word);
-			start = index + 1;
+		if (parser.getMatchType() == MatchType.EXACTLY) {
+			pathMap.put(parser.getTrimPath(), param);
+		} else {
+			trieRouter.add(pattern, param);
 		}
-		String word = pattern.substring(start);
-		list.add(word);
 
 		return true;
 	}
 
 	@Override
-	public MatchResult match(String route) {
-		AssertUtil.notEmpty(route, "Route");
+	public MatchResult match(String path) {
+		HttpPathParser validator = new HttpPathParser(path);
+		String trimPath = validator.getTrimPath();
+		if (pathMap.containsKey(trimPath)) {
+			Object param = pathMap.get(trimPath);
+			return new DefaultMatchResult(path, trimPath, param, null);
+		}
+
 
 		return null;
 	}

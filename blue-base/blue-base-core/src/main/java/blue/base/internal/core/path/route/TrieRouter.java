@@ -1,13 +1,12 @@
 package blue.base.internal.core.path.route;
 
-import blue.base.core.path.RouteMatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Jin Zheng
@@ -16,8 +15,8 @@ import java.util.Map;
 public class TrieRouter {
 	private static Logger logger = LoggerFactory.getLogger(TrieRouter.class);
 
-	private final Map<Router, Router> exactly = new HashMap<>();
-	private final Map<Router, Router> wildcard = new HashMap<>();
+	private final Map<Router, Set<Router>> exactly = new HashMap<>();
+	private final Map<Router, Set<Router>> wildcard = new HashMap<>();
 
 	public TrieRouter() {
 	}
@@ -25,29 +24,33 @@ public class TrieRouter {
 	public void add(String pattern, Object param) {
 		int index = -1;
 		int start = 1;
-		List<String> list = new ArrayList<>();
-		while ((index = pattern.indexOf(RouteMatcher.CHAR_SLASH, start)) != -1) {
+		int level = 1;
+		while ((index = pattern.indexOf('/', start)) != -1) {
 			String word = pattern.substring(start, index);
-
-			System.out.println(word);
-			list.add(word);
+			this.addRouter(level, word, param);
 			start = index + 1;
+			level++;
 		}
 		String word = pattern.substring(start);
-		list.add(word);
+		this.addRouter(level, word, param);
 	}
 
-	private void addRouter(String word, Object param) {
-		Router r = new Router(word);
-		if (r.getType() == Router.Type.EXACTLY) {
-
+	private void addRouter(int level, String word, Object param) {
+		Router router = new Router(level, word, param);
+		Set<Router> set;
+		if (router.isExactly()) {
+			set = exactly.computeIfAbsent(router, k -> new HashSet<>());
 		} else {
-
+			set = wildcard.computeIfAbsent(router, k -> new HashSet<>());
 		}
+		set.add(router);
 	}
 
-	private void addRouter(Map<Router, Router> map, String word, Object param) {
-
+	public Map<Router, Set<Router>> getExactly() {
+		return Map.copyOf(exactly);
 	}
 
+	public Map<Router, Set<Router>> getWildcard() {
+		return Map.copyOf(wildcard);
+	}
 }

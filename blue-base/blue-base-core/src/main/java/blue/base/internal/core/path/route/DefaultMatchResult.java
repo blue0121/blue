@@ -19,9 +19,9 @@ public class DefaultMatchResult implements MatchResult {
 		this.pattern = pattern;
 		this.param = param;
 		if (vars == null || vars.isEmpty()) {
-			this.vars = Map.copyOf(vars);
-		} else {
 			this.vars = Map.of();
+		} else {
+			this.vars = Map.copyOf(vars);
 		}
 	}
 

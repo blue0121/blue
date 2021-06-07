@@ -7,9 +7,6 @@ import blue.base.internal.core.path.route.RouteMatcherFactory;
  * @since 1.0 2021-05-28
  */
 public interface RouteMatcher {
-	String SLASH = "/";
-	char CHAR_SLASH = SLASH.charAt(0);
-
 
 	/**
 	 * create RouteMatcher instance
