@@ -35,7 +35,12 @@ public class HttpClientFactoryBean implements FactoryBean<HttpClient>, Initializ
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        this.httpClient = HttpClient.create(baseUrl, timeout, proxy, defaultHeaders, executor);
+        this.httpClient = HttpClient.builder().setBaseUrl(baseUrl)
+                .setTimeout(timeout)
+                .setProxy(proxy)
+                .setDefaultHeaders(defaultHeaders)
+                .setExecutor(executor)
+                .build();
     }
 
     public String getBaseUrl() {

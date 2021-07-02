@@ -1,12 +1,11 @@
 package blue.base.core.http;
 
 import blue.base.core.dict.HttpMethod;
-import blue.base.internal.core.http.DefaultHttpClient;
+import blue.base.internal.core.http.DefaultHttpClientBuilder;
 
 import java.nio.file.Path;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
 
 /**
  * @author Jin Zheng
@@ -14,25 +13,8 @@ import java.util.concurrent.Executor;
  */
 public interface HttpClient {
 
-	/**
-	 * 创建Http客户端
-	 *
-	 * @param baseUrl
-	 * @param timeout
-	 * @param proxy
-	 * @param defaultHeaders
-	 * @param executor
-	 * @return
-	 */
-	static HttpClient create(String baseUrl, int timeout, String proxy, Map<String, String> defaultHeaders, Executor executor) {
-		DefaultHttpClient client = new DefaultHttpClient();
-		client.setBaseUrl(baseUrl);
-		client.setTimeout(timeout);
-		client.setProxy(proxy);
-		client.setDefaultHeaders(defaultHeaders);
-		client.setExecutor(executor);
-		client.init();
-		return client;
+	static HttpClientBuilder builder() {
+		return new DefaultHttpClientBuilder();
 	}
 
 	default StringResponse requestSync(String uri) {
