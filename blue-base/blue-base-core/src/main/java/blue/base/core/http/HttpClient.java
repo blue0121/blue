@@ -89,4 +89,18 @@ public interface HttpClient {
 
 	CompletableFuture<StringResponse> uploadAsync(String uri, String method, Map<String, String> textParam, Map<String, Path> fileParam, Map<String, String> header);
 
+	String getId();
+
+	String getBaseUrl();
+
+	int getTimeout();
+
+	String getUsername();
+
+	String getPassword();
+
+	String getProxy();
+
+	Map<String, String> getHeaders();
+
 }

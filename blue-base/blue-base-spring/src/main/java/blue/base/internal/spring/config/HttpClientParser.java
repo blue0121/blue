@@ -20,9 +20,12 @@ public class HttpClientParser extends SimpleBeanDefinitionParser {
 	protected void doParseInternal(Element element, ParserContext parserContext, BeanDefinitionBuilder builder) {
 		Map<Object, Object> map = this.getBeanMap(element, parserContext, builder, CoreNamespaceHandler.NS, "default-headers");
 		builder.addPropertyValue("defaultHeaders", map);
+		this.parse(element, builder, "id", "id");
 		this.parse(element, builder, "baseUrl", "base-url");
 		this.parse(element, builder, "proxy", "proxy");
 		this.parse(element, builder, "timeout", "timeout");
+		this.parse(element, builder, "username", "username");
+		this.parse(element, builder, "password", "password");
 		this.parseRef(element, builder, "executor", "ref-executor");
 	}
 }

@@ -11,8 +11,11 @@ import java.util.concurrent.Executor;
  * @since 2021-07-02
  */
 public class DefaultHttpClientBuilder implements HttpClientBuilder {
+    private String id;
     private String baseUrl;
     private int timeout;
+    private String username;
+    private String password;
     private String proxy;
     private Map<String, String> headers;
     private Executor executor;
@@ -23,13 +26,22 @@ public class DefaultHttpClientBuilder implements HttpClientBuilder {
     @Override
     public HttpClient build() {
         DefaultHttpClient client = new DefaultHttpClient();
+        client.setId(id);
         client.setBaseUrl(baseUrl);
         client.setTimeout(timeout);
+        client.setUsername(username);
+        client.setPassword(password);
         client.setProxy(proxy);
         client.setDefaultHeaders(headers);
         client.setExecutor(executor);
         client.init();
         return client;
+    }
+
+    @Override
+    public HttpClientBuilder setId(String id) {
+	    this.id = id;
+        return this;
     }
 
     @Override
@@ -41,6 +53,18 @@ public class DefaultHttpClientBuilder implements HttpClientBuilder {
     @Override
     public HttpClientBuilder setTimeout(int timeout) {
 	    this.timeout = timeout;
+        return this;
+    }
+
+    @Override
+    public HttpClientBuilder setUsername(String username) {
+	    this.username = username;
+        return this;
+    }
+
+    @Override
+    public HttpClientBuilder setPassword(String password) {
+	    this.password = password;
         return this;
     }
 

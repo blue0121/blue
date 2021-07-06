@@ -1,4 +1,4 @@
-package blue.base.internal.spring.config;
+package blue.base.internal.starter.config;
 
 import blue.base.core.http.HttpClient;
 import org.springframework.beans.factory.FactoryBean;

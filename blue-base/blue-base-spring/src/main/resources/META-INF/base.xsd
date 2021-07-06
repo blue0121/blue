@@ -76,6 +76,8 @@
 			<xsd:attribute name="id" type="xsd:ID" use="required" />
 			<xsd:attribute name="base-url" type="xsd:string" />
 			<xsd:attribute name="proxy" type="xsd:string" />
+			<xsd:attribute name="username" type="xsd:string" />
+			<xsd:attribute name="password" type="xsd:string" />
 			<xsd:attribute name="timeout" type="xsd:string" default="60000" />
 			<xsd:attribute name="ref-executor" type="xsd:string" />
 		</xsd:complexType>

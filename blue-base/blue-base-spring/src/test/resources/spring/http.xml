@@ -9,7 +9,7 @@
 	<base:task-executor id="taskExecutor" />
 	
 	<base:http-client id="httpInvoker" base-url="http://localhost:10000" timeout="10000"
-	                ref-executor="taskExecutor">
+	                username="test" password="test" ref-executor="taskExecutor">
 		<base:default-headers>
 			<map>
 				<entry key="Content-Type" value="application/json" />

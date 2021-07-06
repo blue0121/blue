@@ -43,7 +43,10 @@ public class HttpInvokerTest {
 	@BeforeEach
 	public void beforeEach() {
 		Map<String, String> headers = Map.of("Content-Type", "application/json");
-		httpClient = HttpClient.create("http://localhost:10000", 10000, null, headers, null);
+		httpClient = HttpClient.builder().setBaseUrl("http://localhost:10000")
+				.setTimeout(10000)
+				.setDefaultHeaders(headers)
+				.build();
 	}
 
 	@Test

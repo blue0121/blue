@@ -12,6 +12,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -47,6 +49,10 @@ public class HttpClientTest {
 				.willReturn(WireMock.aResponse()
 						.withHeader("Content-Type", "application/json")
 						.withBody("test_content")));
+		Assertions.assertEquals("test", httpClient.getUsername());
+		Assertions.assertEquals("test", httpClient.getPassword());
+		String auth = "Basic " + Base64.getEncoder().encodeToString("test:test".getBytes(StandardCharsets.UTF_8));
+		Assertions.assertEquals(auth, httpClient.getHeaders().get("Authorization"));
 		StringResponse response = httpClient.requestSync("/test", HttpMethod.GET.getName());
 		Assertions.assertEquals(200, response.getCode());
 		Assertions.assertEquals("test_content", response.getBody());
@@ -59,7 +65,6 @@ public class HttpClientTest {
 	}
 
 	@Autowired
-
 	public void setHttpClient(HttpClient httpClient) {
 		this.httpClient = httpClient;
 	}

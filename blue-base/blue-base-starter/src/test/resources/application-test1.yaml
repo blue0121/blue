@@ -1,0 +1,26 @@
+red:
+  name: base
+
+blue:
+  http:
+    enabled: true
+    configs:
+      - id: test1
+        baseUrl: http://localhost:8080
+        username: test1
+        password: test1
+        timeout: 60000
+        proxy: localhost:8000
+        headers:
+          - name: Accept
+            value: application/json
+          - name: Content-Type
+            value: application/json
+      - id: test2
+        baseUrl: http://localhost:9090
+        username: test2
+        password: test2
+        timeout: 50000
+        headers:
+          - name: Content-Type
+            value: application/json

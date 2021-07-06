@@ -16,6 +16,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.file.Path;
 import java.time.Duration;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -28,8 +29,11 @@ import java.util.concurrent.Executor;
 public class DefaultHttpClient implements HttpClient {
 	private static Logger logger = LoggerFactory.getLogger(DefaultHttpClient.class);
 
+	private String id;
 	private String baseUrl;
 	private int timeout;
+	private String username;
+	private String password;
 	private String proxy;
 	private Map<String, String> defaultHeaders;
 	private Executor executor;
@@ -170,9 +174,30 @@ public class DefaultHttpClient implements HttpClient {
 		if (executor != null) {
 			builder.executor(executor);
 		}
+		if (defaultHeaders == null) {
+			defaultHeaders = new HashMap<>();
+		}
+		if (username != null && !username.isEmpty() && password != null && !password.isEmpty()) {
+			defaultHeaders.put("Authorization", this.authorization());
+		}
 		this.httpClient = builder.build();
 	}
 
+	private String authorization() {
+		String auth = username + ":" + password;
+		return "Basic " + Base64.getEncoder().encodeToString(auth.getBytes());
+	}
+
+	@Override
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	@Override
 	public String getBaseUrl() {
 		return baseUrl;
 	}
@@ -181,6 +206,7 @@ public class DefaultHttpClient implements HttpClient {
 		this.baseUrl = baseUrl;
 	}
 
+	@Override
 	public int getTimeout() {
 		return timeout;
 	}
@@ -189,8 +215,32 @@ public class DefaultHttpClient implements HttpClient {
 		this.timeout = timeout;
 	}
 
+	@Override
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	@Override
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	@Override
 	public String getProxy() {
 		return proxy;
+	}
+
+	@Override
+	public Map<String, String> getHeaders() {
+		return defaultHeaders;
 	}
 
 	public void setProxy(String proxy) {

@@ -11,9 +11,15 @@ public interface HttpClientBuilder {
 
 	HttpClient build();
 
+	HttpClientBuilder setId(String id);
+
 	HttpClientBuilder setBaseUrl(String baseUrl);
 
 	HttpClientBuilder setTimeout(int timeout);
+
+	HttpClientBuilder setUsername(String username);
+
+	HttpClientBuilder setPassword(String password);
 
 	HttpClientBuilder setProxy(String proxy);
 
