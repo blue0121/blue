@@ -1,4 +1,4 @@
-package blue.base.internal.spring.convert;
+package blue.base.internal.core.convert;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

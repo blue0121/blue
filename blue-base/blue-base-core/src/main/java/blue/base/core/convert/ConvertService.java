@@ -1,4 +1,4 @@
-package blue.base.spring.convert;
+package blue.base.core.convert;
 
 
 /**
@@ -6,10 +6,6 @@ package blue.base.spring.convert;
  * @since 1.0 2020-06-22
  */
 public interface ConvertService {
-
-	/*static ConvertService getInstance() {
-		return Singleton.get(DefaultConvertService.class);
-	}*/
 
 	boolean canConvert(Class<?> sourceType, Class<?> targetType);
 

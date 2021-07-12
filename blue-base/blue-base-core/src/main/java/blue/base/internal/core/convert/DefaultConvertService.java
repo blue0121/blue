@@ -1,6 +1,6 @@
-package blue.base.internal.spring.convert;
+package blue.base.internal.core.convert;
 
-import blue.base.spring.convert.ConvertService;
+import blue.base.core.convert.ConvertService;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.convert.converter.ConverterFactory;
 import org.springframework.core.convert.converter.GenericConverter;

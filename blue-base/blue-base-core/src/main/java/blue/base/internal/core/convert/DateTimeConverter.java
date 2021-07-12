@@ -1,4 +1,4 @@
-package blue.base.internal.spring.convert;
+package blue.base.internal.core.convert;
 
 /**
  * @author Jin Zheng

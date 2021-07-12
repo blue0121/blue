@@ -7,7 +7,6 @@ module blue.base.spring {
 	requires spring.context;
 
 	exports blue.base.spring.common;
-	exports blue.base.spring.convert;
 
 	exports blue.base.internal.spring.config to spring.beans;
 	exports blue.base.internal.spring.dict to spring.beans;

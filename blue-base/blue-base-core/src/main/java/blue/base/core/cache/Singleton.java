@@ -4,6 +4,7 @@ import blue.base.core.util.AssertUtil;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.function.Function;
 
 /**
  * @author Jin Zheng
@@ -28,6 +29,13 @@ public class Singleton {
 		catch (Exception e) {
 			throw new IllegalArgumentException(e);
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> T get(Class<T> clazz, Function<Class<T>, T> f) {
+		AssertUtil.notNull(clazz, "Class");
+		AssertUtil.notNull(f, "Function");
+		return (T) POOL.computeIfAbsent(clazz, k -> f.apply(clazz));
 	}
 
 	public static void put(Object object) {

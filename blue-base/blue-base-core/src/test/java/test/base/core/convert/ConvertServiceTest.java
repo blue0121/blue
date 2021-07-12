@@ -1,10 +1,10 @@
-package test.base.spring.convert;
+package test.base.core.convert;
 
+import blue.base.core.convert.ConvertService;
+import blue.base.core.convert.ConvertServiceFactory;
 import blue.base.core.dict.DictParser;
 import blue.base.core.dict.State;
 import blue.base.core.util.DateUtil;
-import blue.base.spring.convert.ConvertService;
-import blue.base.spring.convert.ConvertServiceFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

@@ -1,4 +1,4 @@
-package blue.base.internal.spring.convert;
+package blue.base.internal.core.convert;
 
 import org.springframework.core.convert.converter.Converter;
 
@@ -23,7 +23,7 @@ public class StringToLocalDateTimeConverter implements Converter<String, LocalDa
 			return null;
 		}
 
-		if (text.indexOf(BLANK) == -1) {
+		if (!text.contains(BLANK)) {
 			text += " 00:00:00";
 		}
 
