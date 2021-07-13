@@ -1,5 +1,7 @@
 package blue.base.core.cache;
 
+import blue.base.internal.core.cache.CaffeineCacheBuilder;
+
 import java.util.Collection;
 import java.util.Map;
 
@@ -10,6 +12,10 @@ import java.util.Map;
  * @since 1.0 2021-04-21
  */
 public interface Cache<K, V> {
+
+	static CacheBuilder builder() {
+		return new CaffeineCacheBuilder();
+	}
 
 	/**
 	 * 获取缓存
@@ -41,6 +47,20 @@ public interface Cache<K, V> {
 	 * @param map
 	 */
 	void putAll(Map<? extends K, ? extends V> map);
+
+	/**
+	 * 刷新缓存
+	 *
+	 * @param key
+	 */
+	void refresh(K key);
+
+	/**
+	 * 批量刷新缓存
+	 *
+	 * @param keys
+	 */
+	void refreshAll(Collection<? extends K> keys);
 
 	/**
 	 * 删除缓存

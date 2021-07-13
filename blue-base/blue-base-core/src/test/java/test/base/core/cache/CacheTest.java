@@ -1,7 +1,6 @@
 package test.base.core.cache;
 
 import blue.base.core.cache.Cache;
-import blue.base.core.cache.CacheBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,7 +17,7 @@ public class CacheTest {
 
 	@BeforeEach
 	public void beforeEach() {
-	    cache = CacheBuilder.create().build();
+	    cache = Cache.builder().build();
     }
 
     @Test

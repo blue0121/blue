@@ -9,10 +9,10 @@ import java.util.Set;
  * @author Jin Zheng
  * @since 1.0 2021-04-21
  */
-public class DefaultCacheLoader<K, V> implements com.github.benmanes.caffeine.cache.CacheLoader<K, V> {
+public class CaffeineCacheLoader<K, V> implements com.github.benmanes.caffeine.cache.CacheLoader<K, V> {
 	private final CacheLoader<K, V> loader;
 
-	public DefaultCacheLoader(CacheLoader<K, V> loader) {
+	public CaffeineCacheLoader(CacheLoader<K, V> loader) {
 		this.loader = loader;
 	}
 

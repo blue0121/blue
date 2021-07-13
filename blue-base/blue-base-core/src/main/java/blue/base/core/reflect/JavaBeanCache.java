@@ -1,7 +1,6 @@
 package blue.base.core.reflect;
 
 import blue.base.core.cache.Cache;
-import blue.base.core.cache.CacheBuilder;
 import blue.base.core.util.AssertUtil;
 import blue.base.internal.core.reflect.DefaultJavaBean;
 
@@ -13,7 +12,7 @@ public class JavaBeanCache {
 	private static Cache<Class<?>, JavaBean> cache;
 
 	static {
-		cache = CacheBuilder.create()
+		cache = Cache.builder()
 				.maximumSize(10_000)
 				.build();
 	}

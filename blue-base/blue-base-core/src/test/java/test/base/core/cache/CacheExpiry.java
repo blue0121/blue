@@ -1,7 +1,6 @@
 package test.base.core.cache;
 
 import blue.base.core.cache.Cache;
-import blue.base.core.cache.CacheBuilder;
 import blue.base.core.cache.Expiry;
 import blue.base.core.util.WaitUtil;
 import org.junit.jupiter.api.Assertions;
@@ -20,7 +19,7 @@ public class CacheExpiry {
 
 	@BeforeEach
 	public void beforeEach() {
-	    this.cache = CacheBuilder.create().expire(new Expiry<Integer, Integer>() {
+	    this.cache = Cache.builder().expire(new Expiry<Integer, Integer>() {
 
             @Override
             public long expireAfterCreate(Integer key, Integer value, long currentTimeMillis) {

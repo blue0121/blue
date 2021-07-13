@@ -10,10 +10,10 @@ import java.util.Map;
  * @author Jin Zheng
  * @since 1.0 2021-04-21
  */
-public class DefaultCache<K, V> implements Cache<K, V> {
+public class CaffeineCache<K, V> implements Cache<K, V> {
     private final com.github.benmanes.caffeine.cache.Cache<K, V> cache;
 
-	public DefaultCache(com.github.benmanes.caffeine.cache.Cache<K, V> cache) {
+	public CaffeineCache(com.github.benmanes.caffeine.cache.Cache<K, V> cache) {
 	    this.cache = cache;
 	}
 
@@ -41,6 +41,20 @@ public class DefaultCache<K, V> implements Cache<K, V> {
     @Override
     public void putAll(Map<? extends K, ? extends V> map) {
         cache.putAll(map);
+    }
+
+    @Override
+    public void refresh(K key) {
+        if (cache instanceof LoadingCache) {
+            ((LoadingCache<K, V>) cache).refresh(key);
+        }
+    }
+
+    @Override
+    public void refreshAll(Collection<? extends K> keys) {
+        if (cache instanceof LoadingCache) {
+            ((LoadingCache<K, V>) cache).refreshAll(keys);
+        }
     }
 
     @Override

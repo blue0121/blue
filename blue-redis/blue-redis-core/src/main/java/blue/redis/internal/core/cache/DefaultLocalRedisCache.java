@@ -1,7 +1,6 @@
 package blue.redis.internal.core.cache;
 
 import blue.base.core.cache.Cache;
-import blue.base.core.cache.CacheBuilder;
 import blue.base.core.cache.CacheLoader;
 import blue.base.core.util.AssertUtil;
 import blue.redis.core.options.RedisCacheOptions;
@@ -29,7 +28,7 @@ public class DefaultLocalRedisCache<T> extends AbstractRedisCache<T> implements 
 
 	public DefaultLocalRedisCache(RedisCacheOptions options, RedissonClient client) {
 		super(options, client);
-		this.cache = CacheBuilder.create()
+		this.cache = Cache.builder()
 				.expireAfterAccess(options.getLocalTtl(), TimeUnit.MILLISECONDS)
 				.maximumSize(options.getLocalMaxSize())
 				.build(this);

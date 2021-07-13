@@ -6,12 +6,12 @@ import com.github.benmanes.caffeine.cache.Expiry;
  * @author Jin Zheng
  * @since 1.0 2021-04-23
  */
-public class DefaultExpiry<K, V> implements Expiry<K, V> {
+public class CaffeineExpiry<K, V> implements Expiry<K, V> {
     private static final long NANO = 1_000_000;
 
     private final blue.base.core.cache.Expiry<K, V> expiry;
 
-    public DefaultExpiry(blue.base.core.cache.Expiry<K, V> expiry) {
+    public CaffeineExpiry(blue.base.core.cache.Expiry<K, V> expiry) {
         this.expiry = expiry;
     }
 
